@@ -1,9 +1,11 @@
 import HeaderNavbar from '../presenters/headerNavbarPresenter'
+import Button from 'react-bootstrap/Button';
 
 function App() {
   return (
-    <div className="app">
+    <div className="container">
         <HeaderNavbar />
+        <Button>This is a bootstrap button!</Button>
     </div>
   );
 }
