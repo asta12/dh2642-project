@@ -1,13 +1,20 @@
 import HeaderNavbar from '../presenters/headerNavbarPresenter'
 import Button from 'react-bootstrap/Button';
+import { Route, Routes} from "react-router-dom";
 
 function App() {
   return (
-    <div className="container">
+    <Routes>
+      <Route path="/" element={<div className="container">
         <HeaderNavbar />
-        <Button>This is a bootstrap button!</Button>
-    </div>
+        
+      </div>} />
+      <Route path="/testbtn" element = {<Button>This is a bootstrap button!</Button>} />
+
+    </Routes>
+    
   );
 }
 
 export default App;
+
