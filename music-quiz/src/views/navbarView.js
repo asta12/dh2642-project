@@ -1,0 +1,29 @@
+import React from "react";
+import { Nav, Navbar, Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
+
+const navbarView = (props) => {
+  return (
+    <Navbar bg="primary" variant="dark" expand="lg">
+      <Container>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to="/">
+              Home
+            </Nav.Link>
+            <Nav.Link as={Link} to="/Playlists">
+              Playlists
+            </Nav.Link>
+            <Nav.Link as={Link} to="/Settings">
+              Settings
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+        <Navbar.Text>Signed in as:</Navbar.Text>
+      </Container>
+    </Navbar>
+  );
+};
+
+export default navbarView;
