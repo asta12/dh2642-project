@@ -11,11 +11,6 @@ function App() {
           path="/"
           element={<Button>This is a bootstrap button!</Button>}
         />
-        <Route
-          path="/test"
-          element={<Button>Testing navigation</Button>}
-        />
-
       </Routes>
     </div>
   );
