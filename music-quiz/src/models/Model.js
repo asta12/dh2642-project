@@ -52,13 +52,6 @@ class Model {
   }
 
   loginUser(email, password) {
-    if (
-      this.users.find(
-        (user) => user.email === email && user.id === this.currentUser
-      )
-    )
-      return;
-
     return login(email, password).then((userCredential) => {
       // Signed in successfully.
       console.log("User signed in successfully");

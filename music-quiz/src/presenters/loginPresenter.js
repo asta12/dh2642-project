@@ -44,7 +44,6 @@ export default function Login(props) {
   function setInput(e) {
     switch (e.target.id) {
       case "inputEmail":
-        console.log("email: " + email);
         setEmail(e.target.value);
         break;
       case "inputPassword":

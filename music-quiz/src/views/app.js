@@ -1,11 +1,11 @@
 import HeaderNavbar from '../presenters/headerNavbarPresenter'
-import Button from 'react-bootstrap/Button';
+import Login from "../presenters/loginPresenter.js"
 
-function App() {
+function App(props) {
   return (
     <div className="container">
         <HeaderNavbar />
-        <Button>This is a bootstrap button!</Button>
+        <Login model={props.model}></Login>
     </div>
   );
 }

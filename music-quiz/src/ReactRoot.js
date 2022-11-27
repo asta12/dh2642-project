@@ -7,7 +7,7 @@ function ReactRoot() {
     const [promiseState] = useState({})
     const [, reRender] = useState() 
     const [model, setModel] = useState({})
-    const App=require("./views/App.js").default;
+    const App=require("./views/app.js").default;
 
     function whenCreatedACB() {
         resolvePromise(firebaseModelPromise(), promiseState, notifyACB)
