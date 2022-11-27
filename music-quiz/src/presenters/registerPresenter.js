@@ -1,6 +1,6 @@
 import { useState } from "react";
 import RegisterView from "../views/registerView.js";
-import Container from "react-bootstrap/Container";
+import { Container } from "react-bootstrap";
 
 export default function Register(props) {
   const [error, setError] = useState("");
@@ -29,7 +29,7 @@ export default function Register(props) {
 
       setError("");
       setLoading(true);
-      props.model.registerUser(email, password).catch((error) => {
+      props.model.registerUser(username, email, password).catch((error) => {
         setError("Failed to create account");
         console.log(error);
       });

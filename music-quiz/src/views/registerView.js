@@ -7,6 +7,7 @@ export default function RegisterView(props) {
         <h2 className="text-center mb-4"> Register </h2>
         {props.error && <Alert variant="danger">{props.error}</Alert>}
         <Form
+          className="text-center"
           noValidate
           onSubmit={(e) => {
             props.handleSubmit(e);
