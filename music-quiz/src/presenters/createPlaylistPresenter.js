@@ -6,9 +6,10 @@ import SearchResultsView from "../views/searchResultsView.js";
 import promiseNoData from "../views/promiseNoData.js";
 import CreatePlaylistName from "../views/createPlaylistNameView.js";
 import CreatePlaylistSelectedSongs from "../views/createPlaylistSelectedSongsView.js";
+import { Row, Col } from 'react-bootstrap';
 
 export default
-function CreatePlaylist(props) {
+    function CreatePlaylist(props) {
     const [searchString, updateSearchString] = useState("Alan Walker")
     const [page, updatePage] = useState(1)
     const [promiseState] = useState({})
@@ -22,6 +23,7 @@ function CreatePlaylist(props) {
     }
 
     function notify() {
+        console.log(promiseState.data)
         reRender(new Object())
     }
 
@@ -42,13 +44,19 @@ function CreatePlaylist(props) {
 
     useEffect(search, [page])
 
-    return  <div>
-                <CreatePlaylistName playlistNameChange={setPlaylistName}/>
+    return <div>
+        <CreatePlaylistName playlistNameChange={setPlaylistName} />
+        <Row>
+            <Col>
+                <SearchSongView updateSearchString={updateInput}
+                    search={search}
+                    nextPage={nextPage}
+                    prevPage={prevPage} />
+                {promiseNoData(promiseState) || <SearchResultsView searchResults={promiseState.data} />}
+            </Col>
+            <Col>
                 <CreatePlaylistSelectedSongs />
-                <SearchSongView updateSearchString={updateInput} 
-                                search={search}
-                                nextPage={nextPage}
-                                prevPage={prevPage}/>
-                {promiseNoData(promiseState) || <SearchResultsView searchResults={promiseState.data}/>}
-            </div>
+            </Col>
+        </Row>
+    </div>
 }
