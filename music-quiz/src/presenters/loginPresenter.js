@@ -16,10 +16,13 @@ export default function Login(props) {
       !isValidEmail() ||
       !isValidPassword()
     ) {
+      console.log("setting isValidated true")
+      setIsValidated(true);
       e.preventDefault();
       e.stopPropagation();
     } else {
       e.preventDefault(); // remove later
+      setIsValidated(false);
 
       setError("");
       setLoading(true);
@@ -29,7 +32,6 @@ export default function Login(props) {
       });
       setLoading(false);
     }
-    setIsValidated(true);
   }
 
   function isValidEmail() {
@@ -63,6 +65,7 @@ export default function Login(props) {
           isValidated={isValidated}
           error={error}
           loading={loading}
+          email={email}
           handleSubmit={handleSubmit}
           setInput={setInput}
           isValidEmail={isValidEmail}
