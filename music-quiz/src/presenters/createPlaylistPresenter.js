@@ -10,20 +10,30 @@ import { Row, Col } from 'react-bootstrap';
 
 export default
     function CreatePlaylist(props) {
-    const [searchString, updateSearchString] = useState("Alan Walker")
+    const [playlistName, setPlaylistName] = useState("")
+    const [searchString, updateSearchString] = useState("")
+    const [initialSearch, updateInitialSearch] = useState(false)
     const [page, updatePage] = useState(1)
     const [promiseState] = useState({})
-    const [playlistName, setPlaylistName] = useState("")
     const [, reRender] = useState()
 
-    function search() {
-        if (!promiseState.promise) {
-            resolvePromise(searchSong(searchString, page), promiseState, notify)
+    useEffect(() => {
+        if (initialSearch) {
+            search()
         }
+    }, [page])
+
+    function search() {
+        updateInitialSearch(true)
+        resolvePromise(searchSong(searchString, page), promiseState, notify)
+    }
+
+    function newSearch() {
+        updatePage(1)
+        search()
     }
 
     function notify() {
-        console.log(promiseState.data)
         reRender(new Object())
     }
 
@@ -41,8 +51,6 @@ export default
     function updateInput(newInput) {
         updateSearchString(newInput)
     }
-
-    useEffect(search, [page])
 
     return <div>
         <CreatePlaylistName playlistNameChange={setPlaylistName} />
