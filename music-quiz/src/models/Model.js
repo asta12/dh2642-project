@@ -10,6 +10,7 @@ class Model {
   constructor() {
     this.observers = [];
     this.currentUser = null;
+    this.playlists = [];
   }
 
   addObserver(observer) {
@@ -71,6 +72,22 @@ class Model {
       this.currentUser = null;
       this.notifyObservers({ setCurrentUser: null });
     });
+  }
+
+  addPlaylist(playlist) {
+    // Don't add the same playlist twice.
+    if (this.playlists.find(pl => pl.id === playlist.id)) {
+        return;
+    }
+
+    this.playlists = [...this.playlists, playlist]
+    this.notifyObservers({ playlistAdded: playlist })
+  }
+
+  getUniquePlaylistID() {
+    // Find the next largest ID that is unique. 
+    // Another solution: `this.playlists.length`, however, that will not work if we are allowed to remove playlists.  
+    return this.playlists.reduce((currentMax, playlist) => Math.max(currentMax, playlist.id), 0)
   }
 }
 

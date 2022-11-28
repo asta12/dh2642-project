@@ -14,10 +14,10 @@ function App(props) {
         {/*<Route exact path="/" component={Home} />
         <Route path="/profile" component={Profile} />
         <Route path="/about" component={About} />*/}
+        <Route path="/profile/create-playlist" element={<CreatePlaylist model={props.model}/>} />
         <Route path="/login" element={<Login model={props.model}/>} />
         <Route path="/register" element={<Register model={props.model}/>} />
       </Routes>
-      <CreatePlaylist />
     </div>
   );
 }

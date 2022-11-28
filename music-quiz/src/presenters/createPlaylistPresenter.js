@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useNavigate } from 'react-router-dom';
 import SearchSongView from "../views/searchSongView.js";
 import resolvePromise from "../resolvePromise.js";
 import { searchSong } from "../songSource.js";
@@ -28,6 +29,7 @@ export default
     const [page, updatePage] = useState(1)
     const [promiseState] = useState({})
     const [, reRender] = useState()
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (initialSearch) {
@@ -46,7 +48,6 @@ export default
     }
 
     function notify() {
-        console.log(promiseState.data)
         reRender(new Object())
     }
 
@@ -90,6 +91,9 @@ export default
         } else {
             // The playlist is valid save it in our model.
             setCreatePlaylistErrorMessage("") 
+            props.model.addPlaylist({id: props.model.getUniquePlaylistID(), name: playlistName, songs: playlistSongs})
+            // Go back to the profile.
+            navigate("/profile")
         }
     }
 
