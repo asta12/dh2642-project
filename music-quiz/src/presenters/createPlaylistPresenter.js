@@ -8,10 +8,14 @@ import CreatePlaylistName from "../views/createPlaylistNameView.js";
 import CreatePlaylistSelectedSongs from "../views/createPlaylistSelectedSongsView.js";
 import { Row, Col } from 'react-bootstrap';
 
+const PLAYLIST_MIN_SONGS = 5;
+const PLAYLIST_MAX_SONGS = 10;
+
 export default
     function CreatePlaylist(props) {
     const [playlistName, setPlaylistName] = useState("")
     const [playlistSongs, setPlaylistSongs] = useState([])
+    const [createPlaylistErrorMessage, setCreatePlaylistErrorMessage] = useState("")
     const [searchString, updateSearchString] = useState("")
     const [initialSearch, updateInitialSearch] = useState(false)
     const [page, updatePage] = useState(1)
@@ -62,8 +66,24 @@ export default
         return playlistSongs.filter(song => song.id === songID).length > 0
     }
 
+    function isPlaylistFull() {
+        return playlistSongs.length === PLAYLIST_MAX_SONGS;
+    }
+
     function removeSongFromPlaylist(songID) {
         setPlaylistSongs(playlistSongs.filter(song => song.id !== songID))
+    }
+
+    function savePlaylistToModel() {
+        // Check that the playlist is valid. The playlist must have a name and at least 5 songs. 
+        if (!playlistName) {
+            setCreatePlaylistErrorMessage("You need to give the playlist a name!")
+        } else if (playlistSongs.length < PLAYLIST_MIN_SONGS) {
+            setCreatePlaylistErrorMessage(`You need to provide at least ${PLAYLIST_MIN_SONGS} songs!`)
+        } else {
+            // The playlist is valid save it in our model.
+            setCreatePlaylistErrorMessage("") 
+        }
     }
 
     return <div>
@@ -79,12 +99,16 @@ export default
                     searchResults={promiseState.data}
                     addSongToPlaylist={addSongToPlaylist}
                     isSongInPlaylist={isSongInPlaylist}
+                    isPlaylistFull={isPlaylistFull}
                 />}
             </Col>
             <Col>
                 <CreatePlaylistSelectedSongs
                     playlistSongs={playlistSongs}
-                    removeSongFromPlaylist={removeSongFromPlaylist} />
+                    removeSongFromPlaylist={removeSongFromPlaylist} 
+                    errorMessage={createPlaylistErrorMessage}
+                    savePlaylist={savePlaylistToModel}
+                    />
             </Col>
         </Row>
     </div>

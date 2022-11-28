@@ -15,7 +15,7 @@ export default
                             variant="outline-primary"
                             size="sm"
                             onClick={(e) => props.addSongToPlaylist({ id: song.id, title: song.title, artist_names: song.artist_names })}
-                            disabled={props.isSongInPlaylist(song.id)}>
+                            disabled={props.isSongInPlaylist(song.id) || props.isPlaylistFull()}>
                             Add
                         </Button>
                     </div>

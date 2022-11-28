@@ -1,6 +1,7 @@
-import { ListGroup, CloseButton, Stack, Button } from 'react-bootstrap';
+import { ListGroup, CloseButton, Stack, Button, Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-function CreatePlaylistSelectedSongs(props) {
+function CreatePlaylistSelectedSongs(props) {    
     return <div>
         <h4>Selected songs</h4>
         <ListGroup className="mb-3">
@@ -20,10 +21,21 @@ function CreatePlaylistSelectedSongs(props) {
                     })
             }
         </ListGroup>
-        <div className="float-end">
-            <Button variant="primary me-2">Save</Button>
-            <Button variant="danger">Cancel</Button>
+        <div className="text-end">
+            <Button variant="primary me-2" onClick={(e) => props.savePlaylist()}>Save</Button>
+            <Link
+                className="btn btn-danger"
+                role="button"
+                to="/profile">
+                Cancel
+            </Link>
         </div>
+        {
+            props.errorMessage ?
+                <Alert variant="danger mt-3">{props.errorMessage}</Alert>
+                :
+                ""
+        }
     </div>
 }
 
