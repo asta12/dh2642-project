@@ -11,6 +11,7 @@ import { Row, Col } from 'react-bootstrap';
 export default
     function CreatePlaylist(props) {
     const [playlistName, setPlaylistName] = useState("")
+    const [playlistSongs, setPlaylistSongs] = useState([])
     const [searchString, updateSearchString] = useState("")
     const [initialSearch, updateInitialSearch] = useState(false)
     const [page, updatePage] = useState(1)
@@ -26,6 +27,11 @@ export default
     function search() {
         updateInitialSearch(true)
         resolvePromise(searchSong(searchString, page), promiseState, notify)
+    }
+
+    function newSearch() {
+        updatePage(1)
+        search()
     }
 
     function notify() {
@@ -48,18 +54,37 @@ export default
         updateSearchString(newInput)
     }
 
+    function addSongToPlaylist(song) {
+        setPlaylistSongs([...playlistSongs, song])
+    }
+
+    function isSongInPlaylist(songID) {
+        return playlistSongs.filter(song => song.id === songID).length > 0
+    }
+
+    function removeSongFromPlaylist(songID) {
+        setPlaylistSongs(playlistSongs.filter(song => song.id !== songID))
+    }
+
     return <div>
         <CreatePlaylistName playlistNameChange={setPlaylistName} />
         <Row>
             <Col>
                 <SearchSongView updateSearchString={updateInput}
-                    search={search}
+                    search={newSearch}
                     nextPage={nextPage}
-                    prevPage={prevPage} />
-                {promiseNoData(promiseState) || <SearchResultsView searchResults={promiseState.data} />}
+                    prevPage={prevPage}
+                    page={page} />
+                {promiseNoData(promiseState) || <SearchResultsView
+                    searchResults={promiseState.data}
+                    addSongToPlaylist={addSongToPlaylist}
+                    isSongInPlaylist={isSongInPlaylist}
+                />}
             </Col>
             <Col>
-                <CreatePlaylistSelectedSongs />
+                <CreatePlaylistSelectedSongs
+                    playlistSongs={playlistSongs}
+                    removeSongFromPlaylist={removeSongFromPlaylist} />
             </Col>
         </Row>
     </div>
