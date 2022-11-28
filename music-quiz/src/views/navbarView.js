@@ -18,6 +18,12 @@ const navbarView = (props) => {
             <Nav.Link as={Link} to="/about">
               About
             </Nav.Link>
+            <Nav.Link as={Link} to="/login">
+              Log in
+            </Nav.Link>
+            <Nav.Link as={Link} to="/register">
+              Register
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
         <Navbar.Text>Signed in as:</Navbar.Text>

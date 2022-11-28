@@ -1,5 +1,5 @@
 import { Button, FloatingLabel, Form, Card, Alert } from "react-bootstrap";
-//import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 export default function LoginView(props) {
   return (
@@ -48,10 +48,9 @@ export default function LoginView(props) {
             Login
           </Button>
         </Form>
-        {/* Placeholder until merged with routing*/}
-        <a href="url">Do you not have an account? Sign up here!</a>{" "}
-        {/* <Link to="/register" variant="body2"> */}
-        {/* </Link> */}
+        <Link to="/register" variant="body2">
+          Do you not have an account? Sign up here!
+        </Link>
       </Card.Body>
     </Card>
   );
