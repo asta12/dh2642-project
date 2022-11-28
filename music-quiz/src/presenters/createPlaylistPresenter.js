@@ -8,7 +8,14 @@ import CreatePlaylistName from "../views/createPlaylistNameView.js";
 import CreatePlaylistSelectedSongs from "../views/createPlaylistSelectedSongsView.js";
 import { Row, Col } from 'react-bootstrap';
 
+/**
+ * The minimum number of songs that a playlist must contain.
+ */
 const PLAYLIST_MIN_SONGS = 5;
+
+/**
+ * The maximum number of songs that a playlist can contain. 
+ */
 const PLAYLIST_MAX_SONGS = 10;
 
 export default
