@@ -12,9 +12,8 @@ function searchSong(searchString, page_offset) {
     let encodedSearch = encodeURI(searchString) // URL encode search string
     let per_page = 10 // entries per page
     let page = page_offset // page offset
-    return fetch('https://genius-song-lyrics1.p.rapidapi.com/search?q=' + encodedSearch +  "&per_page=" + per_page + "&page=" + page, options)
+    return fetch(`https://genius-song-lyrics1.p.rapidapi.com/search?q=${encodedSearch}&per_page=${per_page}&page=${page}`, options)
 	        .then(response => response.json())
-	        .then(response => response)
 	        .catch(err => console.error(err));
 }
 

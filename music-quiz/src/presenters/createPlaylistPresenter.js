@@ -4,16 +4,21 @@ import resolvePromise from "../resolvePromise.js";
 import { searchSong } from "../songSource.js";
 import SearchResultsView from "../views/searchResultsView.js";
 import promiseNoData from "../views/promiseNoData.js";
+import CreatePlaylistName from "../views/createPlaylistNameView.js";
+import CreatePlaylistSelectedSongs from "../views/createPlaylistSelectedSongsView.js";
 
 export default
-function SeachSongPresenter(props) {
+function CreatePlaylist(props) {
     const [searchString, updateSearchString] = useState("Alan Walker")
     const [page, updatePage] = useState(1)
     const [promiseState] = useState({})
+    const [playlistName, setPlaylistName] = useState("")
     const [, reRender] = useState()
 
     function search() {
-        resolvePromise(searchSong(searchString, page), promiseState, notify)
+        if (!promiseState.promise) {
+            resolvePromise(searchSong(searchString, page), promiseState, notify)
+        }
     }
 
     function notify() {
@@ -38,6 +43,8 @@ function SeachSongPresenter(props) {
     useEffect(search, [page])
 
     return  <div>
+                <CreatePlaylistName playlistNameChange={setPlaylistName}/>
+                <CreatePlaylistSelectedSongs />
                 <SearchSongView updateSearchString={updateInput} 
                                 search={search}
                                 nextPage={nextPage}
