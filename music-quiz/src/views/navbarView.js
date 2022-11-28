@@ -12,11 +12,11 @@ const navbarView = (props) => {
             <Nav.Link as={Link} to="/">
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/Playlists">
-              Playlists
+            <Nav.Link as={Link} to="/profile">
+              Profile
             </Nav.Link>
-            <Nav.Link as={Link} to="/Settings">
-              Settings
+            <Nav.Link as={Link} to="/about">
+              About
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
