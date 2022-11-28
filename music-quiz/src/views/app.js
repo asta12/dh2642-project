@@ -1,12 +1,16 @@
-//import Button from "react-bootstrap/Button";
+import HeaderNavbar from "../presenters/headerNavbarPresenter";
+import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Register from "../presenters/registerPresenter.js";
-import Login from "../presenters/loginPresenter.js"
 
 function App(props) {
   return (
-    <div className="App">
-      <Login model={props.model}/>
+    <div className="container">
+      <HeaderNavbar />
+      <Routes>
+        <Route
+          path="/"
+        />
+      </Routes>
     </div>
   );
 }
