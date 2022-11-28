@@ -1,10 +1,15 @@
 import { register, login, logOut } from "../firebaseAuthentication.js";
+import { isEmailAlreadyRegistered } from "./firebaseModel.js";
+
+function UserException(name, message){
+  this.name = name
+  this.message = message
+}
 
 class Model {
   constructor() {
     this.observers = [];
-    this.users = [];
-    this.currentUser = null
+    this.currentUser = null;
   }
 
   addObserver(observer) {
@@ -28,21 +33,20 @@ class Model {
     this.observers.forEach(invokeObserverCB);
   }
 
-  registerInModel(id, username, email) {
-    if (this.users.find((user) => user.id === id)) return;
+  async registerUser(username, email, password) {
 
-    const user = { id: id, username: username, email: email };
-    this.users = [...this.users, user];
-    this.notifyObservers({ addUser: user });
-  }
-
-  registerUser(username, email, password) {
-    if (this.users.find((user) => user.email === email)) return;
+    const isEmailRegistered = await isEmailAlreadyRegistered(email);
+    if (isEmailRegistered === true) {
+      throw new UserException("emailAlreadyRegistered", "Account already exists");
+    }
 
     return register(email, password).then((userCredential) => {
-        // Registered successfully
-        console.log("User Registered");
-        this.registerInModel(userCredential.user.uid, username, email);
+      // Registered successfully
+      const user = { id: userCredential.user.uid, username: username, email: email };
+      console.log("User Registered:");
+      console.log(user);
+
+      this.notifyObservers({ addUser: user });
     });
   }
 

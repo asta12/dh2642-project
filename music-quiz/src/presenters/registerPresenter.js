@@ -29,10 +29,16 @@ export default function Register(props) {
 
       setError("");
       setLoading(true);
+
       props.model.registerUser(username, email, password).catch((error) => {
-        setError("Failed to create account");
-        console.log(error);
+        if (error.name && error.name === "emailAlreadyRegistered") {
+          setError(error.message); // custom error
+        } else {
+          setError("Failed to create account");
+          console.log(error); // db-error
+        }
       });
+
       setLoading(false);
       //e.target.reset() // clear all input values
     }

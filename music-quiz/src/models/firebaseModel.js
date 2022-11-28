@@ -24,11 +24,13 @@ function updateFirebaseFromModel(model) {
   function updateDatabase(payload) {
     if (!payload) return;
     if (payload.hasOwnProperty("addUser")) {
-
       firebase
         .database()
         .ref(REF + "/users/" + payload.addUser.id)
-        .set({username: payload.addUser.username, email: payload.addUser.email});
+        .set({
+          username: payload.addUser.username,
+          email: payload.addUser.email,
+        });
     } else if (payload.hasOwnProperty("setCurrentUser")) {
       firebase
         .database()
@@ -43,13 +45,6 @@ function updateFirebaseFromModel(model) {
 function updateModelFromFirebase(model) {
   firebase
     .database()
-    .ref(REF + "/users")
-    .on("child_added", (firebaseData) => {
-      if (!model.users.find((user) => user.id === firebaseData.key))
-        model.registerInModel(firebaseData.key, firebaseData.val().username, firebaseData.val().email);
-    });
-  firebase
-    .database()
     .ref(REF + "/currentUser")
     .on("value", (firebaseData) => {
       model.setCurrentUser(firebaseData.val());
@@ -57,9 +52,27 @@ function updateModelFromFirebase(model) {
   return;
 }
 
+async function isEmailAlreadyRegistered(email) {
+  return new Promise((resolve) => {
+    firebase
+      .database()
+      .ref(REF + "/users")
+      .on("value", (firebaseData) => {
+        const users = firebaseData.val();
+        for (const [_, user] of Object.entries(users)) {
+          if (user.email.trim() === email.trim()) {
+            resolve(true)
+          }
+        }
+        resolve(false)
+      });
+  });
+}
+
 export {
   firebase,
   updateFirebaseFromModel,
   updateModelFromFirebase,
   firebaseModelPromise,
+  isEmailAlreadyRegistered,
 };

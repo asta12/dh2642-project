@@ -7,12 +7,12 @@ import {
 import resolvePromise from "./resolvePromise.js";
 import promiseNoData from "./views/promiseNoData.js";
 import { BrowserRouter } from 'react-router-dom';
+import App from "./views/app.js"
 
 function ReactRoot() {
   const [promiseState] = useState({});
   const [, reRender] = useState();
   const [model, setModel] = useState({});
-  const App = require("./views/app.js").default;
 
   function whenCreatedACB() {
     resolvePromise(firebaseModelPromise(), promiseState, notifyACB);
