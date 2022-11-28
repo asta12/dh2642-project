@@ -42,5 +42,5 @@ yarn-error.log*
 .npm/
 dist
 
-# ignore files with API configuration
+# ignore Config files
 **/*Config.js*
