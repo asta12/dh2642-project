@@ -15,7 +15,7 @@ function promiseNoData(promiseState){
     }
 
     return (
-        <Spinner animation="border" role="status">
+        <Spinner animation="border" role="status" style={{ "margin": "10px" }} variant="primary">
             <span className="visually-hidden">Loading...</span>
         </Spinner>
     );
