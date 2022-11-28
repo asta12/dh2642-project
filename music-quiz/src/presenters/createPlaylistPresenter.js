@@ -28,12 +28,8 @@ export default
         resolvePromise(searchSong(searchString, page), promiseState, notify)
     }
 
-    function newSearch() {
-        updatePage(1)
-        search()
-    }
-
     function notify() {
+        console.log(promiseState.data)
         reRender(new Object())
     }
 
