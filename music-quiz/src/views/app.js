@@ -1,13 +1,19 @@
 import HeaderNavbar from '../presenters/headerNavbarPresenter'
-import Button from 'react-bootstrap/Button';
 import CreatePlaylist from '../presenters/createPlaylistPresenter';
+import Button from "react-bootstrap/Button";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <div className="container">
-        <HeaderNavbar />
-        <Button>This is a bootstrap button!</Button>
+      <HeaderNavbar />
+      <Routes>
+        <Route
+          path="/"
+          element={<Button>This is a bootstrap button!</Button>}
+        />
         <CreatePlaylist />
+      </Routes>
     </div>
   );
 }
