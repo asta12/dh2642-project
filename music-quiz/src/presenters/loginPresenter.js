@@ -1,37 +1,52 @@
 import LoginView from "../views/loginView.js";
 import Container from "react-bootstrap/Container";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {login} from '../firebaseAuthentication'
+import resolvePromise from '../resolvePromise'
 
 export default function Login(props) {
-  const [isValidated, setIsValidated] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState(props.model.currentUser)
+  const [validEmail, setValidEmail] = useState(true)
+  const [validPassword, setValidPassword] = useState(true)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginPromiseState, setLoginPromiseState] = useState({})
+  const [, reRender] = useState()
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    if (
-      e.currentTarget.checkValidity() === false ||
-      !isValidEmail() ||
-      !isValidPassword()
-    ) {
-      console.log("setting isValidated true")
-      setIsValidated(true);
-      e.preventDefault();
-      e.stopPropagation();
-    } else {
-      e.preventDefault(); // remove later
-      setIsValidated(false);
-
-      setError("");
-      setLoading(true);
-      props.model.loginUser(email, password).catch((error) => {
-        setError("Failed to log in");
-        console.log(error);
-      });
-      setLoading(false);
+  function componentCreated() {
+    
+    function onObserverNotification() {
+        setCurrentUser(props.model.currentUser)
     }
+
+    function onComponentTakeDown() {
+        props.model.removeObserver(onObserverNotification)
+    }
+
+    props.model.addObserver(onObserverNotification)
+
+    return onComponentTakeDown
+  }
+  
+  useEffect(componentCreated, [])
+
+  function loginAttempt() {
+    // No need to send a request to firebase if the email or password is invalid.
+    if (!isValidEmail()) {
+        setValidEmail(false)
+        return;
+    } else {
+        setValidEmail(true)
+    }
+
+    if (!isValidPassword()) {
+        setValidPassword(false)
+        return;
+    } else {
+        setValidPassword(true)
+    }
+
+    resolvePromise(login(email, password), loginPromiseState, () => reRender(new Object()))
   }
 
   function isValidEmail() {
@@ -43,33 +58,25 @@ export default function Login(props) {
     return password.length >= 6;
   }
 
-  function setInput(e) {
-    switch (e.target.id) {
-      case "inputEmail":
-        setEmail(e.target.value);
-        break;
-      case "inputPassword":
-        setPassword(e.target.value);
-        break;
-      default:
-    }
-  }
-
   return (
     <div className="loginContainer">
       <Container
         className="d-flex justify-content-center align-items-center"
         style={{ minHeight: "100vh" }}
-      >
+      >  
+        {
+        props.model.currentUser ? 
+        "You are already logged in"
+        : 
         <LoginView
-          isValidated={isValidated}
-          error={error}
-          loading={loading}
-          email={email}
-          handleSubmit={handleSubmit}
-          setInput={setInput}
-          isValidEmail={isValidEmail}
+          error={loginPromiseState.error}
+          validEmail={validEmail}
+          validPassword={validPassword}
+          setEmail={setEmail}
+          setPassword={setPassword}
+          handleSubmit={loginAttempt}
         />
+        }
       </Container>
     </div>
   );

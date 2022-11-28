@@ -23,6 +23,7 @@ class Model {
     }
     this.observers = this.observers.filter(removeCallback);
   }
+  
   notifyObservers(payload) {
     function invokeObserverCB(obs) {
       try {
@@ -54,24 +55,8 @@ class Model {
   setCurrentUser(uid) {
     if (this.currentUser === uid) return;
     this.currentUser = uid;
-  }
-
-  loginUser(email, password) {
-    return login(email, password).then((userCredential) => {
-      // Signed in successfully.
-      console.log("User signed in successfully");
-      this.setCurrentUser(userCredential.user.uid);
-      this.notifyObservers({ setCurrentUser: userCredential.user.uid });
-    });
-  }
-
-  logOutUser() {
-    this.currentUser = null;
-    return logOut().then(() => {
-      // Signed-out successfully.
-      this.currentUser = null;
-      this.notifyObservers({ setCurrentUser: null });
-    });
+    console.log(this.currentUser)
+    this.notifyObservers({ currentUser: this.currentUser });
   }
 
   addPlaylist(playlist) {

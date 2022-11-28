@@ -8,7 +8,7 @@ import Model from "./Model.js";
 firebase.initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 
-const REF = "music-quiz";
+export const REF = "music-quiz";
 
 function firebaseModelPromise() {
   return firebase
@@ -43,12 +43,13 @@ function updateFirebaseFromModel(model) {
 }
 
 function updateModelFromFirebase(model) {
-  firebase
-    .database()
-    .ref(REF + "/currentUser")
-    .on("value", (firebaseData) => {
-      model.setCurrentUser(firebaseData.val());
-    });
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        model.setCurrentUser(user.uid)
+    } else {
+        model.setCurrentUser(null)
+    }
+  });
   return;
 }
 

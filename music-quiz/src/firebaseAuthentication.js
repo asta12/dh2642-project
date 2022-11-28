@@ -1,23 +1,20 @@
-import { firebase } from "./models/firebaseModel.js";
+import { firebase, REF } from "./models/firebaseModel.js";
 import "firebase/compat/auth";
 
-function register(email, password) {
-  return firebase.auth().createUserWithEmailAndPassword(email, password);
+function register(username, email, password) {
+  return firebase.auth().createUserWithEmailAndPassword(email, password).then((userCredentials) => {
+    return firebase
+        .database()
+        .ref(REF + "/users/" + userCredentials.id.uid)
+        .set({
+            username: username,
+            email: email
+        })
+  })
 }
 
-function login(email, password) { // TODO: add additional user information (username)
+function login(email, password) {
   return firebase.auth().signInWithEmailAndPassword(email, password);
-}
-
-function onAuthStateChanged() {
-  return firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      // User is signed in
-    } else {
-      // User is signed out
-      // ...
-    }
-  });
 }
 
 function logOut() {
@@ -29,4 +26,4 @@ function logOut() {
     });
 }
 
-export { register, login, onAuthStateChanged, logOut };
+export { register, login, logOut };

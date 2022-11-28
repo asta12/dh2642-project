@@ -8,7 +8,7 @@ import CreatePlaylist from "../presenters/createPlaylistPresenter"
 function App(props) {
   return (
     <div className="container">
-      <HeaderNavbar />
+      <HeaderNavbar model={props.model} />
       <Routes>
         <Route path="/" />
         {/*<Route exact path="/" component={Home} />
