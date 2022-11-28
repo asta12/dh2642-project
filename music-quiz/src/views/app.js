@@ -12,8 +12,8 @@ function App() {
           path="/"
           element={<Button>This is a bootstrap button!</Button>}
         />
-        <CreatePlaylist />
       </Routes>
+      <CreatePlaylist />
     </div>
   );
 }
