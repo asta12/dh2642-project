@@ -14,8 +14,8 @@ function SearchSongView(props) {
                             }
                         }}
                         style={{
-                            "border-radius": "10px",
-                            "border-style": "solid",
+                            borderRadius: "10px",
+                            borderStyle: "solid",
                             "height": "35px"
                         }}/>
                 
