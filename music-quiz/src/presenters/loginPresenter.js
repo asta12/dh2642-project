@@ -31,22 +31,16 @@ export default function Login(props) {
   useEffect(componentCreated, [])
 
   function loginAttempt() {
+    const checkEmail = isValidEmail()
+    const checkPassword = isValidPassword()
+
+    setValidEmail(checkEmail)
+    setValidPassword(checkPassword)
+
     // No need to send a request to firebase if the email or password is invalid.
-    if (!isValidEmail()) {
-        setValidEmail(false)
-        return;
-    } else {
-        setValidEmail(true)
+    if (checkEmail && checkPassword) {
+        resolvePromise(login(email, password), loginPromiseState, () => reRender(new Object()))
     }
-
-    if (!isValidPassword()) {
-        setValidPassword(false)
-        return;
-    } else {
-        setValidPassword(true)
-    }
-
-    resolvePromise(login(email, password), loginPromiseState, () => reRender(new Object()))
   }
 
   function isValidEmail() {

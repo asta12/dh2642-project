@@ -6,6 +6,7 @@ export default function LoginView(props) {
     <Card style={{ minWidth: "300px" }}>
       <Card.Body>
         <h2 className="text-center mb-4"> Login </h2>
+        {props.error && <Alert variant="danger">Wrong email or password!</Alert>}
         <Form
           className="text-center"
           noValidate
@@ -53,7 +54,6 @@ export default function LoginView(props) {
         <Link to="/register" variant="body2">
           Do you not have an account? Sign up here!
         </Link>
-        {props.error ? <Alert variant="danger">Wrong email or password!</Alert> : ""}
       </Card.Body>
     </Card>
   );

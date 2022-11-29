@@ -5,12 +5,13 @@ export default function RegisterView(props) {
     <Card style={{ minWidth: "300px" }}>
       <Card.Body>
         <h2 className="text-center mb-4"> Register </h2>
-        {props.error && <Alert variant="danger">{props.error}</Alert>}
+        {props.error && (props.error === "emailAlreadyRegistered" ? <Alert variant="danger">Email already taken</Alert> : <Alert variant="danger">{props.error}</Alert>)}
         <Form
           className="text-center"
           noValidate
           onSubmit={(e) => {
-            props.handleSubmit(e);
+            e.preventDefault()
+            props.handleSubmit()
           }}
         >
           <FloatingLabel
@@ -21,7 +22,7 @@ export default function RegisterView(props) {
             <Form.Control
               type="text"
               placeholder="Username"
-              onChange={(e) => props.setInput(e)}
+              onChange={(e) => props.setUsername(e.target.value)}
               required
             />
             <Form.Control.Feedback type="invalid">
@@ -37,10 +38,10 @@ export default function RegisterView(props) {
             <Form.Control
               type="email"
               placeholder="Email"
-              onChange={(e) => props.setInput(e)}
+              onChange={(e) => props.setEmail(e.target.value)}
               required
               isInvalid={
-                props.isValidated && props.email && !props.isValidEmail()
+                !props.validEmail
               }
             />
             <Form.Control.Feedback type="invalid">
@@ -57,12 +58,10 @@ export default function RegisterView(props) {
               <Form.Control
                 type="password"
                 placeholder="Password"
-                onChange={(e) => props.setInput(e)}
+                onChange={(e) => props.setPassword(e.target.value)}
                 required
                 isInvalid={
-                  props.isValidated &&
-                  props.password &&
-                  !props.isValidPassword()
+                  !props.validPassword
                 }
               />
               <Form.Control.Feedback type="invalid">
@@ -79,12 +78,10 @@ export default function RegisterView(props) {
             <Form.Control
               type="password"
               placeholder="Password"
-              onChange={(e) => props.setInput(e)}
+              onChange={(e) => props.setConfirmPassword(e.target.value)}
               required
               isInvalid={
-                props.isValidated &&
-                props.confirmPassword &&
-                !props.isMatchingPassword()
+                !props.validConfirmPassword
               }
             />
             <Form.Control.Feedback type="invalid">
@@ -92,7 +89,7 @@ export default function RegisterView(props) {
             </Form.Control.Feedback>
           </FloatingLabel>
 
-          <Button disabled={props.loading} variant="primary" type="submit">
+          <Button variant="primary" type="submit">
             Register
           </Button>
         </Form>

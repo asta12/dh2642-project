@@ -53,27 +53,9 @@ function updateModelFromFirebase(model) {
   return;
 }
 
-async function isEmailAlreadyRegistered(email) {
-  return new Promise((resolve) => {
-    firebase
-      .database()
-      .ref(REF + "/users")
-      .on("value", (firebaseData) => {
-        const users = firebaseData.val();
-        for (const [_, user] of Object.entries(users)) {
-          if (user.email.trim() === email.trim()) {
-            resolve(true)
-          }
-        }
-        resolve(false)
-      });
-  });
-}
-
 export {
   firebase,
   updateFirebaseFromModel,
   updateModelFromFirebase,
-  firebaseModelPromise,
-  isEmailAlreadyRegistered,
+  firebaseModelPromise
 };

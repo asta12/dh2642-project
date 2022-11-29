@@ -1,11 +1,3 @@
-import { register, login, logOut } from "../firebaseAuthentication.js";
-import { isEmailAlreadyRegistered } from "./firebaseModel.js";
-
-function UserException(name, message){
-  this.name = name
-  this.message = message
-}
-
 class Model {
   constructor() {
     this.observers = [];
@@ -35,27 +27,9 @@ class Model {
     this.observers.forEach(invokeObserverCB);
   }
 
-  async registerUser(username, email, password) {
-
-    const isEmailRegistered = await isEmailAlreadyRegistered(email);
-    if (isEmailRegistered === true) {
-      throw new UserException("emailAlreadyRegistered", "Account already exists");
-    }
-
-    return register(email, password).then((userCredential) => {
-      // Registered successfully
-      const user = { id: userCredential.user.uid, username: username, email: email };
-      console.log("User Registered:");
-      console.log(user);
-
-      this.notifyObservers({ addUser: user });
-    });
-  }
-
   setCurrentUser(uid) {
     if (this.currentUser === uid) return;
     this.currentUser = uid;
-    console.log(this.currentUser)
     this.notifyObservers({ currentUser: this.currentUser });
   }
 
@@ -72,7 +46,7 @@ class Model {
   getUniquePlaylistID() {
     // Find the next largest ID that is unique. 
     // Another solution: `this.playlists.length`, however, that will not work if we are allowed to remove playlists.  
-    return this.playlists.reduce((currentMax, playlist) => Math.max(currentMax, playlist.id), 0)
+    return this.playlists.reduce((currentMax, playlist) => Math.max(currentMax, playlist.id), 0) + 1
   }
 }
 
