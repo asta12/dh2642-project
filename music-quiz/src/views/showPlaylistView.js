@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ListGroup } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { Button, Stack } from "react-bootstrap";
 import down from "../images/down.png";
 import up from "../images/up.png";
 
@@ -76,46 +76,59 @@ export default function ShowPlaylistView(props) {
       <ListGroup>
         {playlists.map((playlist, index) => {
           let songs = <></>;
-          let img = <img src={up} alt="add item" width="25" />;
+          let img = (
+            <img
+              src={up}
+              alt="add item"
+              width="25"
+              onClick={(e) => {
+                expand(index);
+              }}
+            />
+          );
           if (index === current) {
             songs = (
               <ListGroup>
                 {playlist.songs.map((song, songIndex) => {
                   return (
                     <ListGroup.Item key={songIndex + 100}>
-                      {song.title} by {song.artist}
+                      {song.title} - {song.artist}
                     </ListGroup.Item>
                   );
                 })}
               </ListGroup>
             );
-            img = <img src={down} alt="add item" width="25" />;
-          }
-          return (
-            <div style={{ display: "flex" }} key={index}>
-              <ListGroup.Item
-                action
+            img = (
+              <img
+                src={down}
+                alt="add item"
+                width="25"
                 onClick={(e) => {
                   expand(index);
                 }}
-              >
+              />
+            );
+          }
+          return (
+            <ListGroup.Item>
+              <Stack direction="horizontal">
                 <div style={{ display: "flex" }}>
                   {img}
                   <h5>{playlist.name}</h5>
                 </div>
-                {songs}
-              </ListGroup.Item>
-              <Button
-                size="sm"
-                style={{ height: "50px", width: "50px" }}
-                onClick={(e) => {
-                  console.log("edit " + playlist.name);
-                }}
-                variant="outline-secondary"
-              >
-                Edit
-              </Button>
-            </div>
+                <div className="ms-auto">
+                  <Button
+                    size="sm"
+                    onClick={(e) => {
+                      console.log("edit " + playlist.name);
+                    }}
+                    variant="outline-primary">
+                    Edit
+                  </Button>
+                </div>
+              </Stack>
+              {songs}
+            </ListGroup.Item>
           );
         })}
       </ListGroup>
