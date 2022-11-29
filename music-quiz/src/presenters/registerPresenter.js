@@ -43,8 +43,6 @@ export default function Register(props) {
     return password === confirmPassword;
   }
 
-  console.log(registerPromiseState)
-
   return (
     <div>
       <Container
