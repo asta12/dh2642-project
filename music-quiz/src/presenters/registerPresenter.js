@@ -43,6 +43,8 @@ export default function Register(props) {
     return password === confirmPassword;
   }
 
+  console.log(registerPromiseState)
+
   return (
     <div>
       <Container
@@ -50,6 +52,7 @@ export default function Register(props) {
         style={{ minHeight: "100vh" }}
       >
         <RegisterView
+          created={registerPromiseState.data}
           error={registerPromiseState.error}
           validEmail={validEmail}
           validPassword={validPassword}

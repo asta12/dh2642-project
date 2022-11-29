@@ -5,6 +5,7 @@ export default function RegisterView(props) {
     <Card style={{ minWidth: "300px" }}>
       <Card.Body>
         <h2 className="text-center mb-4"> Register </h2>
+        {props.created && <Alert variant="success">You have created a new account for the user: {props.created}</Alert>}
         {props.error && (props.error === "emailAlreadyRegistered" ? <Alert variant="danger">Email already taken</Alert> : <Alert variant="danger">{props.error}</Alert>)}
         <Form
           className="text-center"

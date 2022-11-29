@@ -39,6 +39,7 @@ async function register(username, email, password) {
             username: username,
             email: email
         })
+        .then(() => username) // If everything went well we will return the username.
     })
 }
 
