@@ -40,7 +40,7 @@ class Model {
     }
 
     this.playlists = [...this.playlists, playlist]
-    this.notifyObservers({ playlistAdded: playlist })
+    this.notifyObservers({ addPlaylist: playlist })
   }
 
   getUniquePlaylistID() {

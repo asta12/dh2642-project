@@ -23,19 +23,11 @@ function firebaseModelPromise() {
 function updateFirebaseFromModel(model) {
   function updateDatabase(payload) {
     if (!payload) return;
-    if (payload.hasOwnProperty("addUser")) {
+    if (payload.hasOwnProperty("addPlaylist")) {
       firebase
         .database()
-        .ref(REF + "/users/" + payload.addUser.id)
-        .set({
-          username: payload.addUser.username,
-          email: payload.addUser.email,
-        });
-    } else if (payload.hasOwnProperty("setCurrentUser")) {
-      firebase
-        .database()
-        .ref(REF + "/currentUser/")
-        .set(payload.setCurrentUser);
+        .ref(`${REF}/users/${model.currentUser}/playlists/${payload.addPlaylist.id}`)
+        .set(payload.addPlaylist);
     }
   }
   model.addObserver(updateDatabase);
@@ -45,8 +37,15 @@ function updateFirebaseFromModel(model) {
 function updateModelFromFirebase(model) {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
+        // We are logged in (we probably want to save username/email in the model as well).
         model.setCurrentUser(user.uid)
+
+        // Get playlist updates.
+        firebase.database().ref(`${REF}/users/${model.currentUser}/playlists/`).on("child_added", (firebaseData) => {
+            model.addPlaylist(firebaseData.val())
+        })
     } else {
+        // We are not logged in.
         model.setCurrentUser(null)
     }
   });
