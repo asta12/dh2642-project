@@ -8,7 +8,7 @@ import Model from "./Model.js";
 firebase.initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 
-const REF = "music-quiz";
+export const REF = "music-quiz";
 
 function firebaseModelPromise() {
   return firebase
@@ -23,19 +23,11 @@ function firebaseModelPromise() {
 function updateFirebaseFromModel(model) {
   function updateDatabase(payload) {
     if (!payload) return;
-    if (payload.hasOwnProperty("addUser")) {
+    if (payload.hasOwnProperty("addPlaylist")) {
       firebase
         .database()
-        .ref(REF + "/users/" + payload.addUser.id)
-        .set({
-          username: payload.addUser.username,
-          email: payload.addUser.email,
-        });
-    } else if (payload.hasOwnProperty("setCurrentUser")) {
-      firebase
-        .database()
-        .ref(REF + "/currentUser/")
-        .set(payload.setCurrentUser);
+        .ref(`${REF}/users/${model.currentUser}/playlists/${payload.addPlaylist.id}`)
+        .set(payload.addPlaylist);
     }
   }
   model.addObserver(updateDatabase);
@@ -43,36 +35,26 @@ function updateFirebaseFromModel(model) {
 }
 
 function updateModelFromFirebase(model) {
-  firebase
-    .database()
-    .ref(REF + "/currentUser")
-    .on("value", (firebaseData) => {
-      model.setCurrentUser(firebaseData.val());
-    });
-  return;
-}
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        // We are logged in (we probably want to save username/email in the model as well).
+        model.setCurrentUser(user.uid)
 
-async function isEmailAlreadyRegistered(email) {
-  return new Promise((resolve) => {
-    firebase
-      .database()
-      .ref(REF + "/users")
-      .on("value", (firebaseData) => {
-        const users = firebaseData.val();
-        for (const [_, user] of Object.entries(users)) {
-          if (user.email.trim() === email.trim()) {
-            resolve(true)
-          }
-        }
-        resolve(false)
-      });
+        // Get playlist updates.
+        firebase.database().ref(`${REF}/users/${model.currentUser}/playlists/`).on("child_added", (firebaseData) => {
+            model.addPlaylist(firebaseData.val())
+        })
+    } else {
+        // We are not logged in.
+        model.setCurrentUser(null)
+    }
   });
+  return;
 }
 
 export {
   firebase,
   updateFirebaseFromModel,
   updateModelFromFirebase,
-  firebaseModelPromise,
-  isEmailAlreadyRegistered,
+  firebaseModelPromise
 };

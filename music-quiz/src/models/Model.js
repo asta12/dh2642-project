@@ -1,15 +1,8 @@
-import { register, login, logOut } from "../firebaseAuthentication.js";
-import { isEmailAlreadyRegistered } from "./firebaseModel.js";
-
-function UserException(name, message){
-  this.name = name
-  this.message = message
-}
-
 class Model {
   constructor() {
     this.observers = [];
     this.currentUser = null;
+    this.playlists = [];
   }
 
   addObserver(observer) {
@@ -22,6 +15,7 @@ class Model {
     }
     this.observers = this.observers.filter(removeCallback);
   }
+  
   notifyObservers(payload) {
     function invokeObserverCB(obs) {
       try {
@@ -33,44 +27,26 @@ class Model {
     this.observers.forEach(invokeObserverCB);
   }
 
-  async registerUser(username, email, password) {
-
-    const isEmailRegistered = await isEmailAlreadyRegistered(email);
-    if (isEmailRegistered === true) {
-      throw new UserException("emailAlreadyRegistered", "Account already exists");
-    }
-
-    return register(email, password).then((userCredential) => {
-      // Registered successfully
-      const user = { id: userCredential.user.uid, username: username, email: email };
-      console.log("User Registered:");
-      console.log(user);
-
-      this.notifyObservers({ addUser: user });
-    });
-  }
-
   setCurrentUser(uid) {
     if (this.currentUser === uid) return;
     this.currentUser = uid;
+    this.notifyObservers({ currentUser: this.currentUser });
   }
 
-  loginUser(email, password) {
-    return login(email, password).then((userCredential) => {
-      // Signed in successfully.
-      console.log("User signed in successfully");
-      this.setCurrentUser(userCredential.user.uid);
-      this.notifyObservers({ setCurrentUser: userCredential.user.uid });
-    });
+  addPlaylist(playlist) {
+    // Don't add the same playlist twice.
+    if (this.playlists.find(pl => pl.id === playlist.id)) {
+        return;
+    }
+
+    this.playlists = [...this.playlists, playlist]
+    this.notifyObservers({ addPlaylist: playlist })
   }
 
-  logOutUser() {
-    this.currentUser = null;
-    return logOut().then(() => {
-      // Signed-out successfully.
-      this.currentUser = null;
-      this.notifyObservers({ setCurrentUser: null });
-    });
+  getUniquePlaylistID() {
+    // Find the next largest ID that is unique. 
+    // Another solution: `this.playlists.length`, however, that will not work if we are allowed to remove playlists.  
+    return this.playlists.reduce((currentMax, playlist) => Math.max(currentMax, playlist.id), 0) + 1
   }
 }
 

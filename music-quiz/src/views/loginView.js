@@ -6,12 +6,13 @@ export default function LoginView(props) {
     <Card style={{ minWidth: "300px" }}>
       <Card.Body>
         <h2 className="text-center mb-4"> Login </h2>
-        {props.error && <Alert variant="danger">{props.error}</Alert>}
+        {props.error && <Alert variant="danger">Wrong email or password!</Alert>}
         <Form
           className="text-center"
           noValidate
           onSubmit={(e) => {
-            props.handleSubmit(e);
+            e.preventDefault();
+            props.handleSubmit();
           }}
         >
           <FloatingLabel
@@ -22,11 +23,9 @@ export default function LoginView(props) {
             <Form.Control
               type="email"
               placeholder="Enter email"
-              onChange={(e) => props.setInput(e)}
+              onChange={(e) => props.setEmail(e.target.value)}
               required
-              isInvalid={
-                props.isValidated && props.email && !props.isValidEmail()
-              }
+              isInvalid={!props.validEmail}
             />
             <Form.Control.Feedback type="invalid">
               Please input a valid email (example@domain.com)
@@ -34,17 +33,21 @@ export default function LoginView(props) {
           </FloatingLabel>
           <FloatingLabel
             controlId="inputPassword"
-            label="password"
+            label="Password"
             className="mb-3"
           >
             <Form.Control
               type="password"
               placeholder="Enter password"
-              onChange={(e) => props.setInput(e)}
+              onChange={(e) => props.setPassword(e.target.value)}
               required
+              isInvalid={!props.validPassword}
             />
+            <Form.Control.Feedback type="invalid">
+              Please input a valid password of at least 6 characters
+            </Form.Control.Feedback>
           </FloatingLabel>
-          <Button disabled={props.loading} variant="primary" type="submit">
+          <Button variant="primary" type="submit">
             Login
           </Button>
         </Form>
