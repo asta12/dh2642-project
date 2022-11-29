@@ -65,7 +65,7 @@ export default function RegisterView(props) {
                 }
               />
               <Form.Control.Feedback type="invalid">
-                {props.passwordFeedback()}
+                Password should be at least 6 characters
               </Form.Control.Feedback>
             </FloatingLabel>
           </Form.Group>
@@ -85,7 +85,7 @@ export default function RegisterView(props) {
               }
             />
             <Form.Control.Feedback type="invalid">
-              {props.confirmPasswordFeedback()}
+              Passwords do not match
             </Form.Control.Feedback>
           </FloatingLabel>
 

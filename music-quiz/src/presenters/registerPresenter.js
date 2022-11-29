@@ -39,20 +39,8 @@ export default function Register(props) {
     return password.length >= 6;
   }
 
-  function passwordFeedback() {
-    if (password && password.length < 6)
-      return "Password should be at least 6 characters";
-    return "Please input password";
-  }
-
   function isMatchingPassword() {
     return password === confirmPassword;
-  }
-
-  function confirmPasswordFeedback() {
-    if (confirmPassword && password !== confirmPassword)
-      return "Passwords do not match";
-    return "Please confirm password";
   }
 
   return (
@@ -71,8 +59,6 @@ export default function Register(props) {
           setPassword={setPassword}
           setConfirmPassword={setConfirmPassword}
           handleSubmit={registerAttempt}
-          passwordFeedback={passwordFeedback}
-          confirmPasswordFeedback={confirmPasswordFeedback}
         />
       </Container>
     </div>

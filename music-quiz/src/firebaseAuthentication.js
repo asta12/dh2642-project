@@ -8,12 +8,16 @@ async function isEmailAlreadyRegistered(email) {
         .ref(REF + "/users")
         .on("value", (firebaseData) => {
           const users = firebaseData.val();
-          for (const [_, user] of Object.entries(users)) {
-            if (user.email.trim() === email.trim()) {
-              resolve(true)
-            }
+          if (!users) {
+            resolve(false)
+          } else {
+            for (const [_, user] of Object.entries(users)) {
+                if (user.email.trim() === email.trim()) {
+                  resolve(true)
+                }
+              }
+              resolve(false) 
           }
-          resolve(false)
         });
     });
   }
