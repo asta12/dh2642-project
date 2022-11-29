@@ -1,46 +1,32 @@
 import { useState } from "react";
 import RegisterView from "../views/registerView.js";
 import { Container } from "react-bootstrap";
+import { register } from '../firebaseAuthentication'
+import resolvePromise from '../resolvePromise'
 
 export default function Register(props) {
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [isValidated, setIsValidated] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [validEmail, setValidEmail] = useState(true)
+  const [validPassword, setValidPassword] = useState(true)
+  const [validConfirmPassword, setValidConfirmPassword] = useState(true)
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [registerPromiseState, setRegisterPromiseState] = useState({})
+  const [, reRender] = useState()
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function registerAttempt() {
+    const checkEmail = isValidEmail()
+    const checkPassword = isValidPassword()
+    const checkMatchingPassword = isMatchingPassword()
 
-    if (
-      e.currentTarget.checkValidity() === false ||
-      !isValidEmail() ||
-      !isValidPassword() ||
-      !isMatchingPassword()
-    ) {
-      setIsValidated(true);
-      e.preventDefault();
-      e.stopPropagation();
-    } else {
-      //e.preventDefault(); // remove later
-      setIsValidated(false);
+    setValidEmail(checkEmail)
+    setValidPassword(checkPassword)
+    setValidConfirmPassword(checkMatchingPassword)
 
-      setError("");
-      setLoading(true);
-
-      props.model.registerUser(username, email, password).catch((error) => {
-        if (error.name && error.name === "emailAlreadyRegistered") {
-          setError(error.message); // custom error
-        } else {
-          setError("Failed to create account");
-          console.log(error); // db-error
-        }
-      });
-
-      setLoading(false);
-      //e.target.reset() // clear all input values
+    // No need to send a request to firebase if the email, password or matching password is invalid.
+    if (checkEmail && checkPassword && checkMatchingPassword) {
+        resolvePromise(register(username, email, password), registerPromiseState, () => reRender(new Object()))
     }
   }
 
@@ -53,38 +39,8 @@ export default function Register(props) {
     return password.length >= 6;
   }
 
-  function passwordFeedback() {
-    if (password && password.length < 6)
-      return "Password should be at least 6 characters";
-    return "Please input password";
-  }
-
   function isMatchingPassword() {
     return password === confirmPassword;
-  }
-
-  function confirmPasswordFeedback() {
-    if (confirmPassword && password !== confirmPassword)
-      return "Passwords do not match";
-    return "Please confirm password";
-  }
-
-  function setInput(e) {
-    switch (e.target.id) {
-      case "inputUsername":
-        setUsername(e.target.value);
-        break;
-      case "inputEmail":
-        setEmail(e.target.value);
-        break;
-      case "inputPassword":
-        setPassword(e.target.value);
-        break;
-      case "inputConfirmPassword":
-        setConfirmPassword(e.target.value);
-        break;
-      default:
-    }
   }
 
   return (
@@ -94,19 +50,16 @@ export default function Register(props) {
         style={{ minHeight: "100vh" }}
       >
         <RegisterView
-          error={error}
-          loading={loading}
-          isValidated={isValidated}
-          email={email}
-          password={password}
-          confirmPassword={confirmPassword}
-          setInput={setInput}
-          handleSubmit={handleSubmit}
-          isValidEmail={isValidEmail}
-          isValidPassword={isValidPassword}
-          passwordFeedback={passwordFeedback}
-          confirmPasswordFeedback={confirmPasswordFeedback}
-          isMatchingPassword={isMatchingPassword}
+          created={registerPromiseState.data}
+          error={registerPromiseState.error}
+          validEmail={validEmail}
+          validPassword={validPassword}
+          validConfirmPassword={validConfirmPassword}
+          setEmail={setEmail}
+          setUsername={setUsername}
+          setPassword={setPassword}
+          setConfirmPassword={setConfirmPassword}
+          handleSubmit={registerAttempt}
         />
       </Container>
     </div>
