@@ -26,7 +26,7 @@ const navbarView = (props) => {
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
-        <Navbar.Text>Signed in as:</Navbar.Text>
+        <Navbar.Text>{props.loggedInUser ? `You are logged in as: ${props.loggedInUser}` : "You are not logged in"}</Navbar.Text>
       </Container>
     </Navbar>
   );
