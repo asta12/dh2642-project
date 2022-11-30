@@ -15,7 +15,7 @@ class Model {
     }
     this.observers = this.observers.filter(removeCallback);
   }
-  
+
   notifyObservers(payload) {
     function invokeObserverCB(obs) {
       try {
@@ -35,18 +35,23 @@ class Model {
 
   addPlaylist(playlist) {
     // Don't add the same playlist twice.
-    if (this.playlists.find(pl => pl.id === playlist.id)) {
-        return;
+    if (this.playlists.find((pl) => pl.id === playlist.id)) {
+      return;
     }
 
-    this.playlists = [...this.playlists, playlist]
-    this.notifyObservers({ addPlaylist: playlist })
+    this.playlists = [...this.playlists, playlist];
+    this.notifyObservers({ addPlaylist: playlist });
   }
 
   getUniquePlaylistID() {
-    // Find the next largest ID that is unique. 
-    // Another solution: `this.playlists.length`, however, that will not work if we are allowed to remove playlists.  
-    return this.playlists.reduce((currentMax, playlist) => Math.max(currentMax, playlist.id), 0) + 1
+    // Find the next largest ID that is unique.
+    // Another solution: `this.playlists.length`, however, that will not work if we are allowed to remove playlists.
+    return (
+      this.playlists.reduce(
+        (currentMax, playlist) => Math.max(currentMax, playlist.id),
+        0
+      ) + 1
+    );
   }
 }
 

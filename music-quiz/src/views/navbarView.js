@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav, Navbar, Container } from "react-bootstrap";
+import { Nav, Navbar, Container, NavItem } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const navbarView = (props) => {
@@ -18,15 +18,30 @@ const navbarView = (props) => {
             <Nav.Link as={Link} to="/about">
               About
             </Nav.Link>
-            <Nav.Link as={Link} to="/login">
-              Log in
-            </Nav.Link>
-            <Nav.Link as={Link} to="/register">
-              Register
-            </Nav.Link>
+            {(!props.loggedInUser && [
+              <Nav.Link as={Link} to="/login">
+                Log in
+              </Nav.Link>,
+              <Nav.Link as={Link} to="/register">
+                Register
+              </Nav.Link>,
+            ]) || (
+              <Nav.Link
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.handleLogout();
+                }}
+              >
+                Logout
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
-        <Navbar.Text>{props.loggedInUser ? `You are logged in as: ${props.loggedInUser}` : "You are not logged in"}</Navbar.Text>
+        <Navbar.Text>
+          {props.loggedInUser
+            ? `You are logged in as: ${props.loggedInUser}`
+            : "You are not logged in"}
+        </Navbar.Text>
       </Container>
     </Navbar>
   );

@@ -1,32 +1,36 @@
 import { useState } from "react";
 import RegisterView from "../views/registerView.js";
 import { Container } from "react-bootstrap";
-import { register } from '../firebaseAuthentication'
-import resolvePromise from '../resolvePromise'
+import { register } from "../firebaseAuthentication";
+import resolvePromise from "../resolvePromise";
 
 export default function Register(props) {
-  const [validEmail, setValidEmail] = useState(true)
-  const [validPassword, setValidPassword] = useState(true)
-  const [validConfirmPassword, setValidConfirmPassword] = useState(true)
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [registerPromiseState, setRegisterPromiseState] = useState({})
-  const [, reRender] = useState()
+  const [validEmail, setValidEmail] = useState(true);
+  const [validPassword, setValidPassword] = useState(true);
+  const [validConfirmPassword, setValidConfirmPassword] = useState(true);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [registerPromiseState, setRegisterPromiseState] = useState({});
+  const [, reRender] = useState();
 
   function registerAttempt() {
-    const checkEmail = isValidEmail()
-    const checkPassword = isValidPassword()
-    const checkMatchingPassword = isMatchingPassword()
+    const checkEmail = isValidEmail();
+    const checkPassword = isValidPassword();
+    const checkMatchingPassword = isMatchingPassword();
 
-    setValidEmail(checkEmail)
-    setValidPassword(checkPassword)
-    setValidConfirmPassword(checkMatchingPassword)
+    setValidEmail(checkEmail);
+    setValidPassword(checkPassword);
+    setValidConfirmPassword(checkMatchingPassword);
 
     // No need to send a request to firebase if the email, password or matching password is invalid.
     if (checkEmail && checkPassword && checkMatchingPassword) {
-        resolvePromise(register(username, email, password), registerPromiseState, () => reRender(new Object()))
+      resolvePromise(
+        register(username, email, password),
+        registerPromiseState,
+        () => reRender(new Object())
+      );
     }
   }
 
@@ -47,7 +51,7 @@ export default function Register(props) {
     <div>
       <Container
         className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: "100vh" }}
+        style={{ minHeight: "95vh" }}
       >
         <RegisterView
           created={registerPromiseState.data}

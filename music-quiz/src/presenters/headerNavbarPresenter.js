@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Header from '../views/headerView'
 import NavBar from '../views/navbarView'
+import {logout} from '../firebaseAuthentication'
 
 function HeaderNavbar(props) {
 
@@ -25,7 +26,7 @@ function HeaderNavbar(props) {
 
     return <div className="mb-3">
         <Header />
-        <NavBar loggedInUser={props.model.currentUser} />
+        <NavBar loggedInUser={props.model.currentUser} handleLogout={logout} />
     </div>
 }
 
