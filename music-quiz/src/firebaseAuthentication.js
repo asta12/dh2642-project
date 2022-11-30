@@ -1,4 +1,4 @@
-import { firebase } from "./models/firebaseModel.js";
+import firebase from "./models/firebaseModel.js";
 import "firebase/compat/auth";
 
 function register(email, password) {

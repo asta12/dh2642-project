@@ -69,8 +69,8 @@ async function isEmailAlreadyRegistered(email) {
   });
 }
 
+export default firebase
 export {
-  firebase,
   updateFirebaseFromModel,
   updateModelFromFirebase,
   firebaseModelPromise,
