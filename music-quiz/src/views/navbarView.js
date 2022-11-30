@@ -2,7 +2,7 @@ import React from "react";
 import { Nav, Navbar, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const navbarView = (props) => {
+const NavbarView = (props) => {
   return (
     <Navbar bg="primary" variant="dark" expand="lg">
       <Container>
@@ -32,4 +32,4 @@ const navbarView = (props) => {
   );
 };
 
-export default navbarView;
+export default NavbarView;

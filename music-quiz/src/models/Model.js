@@ -3,6 +3,12 @@ class Model {
     this.observers = [];
     this.currentUser = null;
     this.playlists = [];
+    this.settings = {
+      volume: 0.5,
+      pitch: 1,
+      speed: 1.1,
+      showLyrics: true
+    };
   }
 
   addObserver(observer) {
@@ -47,6 +53,13 @@ class Model {
     // Find the next largest ID that is unique. 
     // Another solution: `this.playlists.length`, however, that will not work if we are allowed to remove playlists.  
     return this.playlists.reduce((currentMax, playlist) => Math.max(currentMax, playlist.id), 0) + 1
+  }
+
+  setVolume(volume) {
+    // Set the preferred volume of the user
+    if (this.settings.volume === volume) return;
+    this.settings.volume = volume;
+    this.notifyObservers({ volume: this.settings.volume });
   }
 }
 

@@ -1,4 +1,4 @@
-import firebase, REF from "./models/firebaseModel.js";
+import firebase, {REF} from "./models/firebaseModel.js";
 import "firebase/compat/auth";
 
 async function isEmailAlreadyRegistered(email) {

@@ -56,5 +56,5 @@ export default firebase
 export {
   updateFirebaseFromModel,
   updateModelFromFirebase,
-  firebaseModelPromise
+  firebaseModelPromise,
 };

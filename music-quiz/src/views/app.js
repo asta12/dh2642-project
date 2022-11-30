@@ -4,13 +4,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "../presenters/loginPresenter.js"
 import Register from "../presenters/registerPresenter.js"
 import CreatePlaylist from "../presenters/createPlaylistPresenter"
+import GamePresenter from "../presenters/gamePresenter";
 
 function App(props) {
   return (
     <div className="container">
       <HeaderNavbar model={props.model} />
       <Routes>
-        <Route path="/" />
+        <Route path="/" element ={<GamePresenter model ={props.model} />}/>
         {/*<Route exact path="/" component={Home} />
         <Route path="/profile" component={Profile} />
         <Route path="/about" component={About} />*/}
