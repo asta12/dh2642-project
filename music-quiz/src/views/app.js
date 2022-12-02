@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import HeaderNavbar from "../presenters/headerNavbarPresenter";
 import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import SidebarPresenter from "../presenters/sidebarPresenter";
 import Login from "../presenters/loginPresenter.js";
 import Register from "../presenters/registerPresenter.js";
 import CreatePlaylistPresenter from "../presenters/createPlaylistPresenter.js";
@@ -32,7 +33,11 @@ function App(props) {
   useEffect(componentCreated, []);
 
   return currentUser || isLoaded ? (
-    <div className="container">
+    <div>
+       <div style={{ position: "fixed", top: "0", left: "0" }}>
+        <SidebarPresenter />
+      </div>
+      <div className="container">
       <HeaderNavbar model={props.model} />
       <Routes>
         <Route path="/" />
@@ -57,6 +62,7 @@ function App(props) {
           element={<AddFriend model={props.model} />}
         />
       </Routes>
+      </div>
     </div>
   ) : (
     <Loading />
@@ -64,3 +70,5 @@ function App(props) {
 }
 
 export default App;
+
+
