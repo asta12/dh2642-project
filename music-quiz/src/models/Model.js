@@ -57,6 +57,21 @@ class Model {
     this.notifyObservers({ addPlaylist: playlist })
   }
 
+  deletePlaylist(playlistID) {
+    // Check that the playlist we want to remove exists.
+    if (!this.playlists.find(pl => pl.id === playlistID)) {
+        return;
+    }
+
+    this.playlists = this.playlists.filter(playlist => playlist.id !== playlistID)
+    this.notifyObservers({ deletePlaylist: playlistID })
+  }
+
+  editPlaylist(playlist) {
+    this.playlists = [...this.playlists.filter(pl => pl.id !== playlist.id), playlist]
+    this.notifyObservers({ editPlaylist: playlist })
+  }
+
   getUniquePlaylistID() {
     // Find the next largest ID that is unique. 
     // Another solution: `this.playlists.length`, however, that will not work if we are allowed to remove playlists.  

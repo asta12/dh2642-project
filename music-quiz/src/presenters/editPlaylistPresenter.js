@@ -1,13 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import CreatePlaylistView from "../views/createPlaylistView.js";
-import { PLAYLIST_MIN_SONGS, PLAYLIST_MAX_SONGS } from "../settings/playlistSettings.js";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  PLAYLIST_MIN_SONGS,
+  PLAYLIST_MAX_SONGS,
+} from "../settings/playlistSettings.js";
+import EditPlaylistView from "../views/editPlaylistView.js";
 
-export default function CreatePlaylistPresenter(props) {
-  const [playlistName, setPlaylistName] = useState("");
+export default function EditPlaylistPresenter(props) {
+  const [playlistID, setPlaylistID] = useState(null);
+  const [playlistName, setPlaylistName] = useState(null);
   const [playlistSongs, setPlaylistSongs] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  function whenCreated() {
+    function observer(payload) {
+      loadPlaylist();
+    }
+
+    loadPlaylist();
+    props.model.addObserver(observer);
+
+    function whenTakenDown() {
+      props.model.removeObserver(observer);
+    }
+
+    return whenTakenDown;
+  }
+
+  useEffect(whenCreated, []);
+
+  function loadPlaylist() {
+    // Tries to load the playlist to edit by looking at the URL query and the model.
+    const id = +searchParams.get("id");
+    const findPlaylist = props.model.playlists.find(
+      (playlist) => playlist.id === id
+    );
+    if (findPlaylist) {
+      setPlaylistID(findPlaylist.id);
+      setPlaylistName(findPlaylist.name);
+      setPlaylistSongs([...findPlaylist.songs]);
+    }
+  }
 
   function addSongToPlaylist(song) {
     setPlaylistSongs([...playlistSongs, song]);
@@ -36,8 +71,8 @@ export default function CreatePlaylistPresenter(props) {
     } else {
       // The playlist is valid save it in our model.
       setErrorMessage("");
-      props.model.addPlaylist({
-        id: props.model.getUniquePlaylistID(),
+      props.model.editPlaylist({
+        id: playlistID,
         name: playlistName,
         songs: playlistSongs,
       });
@@ -46,9 +81,19 @@ export default function CreatePlaylistPresenter(props) {
     }
   }
 
+  function deletePlaylistFromModel() {
+    props.model.deletePlaylist(playlistID);
+    navigate("/profile");
+  }
+
+  if (!playlistID) {
+    return "Cannot find playlist";
+  }
+
   return (
     <div>
-      <CreatePlaylistView
+      <EditPlaylistView
+        playlistName={playlistName}
         playlistNameChange={setPlaylistName}
         addSongToPlaylist={addSongToPlaylist}
         isSongInPlaylist={isSongInPlaylist}
@@ -56,6 +101,7 @@ export default function CreatePlaylistPresenter(props) {
         playlistSongs={playlistSongs}
         removeSongFromPlaylist={removeSongFromPlaylist}
         savePlaylist={savePlaylistToModel}
+        deletePlaylist={deletePlaylistFromModel}
         errorMessage={errorMessage}
       />
     </div>

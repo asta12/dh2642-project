@@ -29,6 +29,18 @@ function updateFirebaseFromModel(model) {
         .ref(`${REF}/users/${model.currentUser}/playlists/${payload.addPlaylist.id}`)
         .set(payload.addPlaylist);
     }
+    else if (payload.hasOwnProperty("deletePlaylist")) {
+        firebase
+          .database()
+          .ref(`${REF}/users/${model.currentUser}/playlists/${payload.deletePlaylist}`)
+          .set(null);
+    }
+    else if (payload.hasOwnProperty("editPlaylist")) {
+        firebase
+          .database()
+          .ref(`${REF}/users/${model.currentUser}/playlists/${payload.editPlaylist.id}`)
+          .set(payload.editPlaylist);
+    }
   }
   model.addObserver(updateDatabase);
   return;
@@ -46,9 +58,13 @@ function updateModelFromFirebase(model) {
             model.setUsername(firebaseData.val())
         })
 
-        // Get playlist updates.
+        // A playlist has been added.
         firebase.database().ref(`${REF}/users/${model.currentUser}/playlists/`).on("child_added", (firebaseData) => {
             model.addPlaylist(firebaseData.val())
+        })
+        // A playlist has been removed.
+        firebase.database().ref(`${REF}/users/${model.currentUser}/playlists/`).on("child_removed", (firebaseData) => {
+            model.deletePlaylist(+firebaseData.key);
         })
     } else {
         // We are not logged in.
