@@ -44,3 +44,7 @@ dist
 
 # ignore Config files
 **/*Config.js*
+
+.firebase
+.firebaserc
+firebase.json
