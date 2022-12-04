@@ -1,6 +1,6 @@
 import SearchSongPresenter from "../presenters/searchSongPresenter";
 import SelectedSongsPresenter from "../presenters/selectedSongsPresenter";
-import { Row, Col, Form, Button, Alert, Badge, Stack } from "react-bootstrap";
+import { Row, Col, Form, Button, Alert, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export default function EditPlaylistView(props) {
