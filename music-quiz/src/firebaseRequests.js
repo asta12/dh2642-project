@@ -1,6 +1,6 @@
 import { firebase, REF } from "./models/firebaseModel.js";
 
-// Fetches firebase for a user 
+// Fetches a user with a specific ID from firebase. 
 function getUser(userID) {
     return firebase.database().ref(`${REF}/users/${userID}/`).get()
 }
