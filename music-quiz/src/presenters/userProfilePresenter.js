@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 import ShowPlaylistView from "../views/showPlaylistView";
 
 export default function UserProfilePresenter(props) {
   const [playlists, updatePlaylists] = useState(props.model.playlists);
-  const [expanding, updateExpanding] = useState([])
-  
+  const [expanding, updateExpanding] = useState([]);
+
   function expand(index) {
-    updateExpanding(expanding.map((exp, expandIndex) => {
-      if (index === expandIndex) {
-        return !exp
-      } else {
-        return exp
-      }
-    }))
+    updateExpanding(
+      expanding.map((exp, expandIndex) => {
+        if (index === expandIndex) {
+          return !exp;
+        } else {
+          return exp;
+        }
+      })
+    );
   }
 
   function whenCreated() {
@@ -28,14 +31,22 @@ export default function UserProfilePresenter(props) {
   }
 
   useEffect(whenCreated, []);
-  useEffect(() => updateExpanding(Array(playlists.length).fill(false)), [playlists])
-  return (
-    <div>
-      <ShowPlaylistView
-        playlists={playlists}
-        expanding={expanding}
-        expand={expand}
-      />
-    </div>
+  useEffect(
+    () => updateExpanding(Array(playlists.length).fill(false)),
+    [playlists]
   );
+
+  if (!props.model.currentUser) {
+    return <Navigate replace to="/login" />;
+  } else {
+    return (
+      <div>
+        <ShowPlaylistView
+          playlists={playlists}
+          expanding={expanding}
+          expand={expand}
+        />
+      </div>
+    );
+  }
 }
