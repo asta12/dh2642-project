@@ -36,8 +36,9 @@ export default function FriendProfilePresenter(props) {
           if (friend) {
             setEmail(friend.email);
             setUsername(friend.username);
-            // The playlists from firebase can contain some "empty" elements because the playlist ID:s start from 1.
-            setPlaylists(friend.playlists.filter((playlist) => playlist));
+            if (friend.playlists) {
+              setPlaylists(friend.playlists);
+            }
           } else {
             // There exists no user with the specified ID, we rerender and show an error message.
             reRender(new Object());

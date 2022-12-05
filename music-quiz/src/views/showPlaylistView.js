@@ -9,7 +9,7 @@ export default function ShowPlaylistView(props) {
     <div>
       <h2>Playlists</h2>
       {props.playlists.length === 0 ? (
-        "You have not created a playlist yet"
+        "The list of playlists is empty"
       ) : (
         <ListGroup>
           {props.playlists.map((playlist, index) => {
