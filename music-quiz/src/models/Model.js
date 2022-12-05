@@ -91,7 +91,7 @@ class Model {
       requestType,
       "from",
       this.currentUser,
-      "mockUsername" //TODO: switch "mockusername" to currentUser username when merged with main
+      this.username
     );
 
     this.addPendingRequest(
@@ -118,8 +118,6 @@ class Model {
     if (addressId === this.currentUser) {
       this.pending = [...this.pending, newPending];
     }
-
-    console.log(this.pending);
 
     this.notifyObservers({ newPending: newPending, addressId: addressId });
   }

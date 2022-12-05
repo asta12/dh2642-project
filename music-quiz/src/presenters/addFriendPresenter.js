@@ -13,7 +13,8 @@ export default function AddFriend(props) {
     const checkEmail = isValidEmail();
     setValidEmail(checkEmail);
 
-    // TODO: check if this is the same as currentUsers email, then do not print results
+    // Should not be able to add yourself as friend
+    if (email === props.model.email) return;
 
     if (checkEmail)
       resolvePromise(
