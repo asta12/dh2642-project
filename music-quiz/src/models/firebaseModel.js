@@ -26,7 +26,9 @@ function updateFirebaseFromModel(model) {
     if (payload.hasOwnProperty("addPlaylist")) {
       firebase
         .database()
-        .ref(`${REF}/users/${model.currentUser}/playlists/${payload.addPlaylist.id}`)
+        .ref(
+          `${REF}/users/${model.currentUser}/playlists/${payload.addPlaylist.id}`
+        )
         .set(payload.addPlaylist);
     }
     else if (payload.hasOwnProperty("deletePlaylist")) {
@@ -49,14 +51,17 @@ function updateFirebaseFromModel(model) {
 function updateModelFromFirebase(model) {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-        // We are logged in.
-        model.setCurrentUser(user.uid)
-        model.setEmail(user.email)
+      // We are logged in.
+      model.setCurrentUser(user.uid);
+      model.setEmail(user.email);
 
-        // Load the username into the model.
-        firebase.database().ref(`${REF}/users/${model.currentUser}/username`).on("value", (firebaseData) => {
-            model.setUsername(firebaseData.val())
-        })
+      // Load the username into the model.
+      firebase
+        .database()
+        .ref(`${REF}/users/${model.currentUser}/username`)
+        .on("value", (firebaseData) => {
+          model.setUsername(firebaseData.val());
+        });
 
         // A playlist has been added.
         firebase.database().ref(`${REF}/users/${model.currentUser}/playlists/`).on("child_added", (firebaseData) => {
@@ -67,11 +72,17 @@ function updateModelFromFirebase(model) {
             model.deletePlaylist(+firebaseData.key);
         })
     } else {
-        // We are not logged in.
-        model.setCurrentUser(null)
-        model.setEmail(null)
-        model.setUsername(null)
+      // We are not logged in.
+      model.setCurrentUser(null);
+      model.setEmail(null);
+      model.setUsername(null);
+      model.clearPlaylist();
+
+      model.setInitialLoginAttemptComplete(false);
     }
+
+    // The initial login attempt should be complete now!
+    model.setInitialLoginAttemptComplete(true);
   });
   return;
 }
@@ -80,5 +91,5 @@ export {
   firebase,
   updateFirebaseFromModel,
   updateModelFromFirebase,
-  firebaseModelPromise
+  firebaseModelPromise,
 };

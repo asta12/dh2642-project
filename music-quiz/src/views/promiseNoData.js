@@ -1,24 +1,19 @@
-import Spinner from 'react-bootstrap/Spinner';
+import Loading from "./loadingView.js";
 
-function promiseNoData(promiseState){
+function promiseNoData(promiseState) {
+  if (!promiseState.promise) {
+    return <div></div>;
+  }
 
-    if (!promiseState.promise) {
-        return <div></div>
-    }
+  if (promiseState.error) {
+    return <div>{promiseState.error.toString()}</div>;
+  }
 
-    if (promiseState.error) {
-        return <div>{promiseState.error.toString()}</div>
-    }
-    
-    if (promiseState.data) {
-        return false
-    }
+  if (promiseState.data) {
+    return false;
+  }
 
-    return (
-        <Spinner animation="border" role="status" style={{ "margin": "10px" }} variant="primary">
-            <span className="visually-hidden">Loading...</span>
-        </Spinner>
-    );
+  return <Loading />;
 }
 
-export default promiseNoData
+export default promiseNoData;
