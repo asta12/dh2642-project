@@ -41,13 +41,38 @@ function updateFirebaseFromModel(model) {
         .set(payload.newPending);
     }
 
+    if (payload.hasOwnProperty("removePending")) {
+      // Remove pending request on one user
+      firebase
+        .database()
+        .ref(
+          `${REF}/users/${model.currentUser}/pending/${payload.removePending}`
+        )
+        .set(null);
+
+      // Remove pending request on the other user
+      firebase
+        .database()
+        .ref(`${REF}/users/${payload.userId}/pending/${payload.removePending}`)
+        .set(null);
+    }
+
     if (payload.hasOwnProperty("addFriend")) {
+      // Add friend on one user
       firebase
         .database()
         .ref(
           `${REF}/users/${model.currentUser}/friends/${payload.addFriend.id}`
         )
         .set(payload.addFriend);
+
+      // Add friend on the other user
+      firebase
+        .database()
+        .ref(
+          `${REF}/users/${payload.addFriend.id}/friends/${model.currentUser}`
+        )
+        .set({ id: model.currentUser, username: model.email });
     }
   }
 
@@ -81,7 +106,7 @@ function updateModelFromFirebase(model) {
       // Get pending updates.
       firebase
         .database()
-        .ref(`${REF}/users/${model.currentUser}/pending`)
+        .ref(`${REF}/users/${model.currentUser}/pending/`)
         .on("child_added", (firebaseData) => {
           const requestId = firebaseData.exportVal().id;
           const keys = Object.keys(firebaseData.exportVal());
@@ -98,6 +123,13 @@ function updateModelFromFirebase(model) {
           );
         });
 
+      firebase
+        .database()
+        .ref(`${REF}/users/${model.currentUser}/pending/`)
+        .on("child_removed", (firebaseData) => {
+          model.removeRequest(firebaseData.exportVal().id, null, null);
+        });
+
       // Get friends updates.
       firebase
         .database()
@@ -105,7 +137,7 @@ function updateModelFromFirebase(model) {
         .on("child_added", (firebaseData) => {
           model.addFriend(
             firebaseData.exportVal().id,
-            firebaseData.val().username
+            firebaseData.exportVal().username
           );
         });
     } else {
