@@ -1,4 +1,5 @@
 import { API_KEY } from "./apiConfig.js"
+import { getLyrics } from "genius-lyrics-api"
 
 const options = {
 	method: 'GET',
@@ -18,4 +19,12 @@ function searchSong(searchString, page_offset) {
 }
 
 
-export { searchSong } 
+function getSongLyrics(songID) {
+    return fetch(`https://genius-song-lyrics1.p.rapidapi.com/songs/${songID}`, options)
+        .then(response => response.json())
+        .then(json => json.response.song.url)
+        .then(url => getLyrics(url))
+        .catch(err => console.error(err));
+}
+
+export { searchSong, getSongLyrics } 

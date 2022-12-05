@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "../presenters/loginPresenter.js";
 import Register from "../presenters/registerPresenter.js";
 import CreatePlaylist from "../presenters/createPlaylistPresenter.js";
+import UserProfilePresenter from "../presenters/userProfilePresenter.js";
 import Loading from "./loadingView.js";
 
 function App(props) {
@@ -39,15 +40,19 @@ function App(props) {
       <HeaderNavbar model={props.model} />
       <Routes>
         <Route path="/" />
-        {/*<Route exact path="/" element={Home} />
-        <Route path="/profile" element={Profile} />
-        <Route path="/about" element={About} />*/}
+        {/*<Route exact path="/" component={Home} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/about" component={About} />*/}
         <Route
           path="/profile/create-playlist"
           element={<CreatePlaylist model={props.model} />}
         />
         <Route path="/login" element={<Login model={props.model} />} />
         <Route path="/register" element={<Register model={props.model} />} />
+        <Route
+          path="/profile"
+          element={<UserProfilePresenter model={props.model} />}
+        />
       </Routes>
     </div>
   ) : (
