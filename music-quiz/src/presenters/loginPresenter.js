@@ -1,45 +1,47 @@
 import LoginView from "../views/loginView.js";
 import Container from "react-bootstrap/Container";
 import { useState, useEffect } from "react";
-import {login} from '../firebaseAuthentication'
-import resolvePromise from '../resolvePromise'
+import { login } from "../firebaseAuthentication";
+import resolvePromise from "../resolvePromise";
+import { Navigate } from "react-router-dom";
 
 export default function Login(props) {
-  const [currentUser, setCurrentUser] = useState(props.model.currentUser)
-  const [validEmail, setValidEmail] = useState(true)
-  const [validPassword, setValidPassword] = useState(true)
+  const [currentUser, setCurrentUser] = useState(props.model.currentUser);
+  const [validEmail, setValidEmail] = useState(true);
+  const [validPassword, setValidPassword] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loginPromiseState, setLoginPromiseState] = useState({})
-  const [, reRender] = useState()
+  const [loginPromiseState, setLoginPromiseState] = useState({});
+  const [, reRender] = useState();
 
   function componentCreated() {
-    
     function onObserverNotification() {
-        setCurrentUser(props.model.currentUser)
+      setCurrentUser(props.model.currentUser);
     }
 
     function onComponentTakeDown() {
-        props.model.removeObserver(onObserverNotification)
+      props.model.removeObserver(onObserverNotification);
     }
 
-    props.model.addObserver(onObserverNotification)
+    props.model.addObserver(onObserverNotification);
 
-    return onComponentTakeDown
+    return onComponentTakeDown;
   }
-  
-  useEffect(componentCreated, [])
+
+  useEffect(componentCreated, []);
 
   function loginAttempt() {
-    const checkEmail = isValidEmail()
-    const checkPassword = isValidPassword()
+    const checkEmail = isValidEmail();
+    const checkPassword = isValidPassword();
 
-    setValidEmail(checkEmail)
-    setValidPassword(checkPassword)
+    setValidEmail(checkEmail);
+    setValidPassword(checkPassword);
 
     // No need to send a request to firebase if the email or password is invalid.
     if (checkEmail && checkPassword) {
-        resolvePromise(login(email, password), loginPromiseState, () => reRender(new Object()))
+      resolvePromise(login(email, password), loginPromiseState, () =>
+        reRender(new Object())
+      );
     }
   }
 
@@ -56,21 +58,20 @@ export default function Login(props) {
     <div className="loginContainer">
       <Container
         className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: "100vh" }}
-      >  
-        {
-        props.model.currentUser ? 
-        "You are already logged in"
-        : 
-        <LoginView
-          error={loginPromiseState.error}
-          validEmail={validEmail}
-          validPassword={validPassword}
-          setEmail={setEmail}
-          setPassword={setPassword}
-          handleSubmit={loginAttempt}
-        />
-        }
+        style={{ minHeight: "75vh" }}
+      >
+        {props.model.currentUser ? (
+          <Navigate replace to="/home" />
+        ) : (
+          <LoginView
+            error={loginPromiseState.error}
+            validEmail={validEmail}
+            validPassword={validPassword}
+            setEmail={setEmail}
+            setPassword={setPassword}
+            handleSubmit={loginAttempt}
+          />
+        )}
       </Container>
     </div>
   );
