@@ -140,13 +140,20 @@ function updateModelFromFirebase(model) {
             firebaseData.exportVal().username
           );
         });
+
     } else {
       // We are not logged in.
       model.setCurrentUser(null);
       model.setEmail(null);
       model.setUsername(null);
       model.clearRequests();
+      model.clearPlaylist();
+
+      model.setInitialLoginAttemptComplete(false);
     }
+
+    // The initial login attempt should be complete now!
+    model.setInitialLoginAttemptComplete(true);
   });
   return;
 }

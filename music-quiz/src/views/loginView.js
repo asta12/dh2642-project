@@ -6,7 +6,9 @@ export default function LoginView(props) {
     <Card style={{ minWidth: "300px" }}>
       <Card.Body>
         <h2 className="text-center mb-4"> Login </h2>
-        {props.error && <Alert variant="danger">Wrong email or password!</Alert>}
+        {props.error && (
+          <Alert variant="danger">Wrong email or password!</Alert>
+        )}
         <Form
           className="text-center"
           noValidate
@@ -47,12 +49,14 @@ export default function LoginView(props) {
               Please input a valid password of at least 6 characters
             </Form.Control.Feedback>
           </FloatingLabel>
-          <Button variant="primary" type="submit">
+          <Button className="mb-4" variant="primary" type="submit">
             Login
           </Button>
         </Form>
         <Link to="/register" variant="body2">
-          Do you not have an account? Sign up here!
+          <div className="text-center" style={{ fontSize: "12px" }}>
+            Do you not have an account? Register here!
+          </div>
         </Link>
       </Card.Body>
     </Card>

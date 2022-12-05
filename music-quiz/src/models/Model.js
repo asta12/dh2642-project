@@ -9,6 +9,7 @@ class Model {
     this.playlists = [];
     this.pending = [];
     this.friends = [];
+    this.initialLoginAttemptComplete = false;
   }
 
   addObserver(observer) {
@@ -49,6 +50,12 @@ class Model {
     if (this.email === email) return;
     this.email = email;
     this.notifyObservers({ email: this.email });
+  }
+
+  setInitialLoginAttemptComplete(isComplete) {
+    if (this.initialLoginAttemptComplete === isComplete) return;
+    this.initialLoginAttemptComplete = isComplete;
+    this.notifyObservers({ loginAttempt: this.initialLoginAttemptComplete });
   }
 
   addPlaylist(playlist) {
@@ -168,6 +175,12 @@ class Model {
   clearFriends() {
     if (this.friends === []) return;
     this.firends = [];
+    this.notifyObservers();
+  }
+
+  clearPlaylist() {
+    if (this.playlists === []) return;
+    this.playlists = [];
     this.notifyObservers();
   }
 }
