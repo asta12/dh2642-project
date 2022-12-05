@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "../presenters/loginPresenter.js"
 import Register from "../presenters/registerPresenter.js"
 import CreatePlaylist from "../presenters/createPlaylistPresenter"
+import UserProfilePresenter from "../presenters/userProfilePresenter.js"
 import GamePresenter from "../presenters/gamePresenter";
 
 function App(props) {
@@ -18,6 +19,7 @@ function App(props) {
         <Route path="/profile/create-playlist" element={<CreatePlaylist model={props.model}/>} />
         <Route path="/login" element={<Login model={props.model}/>} />
         <Route path="/register" element={<Register model={props.model}/>} />
+        <Route path="/profile" element={<UserProfilePresenter model={props.model}/>} />
       </Routes>
     </div>
   );
