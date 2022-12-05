@@ -3,8 +3,6 @@ import { useNavigate, Navigate } from "react-router-dom";
 import ShowPlaylistView from "../views/showPlaylistView";
 import UserInfoView from "../views/userInfoView";
 import CreatePlaylistButtonView from "../views/createPlaylistButtonView";
-import { Navigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 export default function UserProfilePresenter(props) {
   const [playlists, updatePlaylists] = useState(props.model.playlists);
