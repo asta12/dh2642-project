@@ -4,7 +4,8 @@ import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "../presenters/loginPresenter.js";
 import Register from "../presenters/registerPresenter.js";
-import CreatePlaylist from "../presenters/createPlaylistPresenter";
+import CreatePlaylistPresenter from "../presenters/createPlaylistPresenter.js";
+import EditPlaylistPresenter from "../presenters/editPlaylistPresenter";
 import UserProfilePresenter from "../presenters/userProfilePresenter.js";
 import AddFriend from "../presenters/addFriendPresenter";
 import Loading from "./loadingView.js";
@@ -36,7 +37,6 @@ function App(props) {
       <Routes>
         <Route path="/" />
         {/*<Route exact path="/" component={Home} />
-        <Route path="/profile" component={Profile} />
         <Route path="/about" component={About} />*/}
         <Route path="/login" element={<Login model={props.model} />} />
         <Route path="/register" element={<Register model={props.model} />} />
@@ -46,7 +46,11 @@ function App(props) {
         />
         <Route
           path="/profile/create-playlist"
-          element={<CreatePlaylist model={props.model} />}
+          element={<CreatePlaylistPresenter model={props.model} />}
+        />
+        <Route
+          path="/profile/edit-playlist"
+          element={<EditPlaylistPresenter model={props.model} />}
         />
         <Route
           path="/profile/add-friend"

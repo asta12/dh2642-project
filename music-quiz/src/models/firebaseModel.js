@@ -31,7 +31,22 @@ function updateFirebaseFromModel(model) {
         )
         .set(payload.addPlaylist);
     }
-
+    if (payload.hasOwnProperty("deletePlaylist")) {
+      firebase
+        .database()
+        .ref(
+          `${REF}/users/${model.currentUser}/playlists/${payload.deletePlaylist}`
+        )
+        .set(null);
+    }
+    if (payload.hasOwnProperty("editPlaylist")) {
+      firebase
+        .database()
+        .ref(
+          `${REF}/users/${model.currentUser}/playlists/${payload.editPlaylist.id}`
+        )
+        .set(payload.editPlaylist);
+    }
     if (payload.hasOwnProperty("newPending")) {
       firebase
         .database()
@@ -40,7 +55,6 @@ function updateFirebaseFromModel(model) {
         )
         .set(payload.newPending);
     }
-
     if (payload.hasOwnProperty("removePending")) {
       // Remove pending request on one user
       firebase
@@ -56,7 +70,6 @@ function updateFirebaseFromModel(model) {
         .ref(`${REF}/users/${payload.userId}/pending/${payload.removePending}`)
         .set(null);
     }
-
     if (payload.hasOwnProperty("addFriend")) {
       // Add friend on one user
       firebase
@@ -95,12 +108,20 @@ function updateModelFromFirebase(model) {
           model.setUsername(firebaseData.val());
         });
 
-      // Get playlist updates.
+      // A playlist has been added.
       firebase
         .database()
         .ref(`${REF}/users/${model.currentUser}/playlists/`)
         .on("child_added", (firebaseData) => {
           model.addPlaylist(firebaseData.val());
+        });
+        
+      // A playlist has been removed.
+      firebase
+        .database()
+        .ref(`${REF}/users/${model.currentUser}/playlists/`)
+        .on("child_removed", (firebaseData) => {
+          model.deletePlaylist(+firebaseData.key);
         });
 
       // Get pending updates.
@@ -140,7 +161,6 @@ function updateModelFromFirebase(model) {
             firebaseData.exportVal().username
           );
         });
-
     } else {
       // We are not logged in.
       model.setCurrentUser(null);
