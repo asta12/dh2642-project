@@ -7,6 +7,7 @@ import Register from "../presenters/registerPresenter.js";
 import CreatePlaylistPresenter from "../presenters/createPlaylistPresenter.js";
 import EditPlaylistPresenter from "../presenters/editPlaylistPresenter";
 import UserProfilePresenter from "../presenters/userProfilePresenter.js";
+import AddFriend from "../presenters/addFriendPresenter";
 import Loading from "./loadingView.js";
 
 function App(props) {
@@ -37,6 +38,12 @@ function App(props) {
         <Route path="/" />
         {/*<Route exact path="/" component={Home} />
         <Route path="/about" component={About} />*/}
+        <Route path="/login" element={<Login model={props.model} />} />
+        <Route path="/register" element={<Register model={props.model} />} />
+        <Route
+          path="/profile"
+          element={<UserProfilePresenter model={props.model} />}
+        />
         <Route
           path="/profile/create-playlist"
           element={<CreatePlaylistPresenter model={props.model} />}
@@ -45,11 +52,9 @@ function App(props) {
           path="/profile/edit-playlist"
           element={<EditPlaylistPresenter model={props.model} />}
         />
-        <Route path="/login" element={<Login model={props.model} />} />
-        <Route path="/register" element={<Register model={props.model} />} />
         <Route
-          path="/profile"
-          element={<UserProfilePresenter model={props.model} />}
+          path="/profile/add-friend"
+          element={<AddFriend model={props.model} />}
         />
       </Routes>
     </div>
