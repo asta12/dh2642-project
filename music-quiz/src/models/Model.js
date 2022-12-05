@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 class Model {
   constructor() {
     this.observers = [];
@@ -5,6 +7,8 @@ class Model {
     this.email = null;
     this.username = null;
     this.playlists = [];
+    this.pending = [];
+    this.friends = [];
     this.initialLoginAttemptComplete = false;
   }
 
@@ -73,6 +77,105 @@ class Model {
         0
       ) + 1
     );
+  }
+
+  newPendingRequest(searchUserData, requestType) {
+    // We do not want more than one request to/from a user respectively.
+    if (
+      this.pending.find(
+        (p) =>
+          p.type === requestType &&
+          (p.to === searchUserData.id || p.from === searchUserData.id)
+      )
+    )
+      return;
+
+    const requestId = uuidv4();
+
+    this.addPendingRequest(
+      requestId,
+      searchUserData.id,
+      requestType,
+      "from",
+      this.currentUser,
+      this.username
+    );
+
+    this.addPendingRequest(
+      requestId,
+      this.currentUser,
+      requestType,
+      "to",
+      searchUserData.id,
+      searchUserData.username
+    );
+  }
+
+  addPendingRequest(requestId, addressId, requestType, direction, id, name) {
+    // Do not add request if already in model
+    if (this.pending.find((p) => p.id === requestId)) return;
+
+    const newPending = {
+      id: requestId,
+      type: requestType,
+      [direction]: id, // to/from
+      username: name,
+    };
+
+    if (addressId === this.currentUser) {
+      this.pending = [...this.pending, newPending];
+    }
+
+    this.notifyObservers({ newPending: newPending, addressId: addressId });
+  }
+
+  addFriend(friendId, friendUsername) {
+    if (this.friends.find((f) => f.id === friendId)) {
+      return;
+    }
+    const friend = {
+      id: friendId,
+      username: friendUsername,
+    };
+
+    const requestToRemove = this.removeRequest(null, "friendRequest", friendId);
+
+    this.friends = [...this.friends, friend];
+
+    this.notifyObservers({
+      removePending: requestToRemove.id,
+      userId: friendId,
+    });
+    this.notifyObservers({ addFriend: friend });
+  }
+
+  removeRequest(requestId, requestType, userId) {
+    var requestToRemove = {};
+    this.requests = this.pending.filter((p) => {
+      // Either requestId is provided
+      if (requestId) return p.id === requestId;
+
+      // Or we have to go through the data to filter out the correct request
+      if (p.type === requestType && (p.to === userId || p.from === userId)) {
+        requestToRemove = p;
+        return false;
+      }
+      return true;
+    });
+
+    return requestToRemove;
+  }
+
+  clearRequests() {
+    if (this.requests === []) return;
+    this.requests = [];
+    this.notifyObservers();
+  }
+
+  clearFriends() {
+    if (this.friends === []) return;
+    this.firends = [];
+    this.notifyObservers();
   }
 
   clearPlaylist() {
