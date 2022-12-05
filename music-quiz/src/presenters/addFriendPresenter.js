@@ -1,10 +1,13 @@
 import AddFriendView from "../views/addFriendView.js";
 import resolvePromise from "../resolvePromise.js";
+import promiseNoData from "../views/promiseNoData.js";
 import { useState } from "react";
 import { searchForUserByEmail } from "../models/firebaseModel.js";
+import SearchUserResults from "../views/searchUserResultsView.js";
 
 export default function AddFriend(props) {
   const [validEmail, setValidEmail] = useState(true);
+  const [requestSent, setRequestSent] = useState({});
   const [searchUserPromiseState] = useState({});
   const [email, setEmail] = useState("");
   const [, reRender] = useState();
@@ -28,6 +31,7 @@ export default function AddFriend(props) {
     if (searchUserPromiseState.data === null) return;
     const data = searchUserPromiseState.data;
     props.model.newPendingRequest(data, "friendRequest");
+    setRequestSent({ requestTo: searchUserPromiseState.data.id });
   }
 
   function isValidEmail() {
@@ -42,26 +46,33 @@ export default function AddFriend(props) {
   }
 
   function isRequestSent() {
-    return props.model.pending.find(
-      (p) =>
-        p.type === "friendRequest" &&
-        (p.to === searchUserPromiseState.data.id ||
-          p.from === searchUserPromiseState.data.id)
+    return (
+      requestSent.requestTo === searchUserPromiseState.data.id ||
+      props.model.pending.find(
+        (p) =>
+          p.type === "friendRequest" &&
+          (p.to === searchUserPromiseState.data.id ||
+            p.from === searchUserPromiseState.data.id)
+      )
     );
   }
 
   return (
     <div>
       <AddFriendView
-        searchResult={searchUserPromiseState.data}
         error={searchUserPromiseState.error}
         validEmail={validEmail}
         setEmail={setEmail}
-        isUserFriend={isUserFriend}
         searchUser={searchUser}
-        sendFriendRequest={sendFriendRequest}
-        isRequestSent={isRequestSent}
       ></AddFriendView>
+      {promiseNoData(searchUserPromiseState) || (
+        <SearchUserResults
+          searchResult={searchUserPromiseState.data}
+          isRequestSent={isRequestSent}
+          isUserFriend={isUserFriend}
+          sendFriendRequest={sendFriendRequest}
+        />
+      )}
     </div>
   );
 }
