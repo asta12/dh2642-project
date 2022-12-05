@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "../presenters/loginPresenter.js";
 import Register from "../presenters/registerPresenter.js";
 import CreatePlaylist from "../presenters/createPlaylistPresenter";
+import UserProfilePresenter from "../presenters/userProfilePresenter.js";
 import AddFriend from "../presenters/addFriendPresenter";
 
 function App(props) {
@@ -15,6 +16,12 @@ function App(props) {
         {/*<Route exact path="/" component={Home} />
         <Route path="/profile" component={Profile} />
         <Route path="/about" component={About} />*/}
+        <Route path="/login" element={<Login model={props.model} />} />
+        <Route path="/register" element={<Register model={props.model} />} />
+        <Route
+          path="/profile"
+          element={<UserProfilePresenter model={props.model} />}
+        />
         <Route
           path="/profile/create-playlist"
           element={<CreatePlaylist model={props.model} />}
@@ -23,8 +30,6 @@ function App(props) {
           path="/profile/add-friend"
           element={<AddFriend model={props.model} />}
         />
-        <Route path="/login" element={<Login model={props.model} />} />
-        <Route path="/register" element={<Register model={props.model} />} />
       </Routes>
     </div>
   );

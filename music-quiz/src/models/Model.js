@@ -4,6 +4,8 @@ class Model {
   constructor() {
     this.observers = [];
     this.currentUser = null;
+    this.email = null;
+    this.username = null;
     this.playlists = [];
     this.pending = [];
     this.friends = [];
@@ -35,6 +37,18 @@ class Model {
     if (this.currentUser === uid) return;
     this.currentUser = uid;
     this.notifyObservers({ currentUser: this.currentUser });
+  }
+
+  setUsername(username) {
+    if (this.username === username) return;
+    this.username = username;
+    this.notifyObservers({ username: this.username });
+  }
+
+  setEmail(email) {
+    if (this.email === email) return;
+    this.email = email;
+    this.notifyObservers({ email: this.email });
   }
 
   addPlaylist(playlist) {

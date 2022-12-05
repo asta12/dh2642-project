@@ -4,12 +4,12 @@ import NavBar from '../views/navbarView'
 
 function HeaderNavbar(props) {
 
-    const [currentUser, setCurrentUser] = useState(props.model.currentUser)
+    const [username, setUsername] = useState(props.model.username)
 
     function componentCreated() {
     
         function onObserverNotification() {
-            setCurrentUser(props.model.currentUser)
+            setUsername(props.model.username)
         }
     
         function onComponentTakeDown() {
@@ -25,7 +25,7 @@ function HeaderNavbar(props) {
 
     return <div className="mb-3">
         <Header />
-        <NavBar loggedInUser={props.model.currentUser} />
+        <NavBar loggedInUser={props.model.username} />
     </div>
 }
 

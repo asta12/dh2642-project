@@ -14,7 +14,7 @@ export default
                         <Button
                             variant="outline-primary"
                             size="sm"
-                            onClick={(e) => props.addSongToPlaylist({ id: song.id, title: song.title, artist_names: song.artist_names })}
+                            onClick={(e) => props.addSongToPlaylist({ id: song.id, title: song.title, artist_names: song.artist_names, img_src: song.header_image_thumbnail_url })}
                             disabled={props.isSongInPlaylist(song.id) || props.isPlaylistFull()}>
                             Add
                         </Button>

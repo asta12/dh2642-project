@@ -58,8 +58,17 @@ function updateFirebaseFromModel(model) {
 function updateModelFromFirebase(model) {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-      // We are logged in (we probably want to save username/email in the model as well).
+      // We are logged in.
       model.setCurrentUser(user.uid);
+      model.setEmail(user.email);
+
+      // Load the username into the model.
+      firebase
+        .database()
+        .ref(`${REF}/users/${model.currentUser}/username`)
+        .on("value", (firebaseData) => {
+          model.setUsername(firebaseData.val());
+        });
 
       // Get playlist updates.
       firebase
@@ -102,6 +111,8 @@ function updateModelFromFirebase(model) {
     } else {
       // We are not logged in.
       model.setCurrentUser(null);
+      model.setEmail(null);
+      model.setUsername(null);
       model.clearRequests();
     }
   });
