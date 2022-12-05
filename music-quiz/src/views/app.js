@@ -41,7 +41,7 @@ function App(props) {
         <Route path="/about" component={About} />*/}
         <Route path="/login" element={<Login model={props.model} />} />
         <Route path="/register" element={<Register model={props.model} />} />
-        <Route path="/user" element={<FriendProfilePresenter model={props.model} />} />
+        <Route path="/friend" element={<FriendProfilePresenter model={props.model} />} />
         <Route
           path="/profile"
           element={<UserProfilePresenter model={props.model} />}

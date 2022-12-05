@@ -61,17 +61,19 @@ export default function ShowPlaylistView(props) {
                     {expandImg}
                     <h5>{playlist.name}</h5>
                   </div>
-                  <div className="ms-auto">
-                    <Button
-                      size="sm"
-                      onClick={(e) => {
-                        props.editPlaylist(playlist.id);
-                      }}
-                      variant="outline-primary"
-                    >
-                      Edit
-                    </Button>
-                  </div>
+                  {props.editable && (
+                    <div className="ms-auto">
+                      <Button
+                        size="sm"
+                        onClick={(e) => {
+                          props.editPlaylist(playlist.id);
+                        }}
+                        variant="outline-primary"
+                      >
+                        Edit
+                      </Button>
+                    </div>
+                  )}
                 </Stack>
                 {songs}
               </ListGroup.Item>

@@ -60,6 +60,7 @@ export default function UserProfilePresenter(props) {
         expanding={expanding}
         expand={expand}
         editPlaylist={editPlaylist}
+        editable={true}
       />
       <CreatePlaylistButtonView
         createPlaylistButtonClick={() => navigate("/profile/create-playlist")}
