@@ -15,6 +15,7 @@ function App(props) {
   function componentCreated() {
     function onObserverNotification() {
       setCurrentUser(props.model.currentUser);
+      if (props.model.initialLoginAttemptComplete) setIsLoaded(true);
     }
 
     function onComponentTakeDown() {
@@ -27,13 +28,6 @@ function App(props) {
   }
 
   useEffect(componentCreated, []);
-
-  useEffect(() => {
-    // Wait 500 milliseconds before displaying page
-    setInterval(() => {
-      setIsLoaded(true);
-    }, 500);
-  }, []);
 
   return currentUser || isLoaded ? (
     <div className="container">

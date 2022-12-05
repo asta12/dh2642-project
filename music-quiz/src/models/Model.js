@@ -5,6 +5,7 @@ class Model {
     this.email = null;
     this.username = null;
     this.playlists = [];
+    this.initialLoginAttemptComplete = false;
   }
 
   addObserver(observer) {
@@ -45,6 +46,12 @@ class Model {
     if (this.email === email) return;
     this.email = email;
     this.notifyObservers({ email: this.email });
+  }
+
+  setInitialLoginAttemptComplete(isComplete) {
+    if (this.initialLoginAttemptComplete === isComplete) return;
+    this.initialLoginAttemptComplete = isComplete;
+    this.notifyObservers({ loginAttempt: this.initialLoginAttemptComplete });
   }
 
   addPlaylist(playlist) {
