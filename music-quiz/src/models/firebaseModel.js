@@ -63,6 +63,7 @@ function updateModelFromFirebase(model) {
       model.setCurrentUser(null);
       model.setEmail(null);
       model.setUsername(null);
+      model.clearPlaylist();
 
       model.setInitialLoginAttemptComplete(false);
     }

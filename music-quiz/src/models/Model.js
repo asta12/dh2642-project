@@ -74,6 +74,12 @@ class Model {
       ) + 1
     );
   }
+
+  clearPlaylist() {
+    if (this.playlists === []) return;
+    this.playlists = [];
+    this.notifyObservers();
+  }
 }
 
 export default Model;
