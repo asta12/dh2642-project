@@ -1,6 +1,7 @@
 import AddFriendView from "../views/addFriendView.js";
 import resolvePromise from "../resolvePromise.js";
 import promiseNoData from "../views/promiseNoData.js";
+import { Navigate } from "react-router-dom";
 import { useState } from "react";
 import { searchForUserByEmail } from "../models/firebaseModel.js";
 import SearchUserResults from "../views/searchUserResultsView.js";
@@ -57,22 +58,26 @@ export default function AddFriend(props) {
     );
   }
 
-  return (
-    <div>
-      <AddFriendView
-        error={searchUserPromiseState.error}
-        validEmail={validEmail}
-        setEmail={setEmail}
-        searchUser={searchUser}
-      ></AddFriendView>
-      {promiseNoData(searchUserPromiseState) || (
-        <SearchUserResults
-          searchResult={searchUserPromiseState.data}
-          isRequestSent={isRequestSent}
-          isUserFriend={isUserFriend}
-          sendFriendRequest={sendFriendRequest}
-        />
-      )}
-    </div>
-  );
+  if (!props.model.currentUser) {
+    return <Navigate replace to="/login" />;
+  } else {
+    return (
+      <div>
+        <AddFriendView
+          error={searchUserPromiseState.error}
+          validEmail={validEmail}
+          setEmail={setEmail}
+          searchUser={searchUser}
+        ></AddFriendView>
+        {promiseNoData(searchUserPromiseState) || (
+          <SearchUserResults
+            searchResult={searchUserPromiseState.data}
+            isRequestSent={isRequestSent}
+            isUserFriend={isUserFriend}
+            sendFriendRequest={sendFriendRequest}
+          />
+        )}
+      </div>
+    );
+  }
 }
