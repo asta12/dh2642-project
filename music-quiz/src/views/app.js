@@ -5,6 +5,7 @@ import Login from "../presenters/loginPresenter.js"
 import Register from "../presenters/registerPresenter.js"
 import CreatePlaylist from "../presenters/createPlaylistPresenter"
 import UserProfilePresenter from "../presenters/userProfilePresenter.js"
+import FriendProfilePresenter from "../presenters/friendProfilePresenter"
 
 function App(props) {
   return (
@@ -19,6 +20,7 @@ function App(props) {
         <Route path="/login" element={<Login model={props.model}/>} />
         <Route path="/register" element={<Register model={props.model}/>} />
         <Route path="/profile" element={<UserProfilePresenter model={props.model}/>} />
+        <Route path="/user" element={<FriendProfilePresenter model={props.model}/>} />
       </Routes>
     </div>
   );
