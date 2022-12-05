@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import FriendUserInfo from "../views/friendUserInfoView";
 import resolvePromise from "../resolvePromise";
 import promiseNoData from "../views/promiseNoData";
-import { getFriend } from "../firebaseRequests";
+import { getUser } from "../firebaseRequests";
 
 export default function FriendProfilePresenter(props) {
   const [friendPromiseState, setFriendPromiseState] = useState({});
@@ -13,7 +13,7 @@ export default function FriendProfilePresenter(props) {
   function whenCreated() {
     const id = searchParams.get("id");
     if (id) {
-      resolvePromise(getFriend(id), friendPromiseState, () =>
+      resolvePromise(getUser(id), friendPromiseState, () =>
         reRender(new Object())
       );
     }
@@ -22,25 +22,21 @@ export default function FriendProfilePresenter(props) {
   useEffect(whenCreated, []);
 
   if (!friendPromiseState.promise) {
-    return "Please provide a valid ID"
+    return "Please provide a valid ID";
   }
-  
-  const dataNotReady = promiseNoData(friendPromiseState)
+
+  const dataNotReady = promiseNoData(friendPromiseState);
 
   if (dataNotReady) {
-    return dataNotReady
+    return dataNotReady;
   }
 
-  // The data is now ready to be proccessed. 
-  const friend = friendPromiseState.data.val()
+  // The data is now ready.
+  const friend = friendPromiseState.data.val();
 
   if (!friend) {
-    return "Could not find an user with that ID"
+    return "Could not find an user with that ID";
   }
 
-  return (
-    promiseNoData(friendPromiseState) || (
-      <FriendUserInfo username={friend.username} email={friend.email} />
-    )
-  );
+  return <FriendUserInfo username={friend.username} email={friend.email} />;
 }

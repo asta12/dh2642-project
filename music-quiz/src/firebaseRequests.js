@@ -1,7 +1,8 @@
 import { firebase, REF } from "./models/firebaseModel.js";
 
-function getFriend(friendID) {
-    return firebase.database().ref(`${REF}/users/${friendID}/`).get()
+// Fetches firebase for a user 
+function getUser(userID) {
+    return firebase.database().ref(`${REF}/users/${userID}/`).get()
 }
 
-export { getFriend }
+export { getUser }
