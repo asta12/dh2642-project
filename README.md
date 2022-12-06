@@ -26,40 +26,40 @@ You can create an account on which you can create quiz playlists and save for yo
 
 ### src/models
 
-- firebaseModel
+- firebaseModel:
 FirebaseModel communicates with firebase and ensures that data is loaded into the model from firebase and vice versa. Works like in the lab.
 
-- model
+- model:
 This is the model in our model-view-presenter architecture. The purpose of this file is to handle the model, which is passed down to each presenter. Also works like in the lab with observers so that when the model is updated, the components that are observing it are sent a notification.
 
 ### src/presenters
 
-- createPlayListPresenter
+- createPlayListPresenter:
 Responsible for creating new playlists. This presenter uses the createPlaylistView, which in turn uses the searchSongPresenter (to search for new songs to add) and the selectedSongsPresenter to show the list of selected songs.
 
-- editPlayListPresenter
+- editPlayListPresenter:
 Responsible for editing playlists. This presenter uses the editPlaylistView, which in turn uses the searchSongPresenter (to search for new songs to add) and the selectedSongsPresenter to show the list of selected songs. 
 
-- searchSongPresenter 
+- searchSongPresenter:
 Responsible for taking an input query from the user and fetching songs from the genius API. This presenter uses the searchSongView, which has an input for the search query, and searchSongResultsView which displays all the search results. We also use promiseNoData in the presenter in order to display a spinner while we are waiting for the search promise to resolve. 
 
-- selectedSongsPresenter 
+- selectedSongsPresenter: 
 Responsible for displaying a list of selected songs. This presenter uses the selectedSongsView which displays a list of songs.
 
-- gamePresenter
+- gamePresenter:
 Presenter that keeps the game state as component state and handles the logic for the views that make up the game. Contains the views guessSongView, settingsView, scoreView and choosePlaylistView. Sends the alternatives down to guessSongView which sends up information via custom events when the user clicks on a song title and makes their guess. This view is also conditionally styled via props after a user has made a guess. 
 The presenter manages the game settings and updates them via settingsView. Displays the score of the game via scoreView and lets the user select a playlist to play using choosePlaylistView.
 
-- headerNavbarPresenter
+- headerNavbarPresenter:
 Presenter that handles the logic for the headerView and NavbarView. Receives the model as a props and adds an observer to it. Receives the current user from the model and sends it as a prop to the NavbarView.
 
-- addFriendPresenter
+- addFriendPresenter:
 Presenter that handles the logic for searching for users and sending friend requests. Contains the view: addFriendView.
 
-- loginPresenter
+- loginPresenter:
 Presenter that handles the logic for signing in a user. Contains the view: loginView.
 
-- registerPresenter
+- registerPresenter:
 Presenter that handles the logic to register a new user. Contains the view: registerView.
 userProfilePresenter
 Responsible for showing the profile of a logged-in user. The presenter uses the userInfoView which displays the username and the email. In addition, the presenter uses the showPlaylistView to display all playlists of the user. Lastly, the presenter uses the  createPlaylistButtonView to show a button that can redirect the user to the createPlayListPresenter.
@@ -68,10 +68,10 @@ Responsible for showing the profile of a logged-in user. The presenter uses the 
 
 All views are in this directory. Most views are tied to a presenter, and are therefore described under the presenter they belong to.   
 
-- app
+- app:
 Sets up routing and displays all components of the application.
 
-- loadingView
+- loadingView:
 Shows the spinner when loading. Is used when waiting for promises to be resolved in the application.
 
 ### src/settings
