@@ -1,7 +1,7 @@
 # Music Quiz with a Twist
 
 ## Setup
-If you would like to test our game, install this plugin Allow CORS to allow CORS. 
+If you would like to test our game, install this plugin [Allow CORS](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=en) to allow CORS. 
 Visit our deployed site at: https://dh2642-project-f1eca.web.app/
 
 ## Description
