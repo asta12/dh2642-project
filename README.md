@@ -4,7 +4,7 @@
 If you would like to test our game, install this plugin [Allow CORS](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=en) to allow CORS. 
 Visit our deployed site at: https://dh2642-project-f1eca.web.app/
 
-**Don't forget to disable the plugin after you are testing our website!! By default the browser restricts CORS for security reasons.**
+⚠️**Don't forget to disable the plugin after you are testing our website!! By default the browser restricts CORS for security reasons.**
 
 ## Description
 Music Quiz with a Twist is a music quiz where the lyrics of a song is read out loud by an AI (text-to-speech). You will then have to guess the song by selecting the correct title of the song from a selection of titles.
