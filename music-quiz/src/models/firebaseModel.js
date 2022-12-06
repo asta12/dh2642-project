@@ -85,7 +85,7 @@ function updateFirebaseFromModel(model) {
         .ref(
           `${REF}/users/${payload.addFriend.id}/friends/${model.currentUser}`
         )
-        .set({ id: model.currentUser, username: model.email });
+        .set({ id: model.currentUser, username: model.username });
     }
   }
 
@@ -115,7 +115,7 @@ function updateModelFromFirebase(model) {
         .on("child_added", (firebaseData) => {
           model.addPlaylist(firebaseData.val());
         });
-        
+
       // A playlist has been removed.
       firebase
         .database()
@@ -166,8 +166,7 @@ function updateModelFromFirebase(model) {
       model.setCurrentUser(null);
       model.setEmail(null);
       model.setUsername(null);
-      model.clearRequests();
-      model.clearPlaylist();
+      model.clearModelData();
 
       model.setInitialLoginAttemptComplete(false);
     }

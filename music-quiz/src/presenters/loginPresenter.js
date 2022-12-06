@@ -54,6 +54,8 @@ export default function Login(props) {
     return password.length >= 6;
   }
 
+  useEffect(() => reRender(new Object()), [currentUser]);
+
   return (
     <div className="loginContainer">
       <Container
