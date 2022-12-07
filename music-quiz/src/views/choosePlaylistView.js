@@ -2,7 +2,6 @@ import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 
 function ChoosePlaylistView(props) {
-  console.log(props.choosePlaylistText);
   function getDropdownItem(playlist) {
     function onSelected() {
       props.onPlaylistSelected(playlist.id);

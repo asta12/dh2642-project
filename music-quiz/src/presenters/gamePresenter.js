@@ -11,6 +11,7 @@ import resolvePromise from "../resolvePromise";
 import {
   numSecondsAfterGuess,
   numSongsToGuess,
+  extractFirst20Lines,
 } from "../settings/gameSettings";
 
 function GamePresenter(props) {
@@ -78,10 +79,11 @@ function GamePresenter(props) {
   */
   function getSpeechSettingsObject() {
     const u = new SpeechSynthesisUtterance();
-    u.text = songLyricsPromiseState.data;
+    u.text = extractFirst20Lines(songLyricsPromiseState.data);
     u.pitch = 1;
     u.rate = currentSpeed;
     u.volume = currentVolume;
+
     return u;
   }
 
