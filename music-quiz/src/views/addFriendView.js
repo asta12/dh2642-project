@@ -1,4 +1,4 @@
-import { Card, Form, Button, Row, Col } from "react-bootstrap";
+import { Card, Form, Button, Row, Col, Alert } from "react-bootstrap";
 
 export default function AddFriendView(props) {
   return (

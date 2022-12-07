@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { searchForUserByEmail } from "../models/firebaseModel.js";
 import SearchUserResults from "../views/searchUserResultsView.js";
+import { Alert } from "react-bootstrap";
 
 export default function AddFriend(props) {
   const [validEmail, setValidEmail] = useState(true);
@@ -84,14 +85,19 @@ export default function AddFriend(props) {
     return (
       <div>
         <AddFriendView
-          error={searchUserPromiseState.error}
           validEmail={validEmail}
           setEmail={setEmail}
           searchUser={searchUser}
         ></AddFriendView>
-        {promiseNoData(searchUserPromiseState) || (
+        {promiseNoData(
+          searchUserPromiseState,
+          <Alert variant="danger" className="w-25 text-center">
+            User does not exist
+          </Alert>
+        ) || (
           <SearchUserResults
             searchResult={searchUserPromiseState.data}
+            error={searchUserPromiseState.error}
             isRequestSent={isRequestSent}
             isUserFriend={isUserFriend}
             sendFriendRequest={sendFriendRequest}
