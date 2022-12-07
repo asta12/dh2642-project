@@ -5,8 +5,8 @@ import Card from 'react-bootstrap/Card';
 
 function GameOverView(props) {
   return (
-    <div className='mx-auto' style={{width: "400px"}}>
-        <Card  style={{ width: '25rem'}} className="text-center">
+    <div className='mx-auto' style={{width: "500px"}}>
+        <Card  style={{ width: '30rem'}} className="text-center">
         <Card.Body>
             <Card.Title>Thank you for playing!</Card.Title>
             <Card.Text>

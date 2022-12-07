@@ -3,7 +3,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 
 function ChoosePlaylistView(props) {
-    
+    console.log(props.choosePlaylistText)
     function getDropdownItem(playlist){
        
         function onSelected(){
@@ -18,7 +18,7 @@ function ChoosePlaylistView(props) {
   return (
     <Dropdown>
         <Dropdown.Toggle variant="primary" id="dropdown-playlists">
-            Choose a playlist
+           {props.choosePlaylistText} 
         </Dropdown.Toggle>
         <Dropdown.Menu>
         {props.playlists.map(getDropdownItem)}
