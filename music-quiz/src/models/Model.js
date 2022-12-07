@@ -7,6 +7,11 @@ class Model {
     this.email = null;
     this.username = null;
     this.playlists = [];
+    this.settings = {
+      volume: 0.5,
+      pitch: 1,
+      speed: 1.1,
+    };
     this.pending = [];
     this.friends = [];
     this.initialLoginAttemptComplete = false;
@@ -197,6 +202,13 @@ class Model {
     if (this.playlists === []) return;
     this.playlists = [];
     this.notifyObservers();
+  }
+
+  setVolume(volume) {
+    // Set the preferred volume of the user
+    if (this.settings.volume === volume) return;
+    this.settings.volume = volume;
+    this.notifyObservers({ volume: this.settings.volume });
   }
 }
 

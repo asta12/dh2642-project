@@ -192,8 +192,8 @@ function searchForUserByEmail(model, email) {
     });
 }
 
+export default firebase;
 export {
-  firebase,
   updateFirebaseFromModel,
   updateModelFromFirebase,
   firebaseModelPromise,

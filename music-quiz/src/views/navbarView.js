@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav, Navbar, Container, NavItem } from "react-bootstrap";
+import { Nav, Navbar, Container} from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export default function navbarView(props) {
@@ -17,6 +17,9 @@ export default function navbarView(props) {
             </Nav.Link>
             <Nav.Link as={Link} to="/about" key="about">
               About
+            </Nav.Link>
+            <Nav.Link as={Link} to="/play" key="play">
+              Play
             </Nav.Link>
             {(!props.loggedInUser && [
               <Nav.Link as={Link} to="/login" key="login">
