@@ -8,7 +8,10 @@ import { getSongLyrics } from "../songSource";
 import { useState, useEffect } from "react";
 import promiseNoData from "../views/promiseNoData";
 import resolvePromise from "../resolvePromise";
-import { numSecondsAfterGuess, numSongsToGuess } from "../gameSettings";
+import {
+  numSecondsAfterGuess,
+  numSongsToGuess,
+} from "../settings/gameSettings";
 
 function GamePresenter(props) {
   const [countdownInterval, setCountdownInterval] = useState();
@@ -44,7 +47,9 @@ function GamePresenter(props) {
     props.model.settings["volume"] = currentVolume;
     props.model.settings["speed"] = currentSpeed;
   }
-
+  /*
+  starts the game given that we have chosen a playlist. Fetches the lyrics for the first song.
+  */
   function startGame() {
     if (currentPlaylist.songs.length > 0) {
       setGameStarted(true);
@@ -60,6 +65,7 @@ function GamePresenter(props) {
   }
 
   function playTextToSpeech() {
+    //  We only want to start playing given that we are not inbetween songs, and we have received the lyrics from a promise
     if (songLyricsPromiseState.data && !isInbetweenSongs) {
       window.speechSynthesis.cancel();
       const u = getSpeechSettingsObject();
@@ -67,6 +73,9 @@ function GamePresenter(props) {
     }
   }
 
+  /*
+  Sets the text to speech options
+  */
   function getSpeechSettingsObject() {
     const u = new SpeechSynthesisUtterance();
     u.text = songLyricsPromiseState.data;
@@ -76,16 +85,23 @@ function GamePresenter(props) {
     return u;
   }
 
+  /*
+  Function called by resolvePromise. When data is retrieved, we change the promiseDataLyrics state, causing an update via useState
+  */
   function promiseDataFound() {
     if (songLyricsPromiseState.data) {
       setPromiseDataLyrics(songLyricsPromiseState.data);
     }
   }
 
-  function countDownNextSong() {
+  function performCountdown() {
     setCountdown((prevTime) => prevTime - 1);
   }
 
+  /*
+  Checks if there are any songs left, if that is the case we try to retrieve the next song. 
+  At the end, we start the countdown.
+  */
   function getNextSong() {
     if (currentSongIndex < correctSongs.length - 1) {
       resolvePromise(
@@ -93,17 +109,11 @@ function GamePresenter(props) {
         songLyricsPromiseState,
         promiseDataFound
       );
-      
-    } else {
-      setPreviousGuessText("Game Over!");
-      
-      window.speechSynthesis.cancel();
     }
-    setCountdownInterval(setInterval(countDownNextSong, 1000));
+    setCountdownInterval(setInterval(performCountdown, 1000));
   }
-
+  /*Resets the game */
   function playAgain() {
-    // Reset all state of the game
     setSongLyricsPromiseState({});
     setIsInbetweenSongs(false);
     setPlayerScore(0);
@@ -114,6 +124,10 @@ function GamePresenter(props) {
     setPreviousGuessText("Which song are you hearing?");
   }
 
+  /*
+  Needs a playlist of atleast (numberOfSongsToGuess + 3). Takes the playlist, shuffles it, chooses the NumberOfSongsToGuess songs 
+  that will be the correct answers. For each song, it then randomly generates 3 alternatives from the remaining titles. 
+   */
   function getSongAlternatives(playlist) {
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
@@ -134,6 +148,9 @@ function GamePresenter(props) {
     setAllSongs(found);
   }
 
+  /*
+  Function used in choosePlaylistView to select a playlist for the game.
+  */
   function playlistSelected(id) {
     const foundPlaylist = props.model.playlists.find(
       (playlist) => playlist.id === id
@@ -142,6 +159,11 @@ function GamePresenter(props) {
     setCurrentPlaylist(foundPlaylist);
   }
 
+  /*
+  Takes a guessed song index as well as the correct song index. Changes the style so that
+  if the guessed song index is different from the correct one, it is highlighted with the "danger"
+  variant. The correct index always receives the "success" variant styling.
+  */
   function setButtonStylingAfterGuess(guessedSongIndex, correctSongIndex) {
     let newButtonStyles = [...buttonStyles];
 
@@ -152,6 +174,10 @@ function GamePresenter(props) {
     setButtonStyles(newButtonStyles);
   }
 
+  /*
+  Performs a guess if we are not inbetween songs. Increments the player score and calls 
+  on the function to update styling depending on if the user guessed correctly
+  */
   function guessSong(guessedSongIndex) {
     if (isInbetweenSongs) {
       return;
@@ -171,7 +197,9 @@ function GamePresenter(props) {
 
     setButtonStylingAfterGuess(guessedSongIndex, correctSongIndex);
   }
-
+  /* Called when the component is rendered adds observers to the model and removes them upon
+    component takedown
+  */
   function componentCreated() {
     function onObserverNotification() {
       // What state should be updated from the model
@@ -186,11 +214,16 @@ function GamePresenter(props) {
     props.model.addObserver(onObserverNotification);
     return onComponentTakeDown;
   }
+  useEffect(componentCreated, []);
+  /*
+   Checks when the countdown state variable changes. If it changes to zero, this means we should progress in the game
+   and increase the song index. Although if we are at the end, we instead set game over.
+  */
   useEffect(() => {
     if (countdown === 0) {
       if (currentSongIndex === correctSongs.length - 1) {
         setGameOver(true);
-        return
+        return;
       }
       clearInterval(countdownInterval);
       setIsInbetweenSongs(false);
@@ -200,10 +233,12 @@ function GamePresenter(props) {
     }
   }, [countdown]);
 
+  // When we receive new promise data we call upon text to speech
   useEffect(() => {
     playTextToSpeech();
   }, [promiseDataLyrics]);
 
+  // When we set inbetween songs, we start fetching the next song
   useEffect(() => {
     if (isInbetweenSongs) {
       getNextSong();
@@ -217,7 +252,6 @@ function GamePresenter(props) {
       playTextToSpeech();
     }
   }, [currentSongIndex]);
-  useEffect(componentCreated, []);
 
   return (
     <>
