@@ -155,43 +155,33 @@ class Model {
     this.notifyObservers({ newPending: newPending, addressId: addressId });
   }
 
-  addFriend(friendId, friendUsername) {
+  addFriend(requestId, friendId, friendUsername) {
+    this.removeRequest(requestId, "friendRequest", friendId);
+    this.addFriendFromFirebase(friendId, friendUsername);
+  }
+
+  addFriendFromFirebase(friendId, friendUsername) {
     if (this.friends.find((f) => f.id === friendId)) {
       return;
     }
+
     const friend = {
       id: friendId,
       username: friendUsername,
     };
 
-    const requestToRemove = this.removeRequest(null, "friendRequest", friendId);
-
     this.friends = [...this.friends, friend];
-
-    this.notifyObservers({
-      removePending: requestToRemove.id,
-      userId: friendId,
-    });
     this.notifyObservers({ addFriend: friend });
   }
 
   removeRequest(requestId, requestType, userId) {
-    var requestToRemove = {};
-    this.requests = this.pending.filter((p) => {
-      // Either requestId is provided
-      if (requestId) return p.id === requestId;
-
-      // Or we have to go through the data to filter out the correct request
-      if (p.type === requestType && (p.to === userId || p.from === userId)) {
-        requestToRemove = p;
-        return false;
-      }
-      return true;
+    this.pending = this.pending.filter((p) => {
+      if (requestId) return p.id !== requestId;
     });
 
-    this.notifyObservers({ requestRemoved: requestId });
+    this.notifyObservers({ removePending: requestId, userId: userId });
 
-    return requestToRemove;
+    return;
   }
 
   clearModelData() {

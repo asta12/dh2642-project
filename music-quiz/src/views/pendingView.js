@@ -31,7 +31,7 @@ export default function PendingView(props) {
                 <div>
                   <Button
                     onClick={(e) => {
-                      props.accept(event.from, event.username);
+                      props.accept(event.id, event.from, event.username);
                     }}
                     size="sm"
                     variant="success"
@@ -41,7 +41,7 @@ export default function PendingView(props) {
                   </Button>
                   <Button
                     onClick={(e) => {
-                      props.decline(event.id);
+                      props.decline(event.id, event.type, event.from);
                     }}
                     size="sm"
                     variant="danger"

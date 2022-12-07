@@ -65,6 +65,8 @@ export default function AddFriend(props) {
       updateCurrentUser(payload.currentUser);
     } else if (payload?.logOut) {
       updateCurrentUser(null);
+    } else if (payload?.removePending) {
+      reRender(new Object());
     }
   }
 

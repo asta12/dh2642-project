@@ -148,7 +148,13 @@ function updateModelFromFirebase(model) {
         .database()
         .ref(`${REF}/users/${model.currentUser}/pending/`)
         .on("child_removed", (firebaseData) => {
-          model.removeRequest(firebaseData.exportVal().id, null, null);
+          let friendId = "";
+          if (firebaseData.exportVal().from) {
+            friendId = firebaseData.exportVal().from;
+          } else {
+            friendId = firebaseData.exportVal().to;
+          }
+          model.removeRequest(firebaseData.exportVal().id, "", friendId);
         });
 
       // Get friends updates.
@@ -156,7 +162,7 @@ function updateModelFromFirebase(model) {
         .database()
         .ref(`${REF}/users/${model.currentUser}/friends`)
         .on("child_added", (firebaseData) => {
-          model.addFriend(
+          model.addFriendFromFirebase(
             firebaseData.exportVal().id,
             firebaseData.exportVal().username
           );
