@@ -8,6 +8,7 @@ import UserProfilePresenter from "../presenters/userProfilePresenter.js"
 import GamePresenter from "../presenters/gamePresenter";
 import CreatePlaylistPresenter from "../presenters/createPlaylistPresenter.js";
 import EditPlaylistPresenter from "../presenters/editPlaylistPresenter";
+import HomePresenter from "../presenters/homePresenter";
 import AddFriend from "../presenters/addFriendPresenter";
 import Loading from "./loadingView.js";
 
@@ -36,7 +37,7 @@ function App(props) {
     <div className="container">
       <HeaderNavbar model={props.model} />
       <Routes>
-        <Route path="/"></Route>
+        <Route path="/" element = {<HomePresenter model ={props.model} />} />
         {/*<Route exact path="/" component={Home} />
         <Route path="/about" component={About} />*/}
         <Route path="/play" element = {<GamePresenter model ={props.model} />} />
