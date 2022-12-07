@@ -36,6 +36,9 @@ This is the model in our model-view-presenter architecture. The purpose of this 
 
 ### src/presenters
 
+- *homePresenter*: 
+Responsible for handling the homeView the first thing the user sees when entering the page. The view contains a button which when clicked either takes the user to the register page or to the game, depending on if the user is already logged in. 
+
 - *createPlayListPresenter*:
 Responsible for creating new playlists. This presenter uses the *createPlaylistView*, which in turn uses the *searchSongPresenter* (to search for new songs to add) and the *selectedSongsPresenter* to show the list of selected songs.
 
