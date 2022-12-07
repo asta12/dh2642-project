@@ -2,7 +2,7 @@ import AddFriendView from "../views/addFriendView.js";
 import resolvePromise from "../resolvePromise.js";
 import promiseNoData from "../views/promiseNoData.js";
 import { Navigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { searchForUserByEmail } from "../models/firebaseModel.js";
 import SearchUserResults from "../views/searchUserResultsView.js";
 
@@ -12,6 +12,7 @@ export default function AddFriend(props) {
   const [searchUserPromiseState] = useState({});
   const [email, setEmail] = useState("");
   const [, reRender] = useState();
+  const [currentUser, updateCurrentUser] = useState(props.model.currentUser);
 
   function searchUser() {
     const checkEmail = isValidEmail();
@@ -58,7 +59,26 @@ export default function AddFriend(props) {
     );
   }
 
-  if (!props.model.currentUser) {
+  function observer(payload) {
+    if (payload?.currentUser) {
+      updateCurrentUser(payload.currentUser);
+    } else if (payload?.logOut) {
+      updateCurrentUser(null);
+    }
+  }
+
+  function whenCreated() {
+    props.model.addObserver(observer);
+
+    function whenTakenDown() {
+      props.model.removeObserver(observer);
+    }
+    return whenTakenDown;
+  }
+
+  useEffect(whenCreated, []);
+
+  if (!currentUser) {
     return <Navigate replace to="/login" />;
   } else {
     return (

@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { logout } from "../firebaseAuthentication";
 
 class Model {
   constructor() {
@@ -56,6 +57,11 @@ class Model {
     if (this.initialLoginAttemptComplete === isComplete) return;
     this.initialLoginAttemptComplete = isComplete;
     this.notifyObservers({ loginAttempt: this.initialLoginAttemptComplete });
+  }
+
+  loggingout() {
+    logout();
+    this.notifyObservers({ logOut: true });
   }
 
   addPlaylist(playlist) {
@@ -183,7 +189,7 @@ class Model {
       return true;
     });
 
-    this.notifyObservers({ requestRemoved: true });
+    this.notifyObservers({ requestRemoved: requestId });
 
     return requestToRemove;
   }
@@ -192,7 +198,7 @@ class Model {
     this.clearPending();
     this.clearFriends();
     this.clearPlaylist();
-    this.notifyObservers();
+    this.notifyObservers({ clearData: true });
   }
 
   clearPending() {
