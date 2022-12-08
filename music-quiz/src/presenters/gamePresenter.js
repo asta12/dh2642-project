@@ -52,7 +52,8 @@ function GamePresenter(props) {
   starts the game given that we have chosen a playlist. Fetches the lyrics for the first song.
   */
   function startGame() {
-    if (currentPlaylist.songs.length > 0) {
+    console.log(songLyricsPromiseState)
+    if (currentPlaylist.songs) {
       setGameStarted(true);
       // Only update user settings when play is pressed
       updateModelSettings();
@@ -66,6 +67,8 @@ function GamePresenter(props) {
   }
 
   function playTextToSpeech() {
+    console.log(songLyricsPromiseState)
+    console.log(isInbetweenSongs)
     //  We only want to start playing given that we are not inbetween songs, and we have received the lyrics from a promise
     if (songLyricsPromiseState.data && !isInbetweenSongs) {
       window.speechSynthesis.cancel();
@@ -118,12 +121,15 @@ function GamePresenter(props) {
   function playAgain() {
     setSongLyricsPromiseState({});
     setIsInbetweenSongs(false);
+    setPromiseDataLyrics({})
     setPlayerScore(0);
     setGameStarted(false);
     setGameOver(false);
     setCurrentSongIndex(0);
     setButtonStyles(["primary", "primary", "primary", "primary"]);
     setPreviousGuessText("Which song are you hearing?");
+    setCountdown(numSecondsAfterGuess);
+    
   }
 
   /*
@@ -227,6 +233,7 @@ function GamePresenter(props) {
         setGameOver(true);
         return;
       }
+      console.log("shouldnt be in here")
       clearInterval(countdownInterval);
       setIsInbetweenSongs(false);
       setCurrentSongIndex(currentSongIndex + 1);
@@ -237,7 +244,11 @@ function GamePresenter(props) {
 
   // When we receive new promise data we call upon text to speech
   useEffect(() => {
-    playTextToSpeech();
+    if(promiseDataLyrics){
+      console.log("calling text to speech because promisedatalyrics changed")
+      playTextToSpeech();
+    }
+    
   }, [promiseDataLyrics]);
 
   // When we set inbetween songs, we start fetching the next song
@@ -249,8 +260,9 @@ function GamePresenter(props) {
 
   // Call a callback each time the song changes and the game has started
   useEffect(() => {
-    if (gameStarted) {
+    if (currentSongIndex !== 0 && gameStarted) {
       setButtonStyles(["primary", "primary", "primary", "primary"]);
+      console.log("Calling text to speech since song index changed")
       playTextToSpeech();
     }
   }, [currentSongIndex]);
