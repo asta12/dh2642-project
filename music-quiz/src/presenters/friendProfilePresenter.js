@@ -4,7 +4,7 @@ import FriendUserInfo from "../views/friendUserInfoView";
 import resolvePromise from "../resolvePromise";
 import promiseNoData from "../views/promiseNoData";
 import ShowPlaylistView from "../views/showPlaylistView";
-import { getUser } from "../firebaseRequests";
+import { searchForUserByID } from "../models/firebaseModel";
 
 export default function FriendProfilePresenter(props) {
   const [email, setEmail] = useState(null);
@@ -30,7 +30,7 @@ export default function FriendProfilePresenter(props) {
   function whenCreated() {
     const id = searchParams.get("id");
     if (id) {
-      resolvePromise(getUser(id), friendPromiseState, () => {
+      resolvePromise(searchForUserByID(id), friendPromiseState, () => {
         if (friendPromiseState.data) {
           const friend = friendPromiseState.data.val();
           if (friend) {

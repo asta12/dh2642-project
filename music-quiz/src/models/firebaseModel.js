@@ -115,7 +115,7 @@ function updateModelFromFirebase(model) {
         .on("child_added", (firebaseData) => {
           model.addPlaylist(firebaseData.val());
         });
-        
+
       // A playlist has been removed.
       firebase
         .database()
@@ -192,10 +192,16 @@ function searchForUserByEmail(model, email) {
     });
 }
 
+// Fetches a user with a specific ID from firebase.
+function searchForUserByID(userID) {
+  return firebase.database().ref(`${REF}/users/${userID}/`).get();
+}
+
+export default firebase;
 export {
-  firebase,
   updateFirebaseFromModel,
   updateModelFromFirebase,
   firebaseModelPromise,
   searchForUserByEmail,
+  searchForUserByID
 };

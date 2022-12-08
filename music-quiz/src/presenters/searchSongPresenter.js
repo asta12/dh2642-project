@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SearchSongView from "../views/searchSongView.js";
 import resolvePromise from "../resolvePromise.js";
 import { searchSong } from "../songSource.js";
-import SearchResultsView from "../views/searchResultsView.js";
+import SearchSongResultsView from "../views/searchSongResultsView.js";
 import promiseNoData from "../views/promiseNoData.js";
 
 export default function SearchSongPresenter(props) {
@@ -57,7 +57,7 @@ export default function SearchSongPresenter(props) {
         page={page}
       />
       {promiseNoData(promiseState) || (
-        <SearchResultsView
+        <SearchSongResultsView
           searchResults={promiseState.data}
           addSongToPlaylist={props.addSongToPlaylist}
           isSongInPlaylist={props.isSongInPlaylist}
