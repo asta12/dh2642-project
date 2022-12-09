@@ -1,7 +1,7 @@
 import { API_KEY } from "./apiConfig.js"
 import { getLyrics } from "genius-lyrics-api"
 
-const PROXY_IP = "http://164.92.213.174/"
+const PROXY_IP = "https://www.alevarn.com/"
 
 const options = {
 	method: 'GET',
