@@ -1,6 +1,8 @@
 import { API_KEY } from "./apiConfig.js"
 import { getLyrics } from "genius-lyrics-api"
 
+const PROXY_IP = "https://www.alevarn.com/"
+
 const options = {
 	method: 'GET',
 	headers: {
@@ -23,7 +25,7 @@ function getSongLyrics(songID) {
     return fetch(`https://genius-song-lyrics1.p.rapidapi.com/songs/${songID}`, options)
         .then(response => response.json())
         .then(json => json.response.song.url)
-        .then(url => getLyrics(url))
+        .then(url => getLyrics(`${PROXY_IP}${url}`))
         .catch(err => console.error(err));
 }
 

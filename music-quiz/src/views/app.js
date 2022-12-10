@@ -4,9 +4,11 @@ import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "../presenters/loginPresenter.js";
 import Register from "../presenters/registerPresenter.js";
+import UserProfilePresenter from "../presenters/userProfilePresenter.js";
+import GamePresenter from "../presenters/gamePresenter";
 import CreatePlaylistPresenter from "../presenters/createPlaylistPresenter.js";
 import EditPlaylistPresenter from "../presenters/editPlaylistPresenter";
-import UserProfilePresenter from "../presenters/userProfilePresenter.js";
+import HomePresenter from "../presenters/homePresenter";
 import AddFriend from "../presenters/addFriendPresenter";
 import Loading from "./loadingView.js";
 import SidebarPresenter from "../presenters/sidebarPresenter";
@@ -44,8 +46,7 @@ function App(props) {
         <HeaderNavbar model={props.model} />
         <Routes>
           <Route path="/" />
-          {/*<Route exact path="/" component={Home} />
-        <Route path="/about" component={About} />*/}
+          <Route path="/play" element={<GamePresenter model={props.model} />} />
           <Route path="/login" element={<Login model={props.model} />} />
           <Route path="/register" element={<Register model={props.model} />} />
           <Route
