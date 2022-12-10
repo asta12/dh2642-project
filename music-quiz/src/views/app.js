@@ -45,7 +45,7 @@ function App(props) {
       <div className="container">
         <HeaderNavbar model={props.model} />
         <Routes>
-          <Route path="/" />
+          <Route path="/" element={<HomePresenter model={props.model} />} />
           <Route path="/play" element={<GamePresenter model={props.model} />} />
           <Route path="/login" element={<Login model={props.model} />} />
           <Route path="/register" element={<Register model={props.model} />} />
