@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Header from "../views/headerView";
 import NavBar from "../views/navbarView";
-import { logout } from "../firebaseAuthentication";
 
 function HeaderNavbar(props) {
   const [username, setUsername] = useState(props.model.username);
@@ -18,6 +17,10 @@ function HeaderNavbar(props) {
     props.model.addObserver(onObserverNotification);
 
     return onComponentTakeDown;
+  }
+
+  function logout() {
+    props.model.loggingout();
   }
 
   useEffect(componentCreated, []);

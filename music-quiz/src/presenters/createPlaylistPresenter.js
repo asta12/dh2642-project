@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CreatePlaylistView from "../views/createPlaylistView.js";
+import { Navigate } from "react-router-dom";
 import {
   PLAYLIST_MIN_SONGS,
   PLAYLIST_MAX_SONGS,
@@ -10,6 +11,7 @@ export default function CreatePlaylistPresenter(props) {
   const [playlistName, setPlaylistName] = useState("");
   const [playlistSongs, setPlaylistSongs] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [currentUser, updateCurrentUser] = useState(props.model.currentUser);
   const navigate = useNavigate();
 
   function addSongToPlaylist(song) {
@@ -49,18 +51,41 @@ export default function CreatePlaylistPresenter(props) {
     }
   }
 
-  return (
-    <div>
-      <CreatePlaylistView
-        playlistNameChange={setPlaylistName}
-        addSongToPlaylist={addSongToPlaylist}
-        isSongInPlaylist={isSongInPlaylist}
-        isPlaylistFull={isPlaylistFull}
-        playlistSongs={playlistSongs}
-        removeSongFromPlaylist={removeSongFromPlaylist}
-        savePlaylist={savePlaylistToModel}
-        errorMessage={errorMessage}
-      />
-    </div>
-  );
+  function observer(payload) {
+    if (payload?.currentUser) {
+      updateCurrentUser(payload.currentUser);
+    } else if (payload?.logOut) {
+      updateCurrentUser(null);
+    }
+  }
+
+  function whenCreated() {
+    props.model.addObserver(observer);
+
+    function whenTakenDown() {
+      props.model.removeObserver(observer);
+    }
+    return whenTakenDown;
+  }
+
+  useEffect(whenCreated, []);
+
+  if (!currentUser) {
+    return <Navigate replace to="/login" />;
+  } else {
+    return (
+      <div>
+        <CreatePlaylistView
+          playlistNameChange={setPlaylistName}
+          addSongToPlaylist={addSongToPlaylist}
+          isSongInPlaylist={isSongInPlaylist}
+          isPlaylistFull={isPlaylistFull}
+          playlistSongs={playlistSongs}
+          removeSongFromPlaylist={removeSongFromPlaylist}
+          savePlaylist={savePlaylistToModel}
+          errorMessage={errorMessage}
+        />
+      </div>
+    );
+  }
 }

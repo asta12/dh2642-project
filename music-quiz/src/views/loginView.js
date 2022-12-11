@@ -7,7 +7,9 @@ export default function LoginView(props) {
       <Card.Body>
         <h2 className="text-center mb-4"> Login </h2>
         {props.error && (
-          <Alert variant="danger">Wrong email or password!</Alert>
+          <Alert variant="danger" className="text-center">
+            Wrong email or password!
+          </Alert>
         )}
         <Form
           className="text-center"

@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
+import { logout } from "../firebaseAuthentication";
 
 class Model {
   constructor() {
@@ -63,6 +64,11 @@ class Model {
     this.notifyObservers({ loginAttempt: this.initialLoginAttemptComplete });
   }
 
+  loggingout() {
+    logout();
+    this.notifyObservers({ logOut: true });
+  }
+
   addPlaylist(playlist) {
     // Don't add the same playlist twice.
     if (this.playlists.find((pl) => pl.id === playlist.id)) {
@@ -75,17 +81,22 @@ class Model {
 
   deletePlaylist(playlistID) {
     // Check that the playlist we want to remove exists.
-    if (!this.playlists.find(pl => pl.id === playlistID)) {
-        return;
+    if (!this.playlists.find((pl) => pl.id === playlistID)) {
+      return;
     }
 
-    this.playlists = this.playlists.filter(playlist => playlist.id !== playlistID)
-    this.notifyObservers({ deletePlaylist: playlistID })
+    this.playlists = this.playlists.filter(
+      (playlist) => playlist.id !== playlistID
+    );
+    this.notifyObservers({ deletePlaylist: playlistID });
   }
 
   editPlaylist(playlist) {
-    this.playlists = [...this.playlists.filter(pl => pl.id !== playlist.id), playlist]
-    this.notifyObservers({ editPlaylist: playlist })
+    this.playlists = [
+      ...this.playlists.filter((pl) => pl.id !== playlist.id),
+      playlist,
+    ];
+    this.notifyObservers({ editPlaylist: playlist });
   }
 
   getUniquePlaylistID() {
@@ -149,59 +160,55 @@ class Model {
     this.notifyObservers({ newPending: newPending, addressId: addressId });
   }
 
-  addFriend(friendId, friendUsername) {
+  addFriend(requestId, friendId, friendUsername) {
+    this.removeRequest(requestId, "friendRequest", friendId);
+    this.addFriendFromFirebase(friendId, friendUsername);
+  }
+
+  addFriendFromFirebase(friendId, friendUsername) {
     if (this.friends.find((f) => f.id === friendId)) {
       return;
     }
+
     const friend = {
       id: friendId,
       username: friendUsername,
     };
 
-    const requestToRemove = this.removeRequest(null, "friendRequest", friendId);
-
     this.friends = [...this.friends, friend];
-
-    this.notifyObservers({
-      removePending: requestToRemove.id,
-      userId: friendId,
-    });
     this.notifyObservers({ addFriend: friend });
   }
 
   removeRequest(requestId, requestType, userId) {
-    var requestToRemove = {};
-    this.requests = this.pending.filter((p) => {
-      // Either requestId is provided
-      if (requestId) return p.id === requestId;
-
-      // Or we have to go through the data to filter out the correct request
-      if (p.type === requestType && (p.to === userId || p.from === userId)) {
-        requestToRemove = p;
-        return false;
-      }
-      return true;
+    this.pending = this.pending.filter((p) => {
+      if (requestId) return p.id !== requestId;
     });
 
-    return requestToRemove;
+    this.notifyObservers({ removePending: requestId, userId: userId });
+
+    return;
   }
 
-  clearRequests() {
-    if (this.requests === []) return;
-    this.requests = [];
-    this.notifyObservers();
+  clearModelData() {
+    this.clearPending();
+    this.clearFriends();
+    this.clearPlaylist();
+    this.notifyObservers({ clearData: true });
+  }
+
+  clearPending() {
+    if (this.pending === []) return;
+    this.pending = [];
   }
 
   clearFriends() {
     if (this.friends === []) return;
-    this.firends = [];
-    this.notifyObservers();
+    this.friends = [];
   }
 
   clearPlaylist() {
     if (this.playlists === []) return;
     this.playlists = [];
-    this.notifyObservers();
   }
 
   setVolume(volume) {
