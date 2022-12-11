@@ -169,6 +169,29 @@ function updateModelFromFirebase(model) {
         });
     } else {
       // We are not logged in.
+      if (model.currentUser) {
+        // Ensure that we unsubscribe to all events.
+        firebase
+          .database()
+          .ref(`${REF}/users/${model.currentUser}/username`)
+          .off();
+
+        firebase
+          .database()
+          .ref(`${REF}/users/${model.currentUser}/playlists/`)
+          .off();
+
+        firebase
+          .database()
+          .ref(`${REF}/users/${model.currentUser}/pending/`)
+          .off();
+
+        firebase
+          .database()
+          .ref(`${REF}/users/${model.currentUser}/friends`)
+          .off();
+      }
+
       model.setCurrentUser(null);
       model.setEmail(null);
       model.setUsername(null);
