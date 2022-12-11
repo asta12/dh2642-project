@@ -9,7 +9,7 @@ export default function ShowPlaylistView(props) {
     <div>
       <h2>Playlists</h2>
       {props.playlists.length === 0 ? (
-        "You have not created a playlist yet"
+        "The list of playlists is empty"
       ) : (
         <ListGroup>
           {props.playlists.map((playlist, index) => {
@@ -61,17 +61,19 @@ export default function ShowPlaylistView(props) {
                     {expandImg}
                     <h5>{playlist.name}</h5>
                   </div>
-                  <div className="ms-auto">
-                    <Button
-                      size="sm"
-                      onClick={(e) => {
-                        props.editPlaylist(playlist.id);
-                      }}
-                      variant="outline-primary"
-                    >
-                      Edit
-                    </Button>
-                  </div>
+                  {props.editable && (
+                    <div className="ms-auto">
+                      <Button
+                        size="sm"
+                        onClick={(e) => {
+                          props.editPlaylist(playlist.id);
+                        }}
+                        variant="outline-primary"
+                      >
+                        Edit
+                      </Button>
+                    </div>
+                  )}
                 </Stack>
                 {songs}
               </ListGroup.Item>
