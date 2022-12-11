@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import {
   PLAYLIST_MIN_SONGS,
   PLAYLIST_MAX_SONGS,
@@ -12,14 +12,23 @@ export default function EditPlaylistPresenter(props) {
   const [playlistSongs, setPlaylistSongs] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentUser, updateCurrentUser] = useState(props.model.currentUser);
   const navigate = useNavigate();
 
-  function whenCreated() {
-    function observer(payload) {
+  function observer(payload) {
+    if (payload?.currentUser) {
+      updateCurrentUser(payload.currentUser);
+    } else if (payload?.logOut) {
+      updateCurrentUser(null);
+    } else {
       loadPlaylist();
     }
+  }
 
-    loadPlaylist();
+  function whenCreated() {
+    if (currentUser) {
+      loadPlaylist();
+    }
     props.model.addObserver(observer);
 
     function whenTakenDown() {
@@ -86,24 +95,26 @@ export default function EditPlaylistPresenter(props) {
     navigate("/profile");
   }
 
-  if (!playlistID) {
+  if (!currentUser) {
+    return <Navigate replace to="/login" />;
+  } else if (!playlistID) {
     return "Cannot find playlist";
+  } else {
+    return (
+      <div>
+        <EditPlaylistView
+          playlistName={playlistName}
+          playlistNameChange={setPlaylistName}
+          addSongToPlaylist={addSongToPlaylist}
+          isSongInPlaylist={isSongInPlaylist}
+          isPlaylistFull={isPlaylistFull}
+          playlistSongs={playlistSongs}
+          removeSongFromPlaylist={removeSongFromPlaylist}
+          savePlaylist={savePlaylistToModel}
+          deletePlaylist={deletePlaylistFromModel}
+          errorMessage={errorMessage}
+        />
+      </div>
+    );
   }
-
-  return (
-    <div>
-      <EditPlaylistView
-        playlistName={playlistName}
-        playlistNameChange={setPlaylistName}
-        addSongToPlaylist={addSongToPlaylist}
-        isSongInPlaylist={isSongInPlaylist}
-        isPlaylistFull={isPlaylistFull}
-        playlistSongs={playlistSongs}
-        removeSongFromPlaylist={removeSongFromPlaylist}
-        savePlaylist={savePlaylistToModel}
-        deletePlaylist={deletePlaylistFromModel}
-        errorMessage={errorMessage}
-      />
-    </div>
-  );
 }

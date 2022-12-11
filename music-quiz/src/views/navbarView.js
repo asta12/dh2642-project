@@ -29,15 +29,20 @@ export default function navbarView(props) {
                 Register
               </Nav.Link>,
             ]) || (
-              <Nav.Link
-                onClick={(e) => {
-                  e.preventDefault();
-                  props.handleLogout();
-                }}
-                key="logout"
-              >
-                Logout
-              </Nav.Link>
+              <>
+                <Nav.Link
+                  onClick={(e) => {
+                    e.preventDefault();
+                    props.handleLogout();
+                  }}
+                  key="logout"
+                >
+                  Logout
+                </Nav.Link>
+                <Nav.Link as={Link} to="/profile/add-friend" key="add-friend">
+                  Add friend
+                </Nav.Link>
+              </>
             )}
           </Nav>
         </Navbar.Collapse>

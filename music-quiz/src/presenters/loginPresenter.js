@@ -14,11 +14,15 @@ export default function Login(props) {
   const [loginPromiseState, setLoginPromiseState] = useState({});
   const [, reRender] = useState();
 
-  function componentCreated() {
-    function onObserverNotification() {
+  function onObserverNotification(payload) {
+    if (payload?.currentUser) {
       setCurrentUser(props.model.currentUser);
+    } else if (payload?.logOut) {
+      setCurrentUser(null);
     }
+  }
 
+  function componentCreated() {
     function onComponentTakeDown() {
       props.model.removeObserver(onObserverNotification);
     }
@@ -60,7 +64,7 @@ export default function Login(props) {
         className="d-flex justify-content-center align-items-center"
         style={{ minHeight: "75vh" }}
       >
-        {props.model.currentUser ? (
+        {currentUser ? (
           <Navigate replace to="/home" />
         ) : (
           <LoginView

@@ -1,12 +1,12 @@
 import Loading from "./loadingView.js";
 
-function promiseNoData(promiseState) {
+function promiseNoData(promiseState, error = <div>promisteState.error</div>) {
   if (!promiseState.promise) {
     return <div></div>;
   }
 
   if (promiseState.error) {
-    return <div>{promiseState.error.toString()}</div>;
+    return error;
   }
 
   if (promiseState.data) {
