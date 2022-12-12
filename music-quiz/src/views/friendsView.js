@@ -3,6 +3,7 @@ import p1 from "../images/profile_pic_1.png";
 import p2 from "../images/profile_pic_2.png";
 import p3 from "../images/profile_pic_3.png";
 import p4 from "../images/profile_pic_4.png";
+import { Link } from "react-router-dom";
 
 export default function FriendsView(props) {
   // This function gets a random profile picture from a name, same one every time
@@ -42,7 +43,7 @@ export default function FriendsView(props) {
             >
               <div>
                 <Image src={img} width="50" />
-                {friend.username}
+                <Link to={`/friend?id=${friend.id}`}>{friend.username}</Link>
               </div>
               <Button
                 onClick={(e) => console.log("Challenge " + friend.username)}
