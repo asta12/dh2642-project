@@ -31,7 +31,12 @@ export default function PendingView(props) {
                 <div>
                   <Button
                     onClick={(e) => {
-                      props.accept(event.id, event.from, event.username);
+                      props.accept(
+                        event.id,
+                        event.from,
+                        event.username,
+                        event.type
+                      );
                     }}
                     size="sm"
                     variant="success"
@@ -65,7 +70,7 @@ export default function PendingView(props) {
                   >
                     i
                   </Badge>
-                  You have sent a request to {event.username}, waiting for
+                  You have sent a {type} to {event.username}, waiting for
                   response
                 </div>
               </ListGroup.Item>
