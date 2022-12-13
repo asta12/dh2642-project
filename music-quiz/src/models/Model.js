@@ -164,7 +164,7 @@ class Model {
     };
 
     if (playlist) {
-      newPending["playlist"] = playlist.id;
+      newPending["playlist"] = playlist;
     }
 
     if (addressId === this.currentUser) {

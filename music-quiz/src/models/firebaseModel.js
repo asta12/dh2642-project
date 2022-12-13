@@ -133,9 +133,7 @@ function updateModelFromFirebase(model) {
           const keys = Object.keys(firebaseData.exportVal());
           const direction = keys.filter((k) => k === "to" || k === "from");
           const userId = firebaseData.exportVal()[direction];
-          const playlist = firebaseData.exportVal().playlist
-            ? firebaseData.exportVal().playlist
-            : false;
+          const playlist = firebaseData.exportVal().playlist;
 
           model.addPendingRequest(
             requestId,
