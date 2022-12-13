@@ -5,7 +5,6 @@ import { numSongsToGuess } from "../settings/gameSettings";
 
 function GameGuessSongView(props) {
   const [hasGuessed, setHasGuessed] = useState(false);
-  const [correctGuess, setCorrectGuess] = useState(false);
   const [infoText, setInfoText] = useState("Which song are you hearing?");
   const [infoTextStyle, setInfoTextStyle] = useState("text-primary");
   const [buttonStyles, setButtonStyles] = useState([
@@ -29,23 +28,14 @@ function GameGuessSongView(props) {
     if (props.answers[btnID].correct) {
       setInfoText("Correct!");
       setInfoTextStyle("text-success");
-      setCorrectGuess(true);
+      props.correctGuess();
     } else {
       setInfoText("Wrong!");
       setInfoTextStyle("text-danger");
-      setCorrectGuess(false);
+      props.wrongGuess();
     }
 
     setHasGuessed(true);
-  }
-
-  function onNextSongClick() {
-    props.nextSong();
-    if (correctGuess) {
-      props.correctGuess();
-    } else {
-      props.wrongGuess();
-    }
   }
 
   function getSpeechSettingsObject() {
@@ -124,22 +114,40 @@ function GameGuessSongView(props) {
       </Row>
       <Row className="mt-5">
         <Col>
-            <h4>Score <Badge bg="primary">{0} / {numSongsToGuess}</Badge></h4>
+          <h4>
+            Score{" "}
+            <Badge bg="primary">
+              {props.guesses.filter(guess => guess).length} / {numSongsToGuess}
+            </Badge>
+          </h4>
         </Col>
         <Col>
           <Pagination className="d-flex justify-content-center">
             {[...Array(numSongsToGuess).keys()].map((index) => {
-              return <Pagination.Item active={props.guesses.length === index} key={index}>{index + 1}</Pagination.Item>;
+              return (
+                <Pagination.Item
+                  className={
+                    index < props.guesses.length
+                      ? props.guesses[index]
+                        ? "correct-guess"
+                        : "wrong-guess"
+                      : ""
+                  }
+                  key={index}
+                >
+                  {index + 1}
+                </Pagination.Item>
+              );
             })}
           </Pagination>
         </Col>
         <Col className="d-flex justify-content-end">
           <Button
-            onClick={() => onNextSongClick()}
+            onClick={() => props.nextSong()}
             disabled={!hasGuessed}
             size="lg"
           >
-            Next Song
+            {props.guesses.length < numSongsToGuess ? "Next Song" : "Game Over"}
           </Button>
         </Col>
       </Row>

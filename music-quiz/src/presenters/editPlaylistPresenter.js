@@ -42,7 +42,7 @@ export default function EditPlaylistPresenter(props) {
 
   function loadPlaylist() {
     // Tries to load the playlist to edit by looking at the URL query and the model.
-    const id = +searchParams.get("id");
+    const id = searchParams.get("id");
     const findPlaylist = props.model.playlists.find(
       (playlist) => playlist.id === id
     );
