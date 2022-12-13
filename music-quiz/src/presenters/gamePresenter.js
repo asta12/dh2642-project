@@ -20,8 +20,9 @@ function GamePresenter(props) {
   const [volume, setVolume] = useState(0.5);
   const [speed, setSpeed] = useState(0.6);
   const [guesses, setGuesses] = useState([]);
-  const [challengeMode, setChallengeMode] = useState(false)
-  const [challengePlaylistPromiseState, setChallengePlaylistPromiseState] = useState({})
+  const [challengeMode, setChallengeMode] = useState(false);
+  const [challengePlaylistPromiseState, setChallengePlaylistPromiseState] =
+    useState({});
   const [, reRender] = useState();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -49,10 +50,14 @@ function GamePresenter(props) {
     const userID = searchParams.get("userID");
     const playlistID = searchParams.get("playlistID");
     if (userID && playlistID) {
-        setChallengeMode(true)
-        console.log(`Challenge mode: ${userID}:${playlistID}`)
-        // Load the user's playlist from the firebase database.
-        resolvePromise(searchForPlaylist(userID, playlistID), challengePlaylistPromiseState, () => reRender(new Object()))
+      setChallengeMode(true);
+      console.log(`Challenge mode: ${userID}:${playlistID}`);
+      // Load the user's playlist from the firebase database.
+      resolvePromise(
+        searchForPlaylist(userID, playlistID),
+        challengePlaylistPromiseState,
+        () => reRender(new Object())
+      );
     }
   }
 
@@ -101,7 +106,7 @@ function GamePresenter(props) {
   }
 
   if (challengePlaylistPromiseState.data) {
-    console.log(challengePlaylistPromiseState.data.val())
+    console.log(challengePlaylistPromiseState.data.val());
   }
 
   if (currentSongIndex === -1) {
