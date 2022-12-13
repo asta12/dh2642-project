@@ -20,7 +20,6 @@ function GamePresenter(props) {
   const [volume, setVolume] = useState(0.5);
   const [speed, setSpeed] = useState(0.6);
   const [guesses, setGuesses] = useState([]);
-  const [challengeMode, setChallengeMode] = useState(false);
   const [challengePlaylistPromiseState, setChallengePlaylistPromiseState] =
     useState({});
   const [, reRender] = useState();
@@ -50,12 +49,17 @@ function GamePresenter(props) {
   function loadPlaylistInChallengeMode() {
     const challengeID = searchParams.get("challengeID");
     if (challengeID) {
-      setChallengeMode(true);
       // Load the user's playlist from the firebase database.
       resolvePromise(
         searchForChallengePlaylist(props.model.currentUser, challengeID),
         challengePlaylistPromiseState,
-        () => reRender(new Object())
+        () => {
+          if (challengePlaylistPromiseState.data) {
+            loadGameFromPlaylist(challengePlaylistPromiseState.data);
+          } else {
+            reRender(new Object());
+          }
+        }
       );
     }
   }
@@ -91,7 +95,10 @@ function GamePresenter(props) {
   }
 
   function onPlaylistSelected(id) {
-    const playlist = props.model.playlists.find((pl) => pl.id === id);
+    loadGameFromPlaylist(props.model.playlists.find((pl) => pl.id === id));
+  }
+
+  function loadGameFromPlaylist(playlist) {
     const shuffledSongs = [...playlist.songs].sort(() => Math.random() - 0.5);
     const answerOptions = shuffledSongs.map((song, index) =>
       getFourAnswerOptions(shuffledSongs, index)
@@ -104,23 +111,30 @@ function GamePresenter(props) {
     setSongLyricsPromiseStates(playlist.songs.map((song) => new Object()));
   }
 
-  console.log(challengePlaylistPromiseState)
-
   if (currentSongIndex === -1) {
-    return (
-      <GameSettingsView
-        currentVolume={volume}
-        onVolumeChange={setVolume}
-        currentSpeed={speed}
-        onSpeedChange={setSpeed}
-        onStartClick={nextSong}
-        playlists={props.model.playlists}
-        onPlaylistSelected={onPlaylistSelected}
-        choosePlaylistText={
-          selectedPlaylist.songs ? selectedPlaylist.name : "Choose a playlist"
-        }
-      />
-    );
+    if (challengePlaylistPromiseState.promise) {
+      return (
+        promiseNoData(
+          challengePlaylistPromiseState,
+          challengePlaylistPromiseState.error
+        ) || `Loaded ${challengePlaylistPromiseState.data.name}`
+      );
+    } else {
+      return (
+        <GameSettingsView
+          currentVolume={volume}
+          onVolumeChange={setVolume}
+          currentSpeed={speed}
+          onSpeedChange={setSpeed}
+          onStartClick={nextSong}
+          playlists={props.model.playlists}
+          onPlaylistSelected={onPlaylistSelected}
+          choosePlaylistText={
+            selectedPlaylist.songs ? selectedPlaylist.name : "Choose a playlist"
+          }
+        />
+      );
+    }
   }
 
   if (currentSongIndex < numSongsToGuess) {
