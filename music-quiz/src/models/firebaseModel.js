@@ -225,11 +225,20 @@ function searchForUserByID(userID) {
   return firebase.database().ref(`${REF}/users/${userID}/`).get();
 }
 
+// Fetches a playlist from a user.
+function searchForPlaylist(userID, playlistID) {
+  return firebase
+    .database()
+    .ref(`${REF}/users/${userID}/playlists/${playlistID}`)
+    .get();
+}
+
 export default firebase;
 export {
   updateFirebaseFromModel,
   updateModelFromFirebase,
   firebaseModelPromise,
   searchForUserByEmail,
-  searchForUserByID
+  searchForUserByID,
+  searchForPlaylist
 };

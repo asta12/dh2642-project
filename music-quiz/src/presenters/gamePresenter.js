@@ -1,4 +1,5 @@
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import resolvePromise from "../resolvePromise";
 import { extractFirst20Lines, numSongsToGuess } from "../settings/gameSettings";
@@ -7,6 +8,7 @@ import GameGuessSongView from "../views/gameGuessSongView";
 import GameOverView from "../views/gameOverView";
 import GameSettingsView from "../views/gameSettingsView";
 import promiseNoData from "../views/promiseNoData";
+import { searchForPlaylist } from "../models/firebaseModel";
 
 function GamePresenter(props) {
   const [songLyricsPromiseStates, setSongLyricsPromiseStates] = useState([]);
@@ -18,7 +20,10 @@ function GamePresenter(props) {
   const [volume, setVolume] = useState(0.5);
   const [speed, setSpeed] = useState(0.6);
   const [guesses, setGuesses] = useState([]);
+  const [challengeMode, setChallengeMode] = useState(false)
+  const [challengePlaylistPromiseState, setChallengePlaylistPromiseState] = useState({})
   const [, reRender] = useState();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   function componentCreated() {
     function onObserverNotification() {
@@ -30,12 +35,26 @@ function GamePresenter(props) {
       props.model.removeObserver(onObserverNotification);
     }
 
+    // We might be in "challenge mode". If we are then we must load the playlist from the firebase database.
+    loadPlaylistInChallengeMode();
+
     props.model.addObserver(onObserverNotification);
 
     return onComponentTakeDown;
   }
 
   useEffect(componentCreated, []);
+
+  function loadPlaylistInChallengeMode() {
+    const userID = searchParams.get("userID");
+    const playlistID = searchParams.get("playlistID");
+    if (userID && playlistID) {
+        setChallengeMode(true)
+        console.log(`Challenge mode: ${userID}:${playlistID}`)
+        // Load the user's playlist from the firebase database.
+        resolvePromise(searchForPlaylist(userID, playlistID), challengePlaylistPromiseState, () => reRender(new Object()))
+    }
+  }
 
   function nextSong() {
     const nextSongIndex = currentSongIndex + 1;
@@ -79,6 +98,10 @@ function GamePresenter(props) {
     setSelectedSongs(shuffledSongs);
     setAnswerOptions(answerOptions);
     setSongLyricsPromiseStates(playlist.songs.map((song) => new Object()));
+  }
+
+  if (challengePlaylistPromiseState.data) {
+    console.log(challengePlaylistPromiseState.data.val())
   }
 
   if (currentSongIndex === -1) {
