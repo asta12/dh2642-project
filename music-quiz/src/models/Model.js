@@ -111,11 +111,11 @@ class Model {
   }
 
   newPendingRequest(searchUserData, requestType, playlist = false) {
-    // We do not want more than one request to/from a user respectively.
+    // We do not want more than one friend request to/from a user respectively.
     if (
       this.pending.find(
         (p) =>
-          p.type === requestType &&
+          p.type === "friendRequest" &&
           (p.to === searchUserData.id || p.from === searchUserData.id)
       )
     )
@@ -164,7 +164,7 @@ class Model {
     };
 
     if (playlist) {
-      newPending["playlist"] = playlist;
+      newPending["playlist"] = playlist.id;
     }
 
     if (addressId === this.currentUser) {

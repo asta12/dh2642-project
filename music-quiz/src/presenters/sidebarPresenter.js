@@ -57,7 +57,7 @@ export default function SidebarPresenter(props) {
     if (type === "friendRequest") {
       props.model.addFriend(requestId, id, username);
     } else {
-      props.model.acceptChallenge(requestId, id, username, playlist)
+      props.model.acceptChallenge(requestId, id, username, playlist);
     }
   }
 
@@ -68,6 +68,7 @@ export default function SidebarPresenter(props) {
   function togglePopup(f) {
     updateChoosenFriend(f);
     updateShowPopup(!showPopup);
+    if (!showPopup) updatePlaylist({});
   }
 
   function choosePlaylist(newPlaylist) {

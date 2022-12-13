@@ -9,11 +9,11 @@ export default function PendingView(props) {
         {props.pending.map((event, index) => {
           let type = "Friend Request";
           let color = "info";
-          let img = <Image src={friendImg} width="25px" />;
+          let img = <Image src={friendImg} width="50px" />;
           if (event.type === "challenge") {
             type = "Challenge";
-            color = "warning";
-            img = <Image src={challengeImg} width="25px" />;
+            color = "success";
+            img = <Image src={challengeImg} width="50px" />;
           }
           if (event.from) {
             return (
@@ -22,13 +22,7 @@ export default function PendingView(props) {
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <div>
-                  <Badge
-                    pill
-                    bg={color}
-                    style={{ height: "20px", marginRight: "10px" }}
-                  >
-                    {img}
-                  </Badge>
+                  {img}
                   You have a {type} from {event.username}!
                 </div>
 
@@ -44,7 +38,7 @@ export default function PendingView(props) {
                     }}
                     size="sm"
                     variant="success"
-                    style={{ marginRight: "5px" }}
+                    style={{ marginRight: "5px", marginTop: "9px" }}
                   >
                     Accept
                   </Button>
@@ -54,6 +48,7 @@ export default function PendingView(props) {
                     }}
                     size="sm"
                     variant="danger"
+                    style={{ marginTop: "9px" }}
                   >
                     Decline
                   </Button>
@@ -72,7 +67,7 @@ export default function PendingView(props) {
                     bg="success"
                     style={{ height: "20px", marginRight: "10px" }}
                   >
-                    {img}
+                    !
                   </Badge>
                   You have sent a {type} to {event.username}, waiting for
                   response
