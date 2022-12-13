@@ -121,7 +121,7 @@ function updateModelFromFirebase(model) {
         .database()
         .ref(`${REF}/users/${model.currentUser}/playlists/`)
         .on("child_removed", (firebaseData) => {
-          model.deletePlaylist(+firebaseData.key);
+          model.deletePlaylist(firebaseData.key);
         });
 
       // Get pending updates.
