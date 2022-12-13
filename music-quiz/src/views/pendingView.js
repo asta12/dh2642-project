@@ -1,4 +1,6 @@
-import { ListGroup, Button, Badge } from "react-bootstrap";
+import { ListGroup, Button, Badge, Image } from "react-bootstrap";
+import challengeImg from "../images/challenge_double.png";
+import friendImg from "../images/friend_2.png";
 
 export default function PendingView(props) {
   return (
@@ -7,9 +9,11 @@ export default function PendingView(props) {
         {props.pending.map((event, index) => {
           let type = "Friend Request";
           let color = "info";
+          let img = <Image src={friendImg} width="25px" />;
           if (event.type === "challenge") {
             type = "Challenge";
             color = "warning";
+            img = <Image src={challengeImg} width="25px" />;
           }
           if (event.from) {
             return (
@@ -23,7 +27,7 @@ export default function PendingView(props) {
                     bg={color}
                     style={{ height: "20px", marginRight: "10px" }}
                   >
-                    !
+                    {img}
                   </Badge>
                   You have a {type} from {event.username}!
                 </div>
@@ -68,7 +72,7 @@ export default function PendingView(props) {
                     bg="success"
                     style={{ height: "20px", marginRight: "10px" }}
                   >
-                    i
+                    {img}
                   </Badge>
                   You have sent a {type} to {event.username}, waiting for
                   response
