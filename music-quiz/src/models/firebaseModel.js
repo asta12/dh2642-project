@@ -133,6 +133,7 @@ function updateModelFromFirebase(model) {
           const keys = Object.keys(firebaseData.exportVal());
           const direction = keys.filter((k) => k === "to" || k === "from");
           const userId = firebaseData.exportVal()[direction];
+          const playlist = firebaseData.exportVal().playlist;
 
           model.addPendingRequest(
             requestId,
@@ -140,7 +141,8 @@ function updateModelFromFirebase(model) {
             firebaseData.val().type,
             direction,
             userId,
-            firebaseData.val().username
+            firebaseData.val().username,
+            playlist
           );
         });
 
@@ -231,5 +233,5 @@ export {
   updateModelFromFirebase,
   firebaseModelPromise,
   searchForUserByEmail,
-  searchForUserByID
+  searchForUserByID,
 };
