@@ -19,7 +19,8 @@ export default function SidebarPresenter(props) {
   }
 
   function challenge() {
-    props.model.newPendingRequest(friend, "challenge", playlist);
+    console.log(playlist.id);
+    props.model.newPendingRequest(friend, "challenge", playlist.id);
   }
 
   function observer(payload) {
