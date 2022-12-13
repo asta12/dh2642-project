@@ -4,7 +4,7 @@ Everyone in our group choose one person and did a user evaluation in the form of
 
 ## Feedback
 
-This is all feedback from the think aloud evaluation. A checkmark means that this is something that we have taken the feedback into account. What we did to enhance the user experience with regards to the feedback is explained afterwards. 
+This is all feedback from the think aloud evaluation. A checkmark means that we have taken the feedback into account and done something to enhance the user experience with ragards to the feedback. It is also explained what was changed.
 
 ### Anna - 15 min
 
@@ -34,9 +34,9 @@ This is all feedback from the think aloud evaluation. A checkmark means that thi
 - [ ] When on the phone the hamburger menu is not closed when you press a link
 - [ ] He asked what the point with the game is when he had started the game. He didn’t understand if you were supposed to answer as fast as possible or just get the right answer
 - [ ] He didn’t understand what game speed meant when configuring the game until he had played once.
-- [ ] When he played the same playlist again he got the same songs and answers. Would be nice if it was different so that you can replay
-- [x] The game timer broke the game
+- [x] When he played the same playlist again he got the same songs and answers. Would be nice if it was different so that you can replay
   - A better random was choosen and used for the game.
+- [ ] The game timer broke the game
 - [ ] Nice if you could close the game? A button for that maybe?
 
 ### Marcus - 15 min
