@@ -224,15 +224,47 @@ function searchForUserByEmail(model, email) {
 
 // Fetches a user with a specific ID from firebase.
 function searchForUserByID(userID) {
-  return firebase.database().ref(`${REF}/users/${userID}/`).get();
+  return firebase
+    .database()
+    .ref(`${REF}/users/${userID}/`)
+    .get()
+    .then((firebaseData) => {
+      const data = firebaseData.val();
+      if (!data) {
+        throw "The user does not exist";
+      }
+      return data;
+    });
 }
 
-// Fetches a playlist from a user.
+// Fetches a playlist from an user with the help of the userID and playlistID.
 function searchForPlaylist(userID, playlistID) {
   return firebase
     .database()
     .ref(`${REF}/users/${userID}/playlists/${playlistID}`)
-    .get();
+    .get()
+    .then((firebaseData) => {
+      const data = firebaseData.val();
+      if (!data) {
+        throw "The playlist does not exist";
+      }
+      return data;
+    });
+}
+
+// Fetches a playlist from the pending challenge of an user.
+function searchForChallengePlaylist(userID, challengeID) {
+  return firebase
+    .database()
+    .ref(`${REF}/users/${userID}/pending/${challengeID}`)
+    .get()
+    .then((firebaseData) => {
+      const data = firebaseData.val();
+      if (!data) {
+        throw "Challenge does not exist";
+      }
+      return searchForPlaylist(data.from, data.playlist);
+    });
 }
 
 export default firebase;
@@ -242,5 +274,6 @@ export {
   firebaseModelPromise,
   searchForUserByEmail,
   searchForUserByID,
-  searchForPlaylist
+  searchForPlaylist,
+  searchForChallengePlaylist,
 };

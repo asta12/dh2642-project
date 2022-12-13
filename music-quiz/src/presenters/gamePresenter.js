@@ -8,11 +8,11 @@ import GameGuessSongView from "../views/gameGuessSongView";
 import GameOverView from "../views/gameOverView";
 import GameSettingsView from "../views/gameSettingsView";
 import promiseNoData from "../views/promiseNoData";
-import { searchForPlaylist } from "../models/firebaseModel";
+import { searchForChallengePlaylist } from "../models/firebaseModel";
 
 function GamePresenter(props) {
-  const [songLyricsPromiseStates, setSongLyricsPromiseStates] = useState([]);
   const [playlists, setPlaylists] = useState([]);
+  const [songLyricsPromiseStates, setSongLyricsPromiseStates] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState({});
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [answerOptions, setAnswerOptions] = useState([]);
@@ -29,15 +29,16 @@ function GamePresenter(props) {
   function componentCreated() {
     function onObserverNotification() {
       setPlaylists(props.model.playlists);
+      if (props.model.currentUser) {
+        // We might be in "challenge mode". If we are then we must load the playlist from the firebase database.
+        loadPlaylistInChallengeMode();
+      }
     }
 
     function onComponentTakeDown() {
       window.speechSynthesis.cancel();
       props.model.removeObserver(onObserverNotification);
     }
-
-    // We might be in "challenge mode". If we are then we must load the playlist from the firebase database.
-    loadPlaylistInChallengeMode();
 
     props.model.addObserver(onObserverNotification);
 
@@ -47,14 +48,12 @@ function GamePresenter(props) {
   useEffect(componentCreated, []);
 
   function loadPlaylistInChallengeMode() {
-    const userID = searchParams.get("userID");
-    const playlistID = searchParams.get("playlistID");
-    if (userID && playlistID) {
+    const challengeID = searchParams.get("challengeID");
+    if (challengeID) {
       setChallengeMode(true);
-      console.log(`Challenge mode: ${userID}:${playlistID}`);
       // Load the user's playlist from the firebase database.
       resolvePromise(
-        searchForPlaylist(userID, playlistID),
+        searchForChallengePlaylist(props.model.currentUser, challengeID),
         challengePlaylistPromiseState,
         () => reRender(new Object())
       );
@@ -105,9 +104,7 @@ function GamePresenter(props) {
     setSongLyricsPromiseStates(playlist.songs.map((song) => new Object()));
   }
 
-  if (challengePlaylistPromiseState.data) {
-    console.log(challengePlaylistPromiseState.data.val());
-  }
+  console.log(challengePlaylistPromiseState)
 
   if (currentSongIndex === -1) {
     return (
