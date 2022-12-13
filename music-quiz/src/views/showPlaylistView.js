@@ -3,6 +3,7 @@ import { ListGroup } from "react-bootstrap";
 import { Button, Stack, Image } from "react-bootstrap";
 import down from "../images/down.png";
 import up from "../images/up.png";
+import ScoreboardPopupView from "../views/scoreboardPopupView";
 
 export default function ShowPlaylistView(props) {
   return (
@@ -63,6 +64,7 @@ export default function ShowPlaylistView(props) {
                   </div>
                   {props.editable && (
                     <div className="ms-auto">
+                      <ScoreboardPopupView />
                       <Button
                         size="sm"
                         onClick={(e) => {
