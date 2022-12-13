@@ -9,6 +9,7 @@ import GameOverView from "../views/gameOverView";
 import GameSettingsView from "../views/gameSettingsView";
 import promiseNoData from "../views/promiseNoData";
 import { searchForChallengePlaylist } from "../models/firebaseModel";
+import GameChallengeView from "../views/gameChallengeView";
 
 function GamePresenter(props) {
   const [playlists, setPlaylists] = useState([]);
@@ -20,6 +21,7 @@ function GamePresenter(props) {
   const [volume, setVolume] = useState(0.5);
   const [speed, setSpeed] = useState(0.6);
   const [guesses, setGuesses] = useState([]);
+  const [challengeMode, setChallengeMode] = useState(false);
   const [challengePlaylistPromiseState, setChallengePlaylistPromiseState] =
     useState({});
   const [, reRender] = useState();
@@ -30,7 +32,7 @@ function GamePresenter(props) {
       setPlaylists(props.model.playlists);
       if (props.model.currentUser) {
         // We might be in "challenge mode". If we are then we must load the playlist from the firebase database.
-        loadPlaylistInChallengeMode();
+        checkIfChallengeMode();
       }
     }
 
@@ -46,9 +48,12 @@ function GamePresenter(props) {
 
   useEffect(componentCreated, []);
 
-  function loadPlaylistInChallengeMode() {
+  function checkIfChallengeMode() {
+    setSelectedPlaylist({});
+    setChallengeMode(false);
     const challengeID = searchParams.get("challengeID");
     if (challengeID) {
+      setChallengeMode(true);
       // Load the user's playlist from the firebase database.
       resolvePromise(
         searchForChallengePlaylist(props.model.currentUser, challengeID),
@@ -111,13 +116,21 @@ function GamePresenter(props) {
     setSongLyricsPromiseStates(playlist.songs.map((song) => new Object()));
   }
 
+  // If the URL changes we want to check if we are in challenge mode.
+  useEffect(checkIfChallengeMode, [searchParams]);
+
   if (currentSongIndex === -1) {
-    if (challengePlaylistPromiseState.promise) {
+    if (challengeMode) {
       return (
         promiseNoData(
           challengePlaylistPromiseState,
           challengePlaylistPromiseState.error
-        ) || `Loaded ${challengePlaylistPromiseState.data.name}`
+        ) || (
+          <GameChallengeView
+            playlist={challengePlaylistPromiseState.data}
+            onStartClick={nextSong}
+          />
+        )
       );
     } else {
       return (
