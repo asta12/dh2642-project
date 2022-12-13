@@ -94,12 +94,12 @@ class Model {
     this.notifyObservers({ editPlaylist: playlist });
   }
 
-  newPendingRequest(searchUserData, requestType) {
+  newPendingRequest(searchUserData, requestType, playlist = false) {
     // We do not want more than one request to/from a user respectively.
     if (
       this.pending.find(
         (p) =>
-          p.type === requestType &&
+          p.type === "friendRequest" &&
           (p.to === searchUserData.id || p.from === searchUserData.id)
       )
     )
@@ -113,7 +113,8 @@ class Model {
       requestType,
       "from",
       this.currentUser,
-      this.username
+      this.username,
+      playlist
     );
 
     this.addPendingRequest(
@@ -122,11 +123,20 @@ class Model {
       requestType,
       "to",
       searchUserData.id,
-      searchUserData.username
+      searchUserData.username,
+      playlist
     );
   }
 
-  addPendingRequest(requestId, addressId, requestType, direction, id, name) {
+  addPendingRequest(
+    requestId,
+    addressId,
+    requestType,
+    direction,
+    id,
+    name,
+    playlist = false
+  ) {
     // Do not add request if already in model
     if (this.pending.find((p) => p.id === requestId)) return;
 
@@ -136,6 +146,10 @@ class Model {
       [direction]: id, // to/from
       username: name,
     };
+
+    if (playlist) {
+      newPending["playlist"] = playlist;
+    }
 
     if (addressId === this.currentUser) {
       this.pending = [...this.pending, newPending];
@@ -161,6 +175,12 @@ class Model {
 
     this.friends = [...this.friends, friend];
     this.notifyObservers({ addFriend: friend });
+  }
+
+  acceptChallenge(requestId, friendId, friendUsername, playlist) {
+    this.removeRequest(requestId, "challenge", friendId);
+    // play playlist
+    console.log("Challenge accepted");
   }
 
   removeRequest(requestId, requestType, userId) {
