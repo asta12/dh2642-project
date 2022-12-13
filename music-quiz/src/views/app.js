@@ -13,6 +13,7 @@ import HomePresenter from "../presenters/homePresenter";
 import AddFriend from "../presenters/addFriendPresenter";
 import Loading from "./loadingView.js";
 import SidebarPresenter from "../presenters/sidebarPresenter";
+import GamePresenter2 from "../presenters/gamePresenter2";
 
 function App(props) {
   const [currentUser, setCurrentUser] = useState(props.model.currentUser);
@@ -66,6 +67,10 @@ function App(props) {
           <Route
             path="/profile/add-friend"
             element={<AddFriend model={props.model} />}
+          />
+          <Route
+            path="/play2"
+            element={<GamePresenter2 model={props.model} />}
           />
         </Routes>
       </div>

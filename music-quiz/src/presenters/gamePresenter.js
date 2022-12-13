@@ -83,7 +83,7 @@ function GamePresenter(props) {
     u.pitch = 1;
     u.rate = currentSpeed;
     u.volume = currentVolume;
-
+    u.lang = 'en-US';
     return u;
   }
 
