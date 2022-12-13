@@ -2,7 +2,7 @@
 
 Everyone in our group choose one person and did a user evaluation in the form of a think aloud evaluation.
 
-## Raw data
+## Feedback
 
 This is all feedback from the think aloud evaluation. A checkmark means that this is something that we have taken the feedback into account. What we did to enhance the user experience with regards to the feedback is explained afterwards. 
 
