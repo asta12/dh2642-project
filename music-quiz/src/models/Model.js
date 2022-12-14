@@ -10,6 +10,7 @@ class Model {
     this.playlists = [];
     this.pending = [];
     this.friends = [];
+    this.currentChallenge = null;
     this.initialLoginAttemptComplete = false;
   }
 
@@ -51,6 +52,12 @@ class Model {
     if (this.email === email) return;
     this.email = email;
     this.notifyObservers({ email: this.email });
+  }
+
+  setCurrentChallenge(challengeID) {
+    if (this.currentChallenge?.id === challengeID) return;
+    this.currentChallenge = this.pending.find(pending => pending.id === challengeID);
+    this.notifyObservers({ challenge: this.currentChallenge });
   }
 
   setInitialLoginAttemptComplete(isComplete) {

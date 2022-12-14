@@ -59,12 +59,14 @@ export default function SidebarPresenter(props) {
     if (type === "friendRequest") {
       props.model.addFriend(requestId, id, username);
     } else {
-      navigate(`/play?challengeID=${requestId}`)
+      props.model.setCurrentChallenge(requestId);
+      navigate("/play");
     }
   }
 
   function decline(requestId, type, userId) {
     props.model.removeRequest(requestId, type, userId);
+    props.model.setCurrentChallenge(null);
   }
 
   function togglePopup(f) {

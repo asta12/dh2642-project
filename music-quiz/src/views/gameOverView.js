@@ -23,13 +23,13 @@ function GameOverView(props) {
           <ReactStars
             count={5}
             value={3}
-            onChange={(newRating) => console.log(newRating)}
+            onChange={(newRating) => props.changeRating(newRating)}
             size={52}
             activeColor="#ffd700"
           />
         </div>
         <div className="d-flex justify-content-center mt-3">
-            <Button>Save</Button>
+            <Button onClick={() => props.saveStats()}>Save</Button>
         </div>
       </Row>
     </div>

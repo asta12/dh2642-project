@@ -252,19 +252,20 @@ function searchForPlaylist(userID, playlistID) {
     });
 }
 
-// Fetches a playlist from the pending challenge of an user.
-function searchForChallengePlaylist(userID, challengeID) {
+function saveUserStatsInFirebase(
+  playlistOwnerID,
+  playlistID,
+  playerID,
+  username,
+  score,
+  rating
+) {
   return firebase
     .database()
-    .ref(`${REF}/users/${userID}/pending/${challengeID}`)
-    .get()
-    .then((firebaseData) => {
-      const data = firebaseData.val();
-      if (!data) {
-        throw "Challenge does not exist";
-      }
-      return searchForPlaylist(data.from, data.playlist);
-    });
+    .ref(
+      `${REF}/users/${playlistOwnerID}/playlists/${playlistID}/playerHistory/${playerID}`
+    )
+    .set({ playerID, username, score, rating });
 }
 
 export default firebase;
@@ -275,5 +276,5 @@ export {
   searchForUserByEmail,
   searchForUserByID,
   searchForPlaylist,
-  searchForChallengePlaylist,
+  saveUserStatsInFirebase,
 };
