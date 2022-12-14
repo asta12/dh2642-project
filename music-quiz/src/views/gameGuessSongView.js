@@ -21,15 +21,24 @@ function GameGuessSongView(props) {
 
     window.speechSynthesis.cancel();
 
-    setButtonStyles(
-      props.answers.map((answer) => (answer.correct ? "success" : "danger"))
-    );
+    const updatedButtonStyles = props.answers.map((answer) => (answer.correct ? "success" : "primary"));
+
+    setButtonStyles(updatedButtonStyles);
 
     if (props.answers[btnID].correct) {
       setInfoText("Correct!");
       setInfoTextStyle("text-success");
       props.correctGuess();
     } else {
+      setButtonStyles(
+        updatedButtonStyles.map((style, index) => {
+          if (index === btnID) {
+            return "danger";
+          } else {
+            return style;
+          }
+        })
+      );
       setInfoText("Wrong!");
       setInfoTextStyle("text-danger");
       props.wrongGuess();
@@ -117,7 +126,8 @@ function GameGuessSongView(props) {
           <h4>
             Score{" "}
             <Badge bg="primary">
-              {props.guesses.filter(guess => guess).length} / {numSongsToGuess}
+              {props.guesses.filter((guess) => guess).length} /{" "}
+              {numSongsToGuess}
             </Badge>
           </h4>
         </Col>
