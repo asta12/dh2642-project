@@ -3,6 +3,7 @@ import FriendsView from "../views/friendsView.js";
 import PendingView from "../views/pendingView.js";
 import { Button, Image, Offcanvas } from "react-bootstrap";
 import notes from "../images/notes.png";
+import { useNavigate } from "react-router-dom";
 
 export default function SidebarPresenter(props) {
   const [expanded, updateExpanded] = useState(false);
@@ -13,6 +14,7 @@ export default function SidebarPresenter(props) {
   const [showPopup, updateShowPopup] = useState(false);
   const [playlist, updatePlaylist] = useState({});
   const [friend, updateChoosenFriend] = useState("");
+  const navigate = useNavigate();
 
   function expand() {
     updateExpanded(!expanded);
@@ -57,7 +59,7 @@ export default function SidebarPresenter(props) {
     if (type === "friendRequest") {
       props.model.addFriend(requestId, id, username);
     } else {
-      props.model.acceptChallenge(requestId, id, username, playlist);
+      navigate(`/play?challengeID=${requestId}`)
     }
   }
 

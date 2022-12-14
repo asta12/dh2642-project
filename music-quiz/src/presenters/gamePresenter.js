@@ -21,6 +21,7 @@ function GamePresenter(props) {
   const [volume, setVolume] = useState(0.5);
   const [speed, setSpeed] = useState(0.6);
   const [guesses, setGuesses] = useState([]);
+  const [challengeID, setChallengeID] = useState();
   const [challengeMode, setChallengeMode] = useState(false);
   const [challengePlaylistPromiseState, setChallengePlaylistPromiseState] =
     useState({});
@@ -49,9 +50,10 @@ function GamePresenter(props) {
   useEffect(componentCreated, []);
 
   function checkIfChallengeMode() {
+    const challengeID = searchParams.get("challengeID");
     setSelectedPlaylist({});
     setChallengeMode(false);
-    const challengeID = searchParams.get("challengeID");
+    setChallengeID(challengeID);
     if (challengeID) {
       setChallengeMode(true);
       // Load the user's playlist from the firebase database.
@@ -67,6 +69,11 @@ function GamePresenter(props) {
         }
       );
     }
+  }
+
+  function gameStartChallenge() {
+    props.model.acceptChallenge(challengeID, props.model.currentUser);
+    nextSong();
   }
 
   function nextSong() {
@@ -128,7 +135,7 @@ function GamePresenter(props) {
         ) || (
           <GameChallengeView
             playlist={challengePlaylistPromiseState.data}
-            onStartClick={nextSong}
+            onStartClick={gameStartChallenge}
           />
         )
       );
