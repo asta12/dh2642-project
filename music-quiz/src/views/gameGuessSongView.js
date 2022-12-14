@@ -21,7 +21,9 @@ function GameGuessSongView(props) {
 
     window.speechSynthesis.cancel();
 
-    const updatedButtonStyles = props.answers.map((answer) => (answer.correct ? "success" : "primary"));
+    const updatedButtonStyles = props.answers.map((answer) =>
+      answer.correct ? "success" : "primary"
+    );
 
     setButtonStyles(updatedButtonStyles);
 
@@ -158,6 +160,14 @@ function GameGuessSongView(props) {
             size="lg"
           >
             {props.guesses.length < numSongsToGuess ? "Next Song" : "Game Over"}
+          </Button>
+          <Button
+            className="ms-3"
+            onClick={() => props.exitGame()}
+            size="lg"
+            variant="danger"
+          >
+            Exit Game
           </Button>
         </Col>
       </Row>
