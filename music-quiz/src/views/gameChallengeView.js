@@ -5,7 +5,10 @@ function GameChallengeView(props) {
   return (
     <>
       <h1 className="text-primary text-center mt-5">Challenge</h1>
-      <h4 className="text-center mt-3">You will play the playlist "{props.playlist.name}", which contains {props.playlist.songs.length} songs</h4>
+      <h4 className="text-center mt-3">
+        You will play the playlist "{props.playlist.name}", which contains{" "}
+        {props.playlist.songs.length} songs
+      </h4>
       <Row className="justify-content-md-center">
         <Button
           size="lg"
@@ -14,7 +17,19 @@ function GameChallengeView(props) {
           onClick={(e) => props.onStartClick()}
         >
           {" "}
-          Start Game{" "}
+          Start Challenge{" "}
+        </Button>
+      </Row>
+      <Row className="justify-content-md-center">
+        <Button
+          size="lg"
+          className="mt-3"
+          variant="danger"
+          style={{ width: "300px" }}
+          onClick={(e) => props.onDeclineClick()}
+        >
+          {" "}
+          Decline Challenge{" "}
         </Button>
       </Row>
     </>

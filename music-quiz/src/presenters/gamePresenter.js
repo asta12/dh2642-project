@@ -26,7 +26,9 @@ function GamePresenter(props) {
   const [speed, setSpeed] = useState(0.6);
   const [guesses, setGuesses] = useState([]);
   const [rating, setRating] = useState(3);
-  const [currentChallenge, setCurrentChallenge] = useState(props.model.currentChallenge);
+  const [currentChallenge, setCurrentChallenge] = useState(
+    props.model.currentChallenge
+  );
   const [challengePlaylistPromiseState, setChallengePlaylistPromiseState] =
     useState({});
   const [, reRender] = useState();
@@ -75,6 +77,15 @@ function GamePresenter(props) {
 
   function gameStartChallenge() {
     nextSong();
+  }
+
+  function declineChallenge() {
+    props.model.removeRequest(
+      currentChallenge.id,
+      "challenge",
+      props.model.currentUser
+    );
+    props.model.setCurrentChallenge(null);
   }
 
   function nextSong() {
@@ -164,6 +175,7 @@ function GamePresenter(props) {
           <GameChallengeView
             playlist={challengePlaylistPromiseState.data}
             onStartClick={gameStartChallenge}
+            onDeclineClick={declineChallenge}
           />
         )
       );
