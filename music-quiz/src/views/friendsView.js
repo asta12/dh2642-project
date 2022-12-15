@@ -1,4 +1,4 @@
-import { ListGroup, Badge, Button, Image } from "react-bootstrap";
+import { ListGroup, Button, Image, Modal, Dropdown } from "react-bootstrap";
 import p1 from "../images/profile_pic_1.png";
 import p2 from "../images/profile_pic_2.png";
 import p3 from "../images/profile_pic_3.png";
@@ -17,6 +17,40 @@ export default function FriendsView(props) {
 
   return (
     <>
+      <Modal show={props.showPopup} onHide={props.togglePopup}>
+        <Modal.Header closeButton>
+          <Modal.Title>Choose Playlist</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Select the playlist you want to challenge your friend with!
+          <Dropdown className="mt-3">
+            <Dropdown.Toggle>
+              {props.playlist?.name ? props.playlist?.name : "Choose playlist"}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {props.playlistOptions.map((playlist, index) => {
+                return (
+                  <Dropdown.Item
+                    key={index}
+                    onClick={() => props.choosePlaylist(playlist)}
+                  >
+                    {playlist.name}
+                  </Dropdown.Item>
+                );
+              })}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="primary"
+            disabled={!props.playlist?.name}
+            onClick={() => props.challenge()}
+          >
+            Send challenge
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <ListGroup>
         {props.friends.map((friend, index) => {
           let rand_img_nr = getProfileNumber(friend.username);
@@ -46,7 +80,7 @@ export default function FriendsView(props) {
                 <Link to={`/friend?id=${friend.id}`}>{friend.username}</Link>
               </div>
               <Button
-                onClick={(e) => console.log("Challenge " + friend.username)}
+                onClick={(e) => props.togglePopup(friend)}
                 size="sm"
                 style={{ height: "40px" }}
               >

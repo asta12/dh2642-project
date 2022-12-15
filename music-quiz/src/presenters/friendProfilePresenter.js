@@ -28,20 +28,19 @@ export default function FriendProfilePresenter(props) {
   }
 
   function whenCreated() {
+    findFriend();
+  }
+
+  function findFriend() {
     const id = searchParams.get("id");
     if (id) {
       resolvePromise(searchForUserByID(id), friendPromiseState, () => {
         if (friendPromiseState.data) {
-          const friend = friendPromiseState.data.val();
-          if (friend) {
-            setEmail(friend.email);
-            setUsername(friend.username);
-            if (friend.playlists) {
-              setPlaylists(friend.playlists);
-            }
-          } else {
-            // There exists no user with the specified ID, we rerender and show an error message.
-            reRender(new Object());
+          const friend = friendPromiseState.data;
+          setEmail(friend.email);
+          setUsername(friend.username);
+          if (friend.playlists) {
+            setPlaylists(friend.playlists);
           }
         } else {
           reRender(new Object());
@@ -56,29 +55,23 @@ export default function FriendProfilePresenter(props) {
     [playlists]
   );
 
+  useEffect(findFriend, [searchParams])
+
   if (!friendPromiseState.promise) {
     return "Please provide a valid ID";
   }
 
-  const dataNotReady = promiseNoData(friendPromiseState);
-
-  if (dataNotReady) {
-    return dataNotReady;
-  }
-
-  if (!email) {
-    return "Could not find an user with that ID";
-  }
-
   return (
-    <div>
-      <FriendUserInfo username={username} email={email} />
-      <ShowPlaylistView
-        playlists={playlists}
-        expanding={expanding}
-        expand={expand}
-        editable={false}
-      />
-    </div>
+    promiseNoData(friendPromiseState, friendPromiseState.error) || (
+      <div>
+        <FriendUserInfo username={username} email={email} />
+        <ShowPlaylistView
+          playlists={playlists}
+          expanding={expanding}
+          expand={expand}
+          editable={false}
+        />
+      </div>
+    )
   );
 }

@@ -1,4 +1,6 @@
-import { ListGroup, Button, Badge } from "react-bootstrap";
+import { ListGroup, Button, Badge, Image } from "react-bootstrap";
+import challengeImg from "../images/challenge_double.png";
+import friendImg from "../images/friend_2.png";
 
 export default function PendingView(props) {
   return (
@@ -7,9 +9,11 @@ export default function PendingView(props) {
         {props.pending.map((event, index) => {
           let type = "Friend Request";
           let color = "info";
+          let img = <Image src={friendImg} width="50px" />;
           if (event.type === "challenge") {
             type = "Challenge";
-            color = "warning";
+            color = "success";
+            img = <Image src={challengeImg} width="50px" />;
           }
           if (event.from) {
             return (
@@ -18,24 +22,23 @@ export default function PendingView(props) {
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <div>
-                  <Badge
-                    pill
-                    bg={color}
-                    style={{ height: "20px", marginRight: "10px" }}
-                  >
-                    !
-                  </Badge>
+                  {img}
                   You have a {type} from {event.username}!
                 </div>
 
                 <div>
                   <Button
                     onClick={(e) => {
-                      props.accept(event.id, event.from, event.username);
+                      props.accept(
+                        event.id,
+                        event.from,
+                        event.username,
+                        event.type
+                      );
                     }}
                     size="sm"
                     variant="success"
-                    style={{ marginRight: "5px" }}
+                    style={{ marginRight: "5px", marginTop: "9px" }}
                   >
                     Accept
                   </Button>
@@ -45,6 +48,7 @@ export default function PendingView(props) {
                     }}
                     size="sm"
                     variant="danger"
+                    style={{ marginTop: "9px" }}
                   >
                     Decline
                   </Button>
@@ -63,9 +67,9 @@ export default function PendingView(props) {
                     bg="success"
                     style={{ height: "20px", marginRight: "10px" }}
                   >
-                    i
+                    !
                   </Badge>
-                  You have sent a request to {event.username}, waiting for
+                  You have sent a {type} to {event.username}, waiting for
                   response
                 </div>
               </ListGroup.Item>

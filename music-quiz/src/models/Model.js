@@ -8,13 +8,9 @@ class Model {
     this.email = null;
     this.username = null;
     this.playlists = [];
-    this.settings = {
-      volume: 0.5,
-      pitch: 1,
-      speed: 1.1,
-    };
     this.pending = [];
     this.friends = [];
+    this.currentChallenge = null;
     this.initialLoginAttemptComplete = false;
   }
 
@@ -58,6 +54,12 @@ class Model {
     this.notifyObservers({ email: this.email });
   }
 
+  setCurrentChallenge(challengeID) {
+    if (this.currentChallenge?.id === challengeID) return;
+    this.currentChallenge = this.pending.find(pending => pending.id === challengeID);
+    this.notifyObservers({ challenge: this.currentChallenge });
+  }
+
   setInitialLoginAttemptComplete(isComplete) {
     if (this.initialLoginAttemptComplete === isComplete) return;
     this.initialLoginAttemptComplete = isComplete;
@@ -99,23 +101,12 @@ class Model {
     this.notifyObservers({ editPlaylist: playlist });
   }
 
-  getUniquePlaylistID() {
-    // Find the next largest ID that is unique.
-    // Another solution: `this.playlists.length`, however, that will not work if we are allowed to remove playlists.
-    return (
-      this.playlists.reduce(
-        (currentMax, playlist) => Math.max(currentMax, playlist.id),
-        0
-      ) + 1
-    );
-  }
-
-  newPendingRequest(searchUserData, requestType) {
+  newPendingRequest(searchUserData, requestType, playlist = false) {
     // We do not want more than one request to/from a user respectively.
     if (
       this.pending.find(
         (p) =>
-          p.type === requestType &&
+          p.type === "friendRequest" &&
           (p.to === searchUserData.id || p.from === searchUserData.id)
       )
     )
@@ -129,7 +120,8 @@ class Model {
       requestType,
       "from",
       this.currentUser,
-      this.username
+      this.username,
+      playlist
     );
 
     this.addPendingRequest(
@@ -138,11 +130,20 @@ class Model {
       requestType,
       "to",
       searchUserData.id,
-      searchUserData.username
+      searchUserData.username,
+      playlist
     );
   }
 
-  addPendingRequest(requestId, addressId, requestType, direction, id, name) {
+  addPendingRequest(
+    requestId,
+    addressId,
+    requestType,
+    direction,
+    id,
+    name,
+    playlist = false
+  ) {
     // Do not add request if already in model
     if (this.pending.find((p) => p.id === requestId)) return;
 
@@ -152,6 +153,10 @@ class Model {
       [direction]: id, // to/from
       username: name,
     };
+
+    if (playlist) {
+      newPending["playlist"] = playlist;
+    }
 
     if (addressId === this.currentUser) {
       this.pending = [...this.pending, newPending];
@@ -177,6 +182,12 @@ class Model {
 
     this.friends = [...this.friends, friend];
     this.notifyObservers({ addFriend: friend });
+  }
+
+  acceptChallenge(requestId, friendId, friendUsername, playlist) {
+    this.removeRequest(requestId, "challenge", friendId);
+    // play playlist
+    console.log("Challenge accepted");
   }
 
   removeRequest(requestId, requestType, userId) {
@@ -209,13 +220,6 @@ class Model {
   clearPlaylist() {
     if (this.playlists === []) return;
     this.playlists = [];
-  }
-
-  setVolume(volume) {
-    // Set the preferred volume of the user
-    if (this.settings.volume === volume) return;
-    this.settings.volume = volume;
-    this.notifyObservers({ volume: this.settings.volume });
   }
 }
 

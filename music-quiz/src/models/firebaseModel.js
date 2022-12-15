@@ -121,7 +121,7 @@ function updateModelFromFirebase(model) {
         .database()
         .ref(`${REF}/users/${model.currentUser}/playlists/`)
         .on("child_removed", (firebaseData) => {
-          model.deletePlaylist(+firebaseData.key);
+          model.deletePlaylist(firebaseData.key);
         });
 
       // Get pending updates.
@@ -133,6 +133,7 @@ function updateModelFromFirebase(model) {
           const keys = Object.keys(firebaseData.exportVal());
           const direction = keys.filter((k) => k === "to" || k === "from");
           const userId = firebaseData.exportVal()[direction];
+          const playlist = firebaseData.exportVal().playlist;
 
           model.addPendingRequest(
             requestId,
@@ -140,7 +141,8 @@ function updateModelFromFirebase(model) {
             firebaseData.val().type,
             direction,
             userId,
-            firebaseData.val().username
+            firebaseData.val().username,
+            playlist
           );
         });
 
@@ -222,7 +224,48 @@ function searchForUserByEmail(model, email) {
 
 // Fetches a user with a specific ID from firebase.
 function searchForUserByID(userID) {
-  return firebase.database().ref(`${REF}/users/${userID}/`).get();
+  return firebase
+    .database()
+    .ref(`${REF}/users/${userID}/`)
+    .get()
+    .then((firebaseData) => {
+      const data = firebaseData.val();
+      if (!data) {
+        throw "The user does not exist";
+      }
+      return data;
+    });
+}
+
+// Fetches a playlist from an user with the help of the userID and playlistID.
+function searchForPlaylist(userID, playlistID) {
+  return firebase
+    .database()
+    .ref(`${REF}/users/${userID}/playlists/${playlistID}`)
+    .get()
+    .then((firebaseData) => {
+      const data = firebaseData.val();
+      if (!data) {
+        throw "The playlist does not exist";
+      }
+      return data;
+    });
+}
+
+function saveUserStatsInFirebase(
+  playlistOwnerID,
+  playlistID,
+  playerID,
+  username,
+  score,
+  rating
+) {
+  return firebase
+    .database()
+    .ref(
+      `${REF}/users/${playlistOwnerID}/playlists/${playlistID}/playerHistory/${playerID}`
+    )
+    .set({ playerID, username, score, rating });
 }
 
 export default firebase;
@@ -231,5 +274,7 @@ export {
   updateModelFromFirebase,
   firebaseModelPromise,
   searchForUserByEmail,
-  searchForUserByID
+  searchForUserByID,
+  searchForPlaylist,
+  saveUserStatsInFirebase,
 };

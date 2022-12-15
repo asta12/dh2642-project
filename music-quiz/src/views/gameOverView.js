@@ -1,20 +1,37 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
+import { Badge, Button, Row } from "react-bootstrap";
+import { numSongsToGuess } from "../settings/gameSettings";
+import ReactStars from "react-rating-stars-component";
 
 function GameOverView(props) {
   return (
-    <div className="mx-auto" style={{ width: "500px" }}>
-      <Card style={{ width: "30rem" }} className="text-center">
-        <Card.Body>
-          <Card.Title>Thank you for playing!</Card.Title>
-          <Card.Text>Your final score was {props.score}!</Card.Text>
-          <Button onClick={() => props.onPlayAgainClick()} variant="primary">
-            {" "}
-            Play again
-          </Button>
-        </Card.Body>
-      </Card>
+    <div className="mt-5">
+      <h1 className="text-success text-center">Congratulations!</h1>
+      <h3 className="text-center mt-3">
+        Your final score{" "}
+        <Badge bg="primary">
+          {props.guesses.filter((guess) => guess).length} / {numSongsToGuess}
+        </Badge>
+      </h3>
+      <Row className="mt-5">
+        <h3 className="d-flex justify-content-center">Leaderboard</h3>
+        <p  className="d-flex justify-content-center">Insert the leaderboardPresenter here</p>
+      </Row>
+      <Row className="mt-5">
+        <h3 className="d-flex justify-content-center">Give this playlist a rating</h3>
+        <div className="d-flex justify-content-center">
+          <ReactStars
+            count={5}
+            value={3}
+            onChange={(newRating) => props.changeRating(newRating)}
+            size={52}
+            activeColor="#ffd700"
+          />
+        </div>
+        <div className="d-flex justify-content-center mt-3">
+            <Button onClick={() => props.saveStats()}>Save</Button>
+        </div>
+      </Row>
     </div>
   );
 }
