@@ -22,10 +22,10 @@ export default function navbarView(props) {
               Play
             </Nav.Link>
             {(!props.loggedInUser && [
-              <Nav.Link as={Link} to="/login" key="login">
+              <Nav.Link className="d-flex" as={Link} to="/login" key="login">
                 Log in
               </Nav.Link>,
-              <Nav.Link as={Link} to="/register" key="register">
+              <Nav.Link className="d-flex" as={Link} to="/register" key="register">
                 Register
               </Nav.Link>,
             ]) || (
@@ -48,8 +48,8 @@ export default function navbarView(props) {
         </Navbar.Collapse>
         <Navbar.Text>
           {props.loggedInUser
-            ? `You are logged in as: ${props.loggedInUser}`
-            : "You are not logged in"}
+            && `You are logged in as: ${props.loggedInUser}`}
+            
         </Navbar.Text>
       </Container>
     </Navbar>
