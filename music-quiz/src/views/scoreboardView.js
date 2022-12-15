@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function ScoreboardView(props) {
   let sortedScores = Object.values(props.scores).sort(
-    (a, b) => a.score - b.score
+    (a, b) => b.score - a.score
   );
   return (
     <ListGroup>
