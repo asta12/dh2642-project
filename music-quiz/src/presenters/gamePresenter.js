@@ -1,5 +1,4 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import resolvePromise from "../resolvePromise";
 import { extractFirst20Lines, numSongsToGuess } from "../settings/gameSettings";
@@ -10,7 +9,6 @@ import GameSettingsView from "../views/gameSettingsView";
 import promiseNoData from "../views/promiseNoData";
 import {
   saveUserStatsInFirebase,
-  searchForChallenge,
   searchForPlaylist,
 } from "../models/firebaseModel";
 import GameChallengeView from "../views/gameChallengeView";
@@ -25,7 +23,7 @@ function GamePresenter(props) {
   const [volume, setVolume] = useState(0.5);
   const [speed, setSpeed] = useState(0.6);
   const [guesses, setGuesses] = useState([]);
-  const [rating, setRating] = useState(3);
+  const [rating, setRating] = useState(null);
   const [currentChallenge, setCurrentChallenge] = useState(
     props.model.currentChallenge
   );
@@ -90,11 +88,15 @@ function GamePresenter(props) {
 
   function nextSong() {
     const nextSongIndex = currentSongIndex + 1;
-    resolvePromise(
-      getSongLyrics(selectedSongs[nextSongIndex].id),
-      songLyricsPromiseStates[nextSongIndex],
-      () => reRender(new Object())
-    );
+    if (nextSongIndex === numSongsToGuess) {
+      saveStats();
+    } else {
+      resolvePromise(
+        getSongLyrics(selectedSongs[nextSongIndex].id),
+        songLyricsPromiseStates[nextSongIndex],
+        () => reRender(new Object())
+      );
+    }
     setCurrentSongIndex(nextSongIndex);
   }
 
@@ -149,20 +151,18 @@ function GamePresenter(props) {
       score,
       rating
     );
+  }
 
+  function clearGameSettings() {
     // Clear challenge specific data.
     if (currentChallenge) {
       props.model.acceptChallenge(currentChallenge.id, props.model.currentUser);
       props.model.setCurrentChallenge(null);
     }
-
-    clearGameSettings();
-  }
-
-  function clearGameSettings() {
     setCurrentSongIndex(-1);
     setSelectedPlaylist({});
     setGuesses([]);
+    setRating(null);
   }
 
   if (currentSongIndex === -1) {
@@ -221,6 +221,7 @@ function GamePresenter(props) {
       guesses={guesses}
       changeRating={setRating}
       saveStats={saveStats}
+      done={clearGameSettings}
     />
   );
 }

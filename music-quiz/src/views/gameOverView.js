@@ -29,7 +29,8 @@ function GameOverView(props) {
           />
         </div>
         <div className="d-flex justify-content-center mt-3">
-            <Button onClick={() => props.saveStats()}>Save</Button>
+            <Button className="me-3" onClick={() => props.saveStats()}>Save Rating</Button>
+            <Button onClick={() => props.done()}>Done</Button>
         </div>
       </Row>
     </div>

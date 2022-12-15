@@ -252,7 +252,7 @@ function searchForPlaylist(userID, playlistID) {
     });
 }
 
-function saveUserStatsInFirebase(
+async function saveUserStatsInFirebase(
   playlistOwnerID,
   playlistID,
   playerID,
@@ -260,12 +260,27 @@ function saveUserStatsInFirebase(
   score,
   rating
 ) {
+  // Check if the player has already played the playlist.
+  const playlist = await searchForPlaylist(playlistOwnerID, playlistID);
+  if (playlist.playerHistory && playlist.playerHistory[playerID]) {
+    const oldPlayerHistory = playlist.playerHistory[playerID];
+    // Keep the best score.
+    score = Math.max(score, oldPlayerHistory.score);
+    // Keep the old rating if no new rating is being provided.
+    if (!rating) {
+      rating = oldPlayerHistory.rating;
+    }
+  }
+  let playerHistory = { playerID, username, score };
+  if (rating) {
+    playerHistory = { ...playerHistory, rating };
+  }
   return firebase
     .database()
     .ref(
       `${REF}/users/${playlistOwnerID}/playlists/${playlistID}/playerHistory/${playerID}`
     )
-    .set({ playerID, username, score, rating });
+    .set(playerHistory);
 }
 
 export default firebase;
