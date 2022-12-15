@@ -3,10 +3,11 @@ import { Image, ListGroup, Badge } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export default function ScoreboardView(props) {
-  let sortedScores = props.scores.sort((a, b) => a.score - b.score);
+  let sortedScores = Object.values(props.scores).sort(
+    (a, b) => a.score - b.score
+  );
   return (
     <ListGroup>
-      {console.log(typeof props.scores)}
       {sortedScores.map((score, index) => {
         let img = (
           <div

@@ -3,7 +3,7 @@ import { ListGroup } from "react-bootstrap";
 import { Button, Stack, Image } from "react-bootstrap";
 import down from "../images/down.png";
 import up from "../images/up.png";
-import ScoreboardPopupView from "../views/scoreboardPopupView";
+import ScoreboardPopupPresenter from "../presenters/scoreboardPopupPresenter";
 
 export default function ShowPlaylistView(props) {
   return (
@@ -23,7 +23,7 @@ export default function ShowPlaylistView(props) {
                 onClick={(e) => {
                   props.expand(index);
                 }}
-                style={{ cursor: pointer }}
+                style={{ cursor: "pointer" }}
               />
             );
             if (props.expanding[index]) {
@@ -53,7 +53,7 @@ export default function ShowPlaylistView(props) {
                   onClick={(e) => {
                     props.expand(index);
                   }}
-                  style={{ cursor: pointer }}
+                  style={{ cursor: "pointer" }}
                 />
               );
             }
@@ -64,11 +64,12 @@ export default function ShowPlaylistView(props) {
                     {expandImg}
                     <h5>{playlist.name}</h5>
                   </div>
-                  {props.editable && (
-                    <div className="ms-auto">
-                      <ScoreboardPopupPresenter
-                        playerHistory={playlist.playerHistory}
-                      />
+                  <div className="ms-auto">
+                    {props.averageRating(playlist)}
+                    <ScoreboardPopupPresenter
+                      playerHistory={playlist.playerHistory}
+                    />
+                    {props.editable && (
                       <Button
                         size="sm"
                         onClick={(e) => {
@@ -78,15 +79,15 @@ export default function ShowPlaylistView(props) {
                       >
                         Edit
                       </Button>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </Stack>
                 {songs}
               </ListGroup.Item>
             );
           })}
         </ListGroup>
-      )}
+      )}playlist
     </div>
   );
 }

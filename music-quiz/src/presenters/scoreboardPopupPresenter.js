@@ -1,6 +1,6 @@
 import { Modal, Button } from "react-bootstrap";
 import React, { useState } from "react";
-import ScoreboardView from "./scoreboardView.js";
+import ScoreboardView from "../views/scoreboardView.js";
 
 const scores = [
   {

@@ -5,6 +5,7 @@ import resolvePromise from "../resolvePromise";
 import promiseNoData from "../views/promiseNoData";
 import ShowPlaylistView from "../views/showPlaylistView";
 import { searchForUserByID } from "../models/firebaseModel";
+import ReactStars from "react-rating-stars-component";
 
 export default function FriendProfilePresenter(props) {
   const [email, setEmail] = useState(null);
@@ -40,7 +41,7 @@ export default function FriendProfilePresenter(props) {
           setEmail(friend.email);
           setUsername(friend.username);
           if (friend.playlists) {
-            setPlaylists(Object.values(friend.playlists));
+            setPlaylists(friend.playlists);
           }
         } else {
           reRender(new Object());
@@ -49,13 +50,36 @@ export default function FriendProfilePresenter(props) {
     }
   }
 
+  function averageRating(playlistHistory) {
+    let ratings = Object.values(playlistHistory).filter(
+      (history) => history.score
+    );
+    if (ratings.length === 0) {
+      return <p>No Rating</p>;
+    }
+    let sumOfRatings = 0;
+    ratings.map((score, index) => {
+      sumOfRatings += score.rating;
+    });
+    let averageRating = Math.round(sumOfRatings / ratings.length);
+    return (
+      <ReactStars
+        count={5}
+        value={averageRating}
+        size={52}
+        activeColor="#ffd700"
+        edit={false}
+      />
+    );
+  }
+
   useEffect(whenCreated, []);
   useEffect(
     () => updateExpanding(Array(playlists.length).fill(false)),
     [playlists]
   );
 
-  useEffect(findFriend, [searchParams])
+  useEffect(findFriend, [searchParams]);
 
   if (!friendPromiseState.promise) {
     return "Please provide a valid ID";
@@ -66,6 +90,7 @@ export default function FriendProfilePresenter(props) {
       <div>
         <FriendUserInfo username={username} email={email} />
         <ShowPlaylistView
+          averageRating={averageRating}
           playlists={playlists}
           expanding={expanding}
           expand={expand}
