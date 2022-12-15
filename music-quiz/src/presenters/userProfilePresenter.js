@@ -43,9 +43,17 @@ export default function UserProfilePresenter(props) {
   }
 
   function averageRating(playlistHistory) {
-    let ratings = Object.values(playlistHistory).filter(
-      (history) => history.score
-    );
+    if (!playlistHistory) {
+      return (
+        <p style={{ margin: "0px", color: "lightGrey" }}>No ratings yet</p>
+      );
+    }
+    let ratings = Object.values(playlistHistory).filter((history) => {
+      if (history.rating) {
+        return true;
+      }
+      return false;
+    });
     if (ratings.length === 0) {
       return <p style={{ margin: "0px" }}>No Rating</p>;
     }

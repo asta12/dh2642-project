@@ -3,10 +3,13 @@ import { Image, ListGroup, Badge } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export default function ScoreboardView(props) {
-  let sortedScores = Object.values(props.scores).sort(
-    (a, b) => b.score - a.score
-  );
-  return (
+  let sortedScores = false;
+  if (props.scores) {
+    sortedScores = Object.values(props.scores).sort(
+      (a, b) => b.score - a.score
+    );
+  }
+  return sortedScores ? (
     <ListGroup>
       {sortedScores.map((score, index) => {
         let img = (
@@ -34,5 +37,7 @@ export default function ScoreboardView(props) {
         );
       })}
     </ListGroup>
+  ) : (
+    <p style={{ margin: "0px" }}>This playlist have not been played yet</p>
   );
 }

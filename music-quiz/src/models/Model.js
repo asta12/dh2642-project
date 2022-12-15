@@ -186,8 +186,6 @@ class Model {
 
   acceptChallenge(requestId, friendId, friendUsername, playlist) {
     this.removeRequest(requestId, "challenge", friendId);
-    // play playlist
-    console.log("Challenge accepted");
   }
 
   removeRequest(requestId, requestType, userId) {

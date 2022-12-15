@@ -2,24 +2,6 @@ import { Modal, Button } from "react-bootstrap";
 import React, { useState } from "react";
 import ScoreboardView from "../views/scoreboardView.js";
 
-const scores = [
-  {
-    userID: "1",
-    username: "Astra",
-    score: 10,
-  },
-  {
-    userID: "2",
-    username: "Astra2",
-    score: 9,
-  },
-  {
-    userID: "3",
-    username: "Anna",
-    score: 8,
-  },
-];
-
 export default function ScoreboardPopupPresenter(props) {
   // move state to presenter when using real data
   const [showPopup, updatePopup] = useState(false);
