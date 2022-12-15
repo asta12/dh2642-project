@@ -2,6 +2,7 @@ import SearchSongPresenter from "../presenters/searchSongPresenter";
 import SelectedSongsPresenter from "../presenters/selectedSongsPresenter";
 import { Row, Col, Form, Button, Alert, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { PLAYLIST_MIN_SONGS } from "../settings/playlistSettings";
 
 export default function EditPlaylistView(props) {
   return (
@@ -9,6 +10,7 @@ export default function EditPlaylistView(props) {
       <div>
         <Stack direction="horizontal">
         <h2>Edit playlist</h2>
+        <p>Select a minimum of {PLAYLIST_MIN_SONGS} songs and press the save button</p>
           <Button
             className="ms-3"
             variant="outline-danger"
