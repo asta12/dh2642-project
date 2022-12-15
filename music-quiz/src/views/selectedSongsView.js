@@ -1,4 +1,4 @@
-import { ListGroup, CloseButton, Stack, Badge, } from "react-bootstrap";
+import { ListGroup, CloseButton, Stack, Badge } from "react-bootstrap";
 
 function SelectedSongsView(props) {
   return (

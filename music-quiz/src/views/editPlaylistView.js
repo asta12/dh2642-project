@@ -10,7 +10,6 @@ export default function EditPlaylistView(props) {
       <div>
         <Stack direction="horizontal">
         <h2>Edit playlist</h2>
-        <p>Select a minimum of {PLAYLIST_MIN_SONGS} songs and press the save button</p>
           <Button
             className="ms-3"
             variant="outline-danger"
@@ -19,6 +18,7 @@ export default function EditPlaylistView(props) {
             Delete
           </Button>
         </Stack>
+        <p>Select a minimum of {PLAYLIST_MIN_SONGS} songs and press the save button</p>
 
         <Form.Group className="mb-3" controlId="playlistName">
           <Form.Control
