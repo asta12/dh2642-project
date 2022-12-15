@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
 import CreatePlaylistView from "../views/createPlaylistView.js";
 import { Navigate } from "react-router-dom";
@@ -42,7 +43,7 @@ export default function CreatePlaylistPresenter(props) {
       // The playlist is valid save it in our model.
       setErrorMessage("");
       props.model.addPlaylist({
-        id: props.model.getUniquePlaylistID(),
+        id: uuidv4(),
         name: playlistName,
         songs: playlistSongs,
       });

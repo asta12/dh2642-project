@@ -1,0 +1,9 @@
+.correct-guess>a {
+    background-color: #198754 !important;
+    color: #fff !important;
+}
+
+.wrong-guess>a {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+}

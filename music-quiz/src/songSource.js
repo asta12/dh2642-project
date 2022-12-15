@@ -26,6 +26,7 @@ function getSongLyrics(songID) {
         .then(response => response.json())
         .then(json => json.response.song.url)
         .then(url => getLyrics(`${PROXY_IP}${url}`))
+        .then(lyrics => lyrics.replace(/\[(.*?)\]/g, "")) // Remove metadata from the lyrics. 
         .catch(err => console.error(err));
 }
 

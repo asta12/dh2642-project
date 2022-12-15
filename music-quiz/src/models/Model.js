@@ -8,13 +8,9 @@ class Model {
     this.email = null;
     this.username = null;
     this.playlists = [];
-    this.settings = {
-      volume: 0.5,
-      pitch: 1,
-      speed: 1.1,
-    };
     this.pending = [];
     this.friends = [];
+    this.currentChallenge = null;
     this.initialLoginAttemptComplete = false;
   }
 
@@ -58,6 +54,12 @@ class Model {
     this.notifyObservers({ email: this.email });
   }
 
+  setCurrentChallenge(challengeID) {
+    if (this.currentChallenge?.id === challengeID) return;
+    this.currentChallenge = this.pending.find(pending => pending.id === challengeID);
+    this.notifyObservers({ challenge: this.currentChallenge });
+  }
+
   setInitialLoginAttemptComplete(isComplete) {
     if (this.initialLoginAttemptComplete === isComplete) return;
     this.initialLoginAttemptComplete = isComplete;
@@ -99,19 +101,8 @@ class Model {
     this.notifyObservers({ editPlaylist: playlist });
   }
 
-  getUniquePlaylistID() {
-    // Find the next largest ID that is unique.
-    // Another solution: `this.playlists.length`, however, that will not work if we are allowed to remove playlists.
-    return (
-      this.playlists.reduce(
-        (currentMax, playlist) => Math.max(currentMax, playlist.id),
-        0
-      ) + 1
-    );
-  }
-
   newPendingRequest(searchUserData, requestType, playlist = false) {
-    // We do not want more than one friend request to/from a user respectively.
+    // We do not want more than one request to/from a user respectively.
     if (
       this.pending.find(
         (p) =>
@@ -229,13 +220,6 @@ class Model {
   clearPlaylist() {
     if (this.playlists === []) return;
     this.playlists = [];
-  }
-
-  setVolume(volume) {
-    // Set the preferred volume of the user
-    if (this.settings.volume === volume) return;
-    this.settings.volume = volume;
-    this.notifyObservers({ volume: this.settings.volume });
   }
 }
 
