@@ -2,6 +2,7 @@ import React from "react";
 import { Badge, Button, Row } from "react-bootstrap";
 import { numSongsToGuess } from "../settings/gameSettings";
 import ReactStars from "react-rating-stars-component";
+import ScoreboardView from "./scoreboardView.js"
 
 function GameOverView(props) {
   return (
@@ -15,7 +16,7 @@ function GameOverView(props) {
       </h3>
       <Row className="mt-5">
         <h3 className="d-flex justify-content-center">Leaderboard</h3>
-        <p  className="d-flex justify-content-center">Insert the leaderboardPresenter here</p>
+        <ScoreboardView  className="d-flex justify-content-center" scores={props.scores}></ScoreboardView>
       </Row>
       <Row className="mt-5">
         <h3 className="d-flex justify-content-center">Give this playlist a rating</h3>

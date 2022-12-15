@@ -222,6 +222,7 @@ function GamePresenter(props) {
       changeRating={setRating}
       saveStats={saveStats}
       done={clearGameSettings}
+      scores={selectedPlaylist.playerHistory}
     />
   );
 }
