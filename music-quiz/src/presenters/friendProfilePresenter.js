@@ -41,7 +41,7 @@ export default function FriendProfilePresenter(props) {
           setEmail(friend.email);
           setUsername(friend.username);
           if (friend.playlists) {
-            setPlaylists(friend.playlists);
+            setPlaylists(Object.values(friend.playlists));
           }
         } else {
           reRender(new Object());
@@ -55,7 +55,7 @@ export default function FriendProfilePresenter(props) {
       (history) => history.score
     );
     if (ratings.length === 0) {
-      return <p>No Rating</p>;
+      return <p style={{ margin: "0px" }}>No Rating</p>;
     }
     let sumOfRatings = 0;
     ratings.map((score, index) => {
@@ -63,13 +63,16 @@ export default function FriendProfilePresenter(props) {
     });
     let averageRating = Math.round(sumOfRatings / ratings.length);
     return (
-      <ReactStars
-        count={5}
-        value={averageRating}
-        size={52}
-        activeColor="#ffd700"
-        edit={false}
-      />
+      <div style={{ display: "flex" }}>
+        <p style={{ margin: "3px 3px" }}>Rating:</p>
+        <ReactStars
+          count={5}
+          value={averageRating}
+          size={20}
+          activeColor="#ffd700"
+          edit={false}
+        />
+      </div>
     );
   }
 

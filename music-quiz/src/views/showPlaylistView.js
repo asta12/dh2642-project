@@ -59,13 +59,18 @@ export default function ShowPlaylistView(props) {
             }
             return (
               <ListGroup.Item key={index}>
-                <Stack direction="horizontal">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
                   <div style={{ display: "flex" }}>
                     {expandImg}
-                    <h5>{playlist.name}</h5>
+                    <h5 style={{ margin: "0px" }}>{playlist.name}</h5>
                   </div>
-                  <div className="ms-auto">
-                    {props.averageRating(playlist)}
+                  {props.averageRating(playlist.playerHistory)}
+                  <div>
                     <ScoreboardPopupPresenter
                       playerHistory={playlist.playerHistory}
                     />
@@ -81,13 +86,13 @@ export default function ShowPlaylistView(props) {
                       </Button>
                     )}
                   </div>
-                </Stack>
+                </div>
                 {songs}
               </ListGroup.Item>
             );
           })}
         </ListGroup>
-      )}playlist
+      )}
     </div>
   );
 }
