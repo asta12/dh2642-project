@@ -20,7 +20,7 @@ const scores = [
   },
 ];
 
-export default function ScoreboardPopupView(props) {
+export default function ScoreboardPopupPresenter(props) {
   // move state to presenter when using real data
   const [showPopup, updatePopup] = useState(false);
 
@@ -35,7 +35,7 @@ export default function ScoreboardPopupView(props) {
           <Modal.Title>Scoreboard</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ScoreboardView scores={scores} />
+          <ScoreboardView scores={props.playerHistory} />
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>

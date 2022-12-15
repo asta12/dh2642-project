@@ -23,6 +23,7 @@ export default function ShowPlaylistView(props) {
                 onClick={(e) => {
                   props.expand(index);
                 }}
+                style={{ cursor: pointer }}
               />
             );
             if (props.expanding[index]) {
@@ -52,6 +53,7 @@ export default function ShowPlaylistView(props) {
                   onClick={(e) => {
                     props.expand(index);
                   }}
+                  style={{ cursor: pointer }}
                 />
               );
             }
@@ -64,7 +66,9 @@ export default function ShowPlaylistView(props) {
                   </div>
                   {props.editable && (
                     <div className="ms-auto">
-                      <ScoreboardPopupView />
+                      <ScoreboardPopupPresenter
+                        playerHistory={playlist.playerHistory}
+                      />
                       <Button
                         size="sm"
                         onClick={(e) => {

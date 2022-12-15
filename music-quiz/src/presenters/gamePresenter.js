@@ -221,6 +221,7 @@ function GamePresenter(props) {
       guesses={guesses}
       changeRating={setRating}
       saveStats={saveStats}
+      scores={selectedPlaylist.playerHistory}
     />
   );
 }
