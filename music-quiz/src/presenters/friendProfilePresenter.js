@@ -40,7 +40,7 @@ export default function FriendProfilePresenter(props) {
           setEmail(friend.email);
           setUsername(friend.username);
           if (friend.playlists) {
-            setPlaylists(friend.playlists);
+            setPlaylists(Object.values(friend.playlists));
           }
         } else {
           reRender(new Object());
