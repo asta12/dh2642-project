@@ -2,7 +2,7 @@ import React from "react";
 import HomeView from "../views/homeView";
 
 function HomePresenter(props) {
-  return <HomeView link={props.model.currentUser ? "/play" : "/register"} />;
+  return <HomeView />;
 }
 
 export default HomePresenter;

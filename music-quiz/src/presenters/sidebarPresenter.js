@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import FriendsView from "../views/friendsView.js";
 import PendingView from "../views/pendingView.js";
-import { Button, Image, Offcanvas } from "react-bootstrap";
-import notes from "../images/notes.png";
-import { useNavigate } from "react-router-dom";
+import { Button, Image, Offcanvas, Badge } from "react-bootstrap";
+import plus from "../images/plus.png";
+import friendNotes from "../images/two_shades_friend_notes.png";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function SidebarPresenter(props) {
   const [expanded, updateExpanded] = useState(false);
@@ -86,8 +87,18 @@ export default function SidebarPresenter(props) {
   ) : (
     <>
       <div>
-        <Button variant="light" onClick={(e) => expand()}>
-          <Image src={notes} height="50px" />
+        <Button
+          variant="light"
+          onClick={(e) => expand()}
+          style={{
+            borderTopRightRadius: "0px",
+            borderTopLeftRadius: "0px",
+            borderBottomRightRadius: "10px",
+            borderBottomLeftRadius: "0px",
+            opacity: "0.85",
+          }}
+        >
+          <Image src={friendNotes} height="50px" />
         </Button>
       </div>
       <Offcanvas
@@ -98,7 +109,25 @@ export default function SidebarPresenter(props) {
         style={{ width: "600px" }}
       >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Friends</Offcanvas.Title>
+          <Offcanvas.Title>
+            Friends
+            <br />
+            <Link
+              as={Link}
+              to="/profile/add-friend"
+              key="add-friend"
+              style={{
+                fontSize: "14px",
+                color: "grey",
+                textDecoration: "none",
+              }}
+            >
+              <Badge pill>
+                <Image src={plus} height="9px" />
+              </Badge>{" "}
+              Add friend
+            </Link>
+          </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body style={{ position: "relative" }}>
           <FriendsView
