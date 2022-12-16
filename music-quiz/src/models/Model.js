@@ -103,6 +103,30 @@ class Model {
     this.notifyObservers({ editPlaylist: playlist });
   }
 
+  addPlayerHistory(playlistID, playerHistory) {
+    const playlist = this.playlists.find(
+      (playlist) => playlist.id === playlistID
+    );
+
+    if (!playlist.playerHistory) {
+      playlist.playerHistory = {};
+    }
+
+    playlist.playerHistory[playerHistory.historyID] = playerHistory;
+
+    this.notifyObservers({ addPlayerHistory: playerHistory });
+  }
+
+  removePlayerHistory(playlistID, historyID) {
+    const playlist = this.playlists.find(
+      (playlist) => playlist.id === playlistID
+    );
+
+    delete playlist.playerHistory[historyID];
+
+    this.notifyObservers({ removePlayerHistory: { playlistID, historyID } });
+  }
+
   newPendingRequest(searchUserData, requestType, playlist = false) {
     // We do not want more than one request to/from a user respectively.
     if (

@@ -141,7 +141,7 @@ function GamePresenter(props) {
       getFourAnswerOptions(shuffledSongs, index)
     );
     // Uncomment this to print the correct answers for each question.
-    console.log(answerOptions);
+    // console.log(answerOptions);
     setSelectedPlaylist(playlist);
     setSelectedSongs(shuffledSongs);
     setAnswerOptions(answerOptions);
@@ -165,7 +165,7 @@ function GamePresenter(props) {
       resolvePromise(
         searchForPlaylistPlayerHistory(playlistOwnerID, selectedPlaylist.id),
         playlistPlayerHistoryPromiseState,
-        reRender(new Object())
+        () => reRender(new Object())
       );
     });
   }
