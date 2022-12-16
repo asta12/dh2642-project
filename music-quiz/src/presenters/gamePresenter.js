@@ -59,7 +59,6 @@ function GamePresenter(props) {
 
   function loadChallengeMode() {
     if (!props.model.currentChallenge) {
-      clearGameSettings();
       return;
     }
     // Load the user's playlist from the firebase database.
@@ -90,11 +89,12 @@ function GamePresenter(props) {
 
   function declineChallenge() {
     props.model.removeRequest(
-      currentChallenge.id,
+      props.model.currentChallenge.id,
       "challenge",
       props.model.currentUser
     );
     props.model.setCurrentChallenge(null);
+    clearGameSettings();
   }
 
   function nextSong() {
@@ -150,8 +150,8 @@ function GamePresenter(props) {
 
   function saveStats() {
     const score = guesses.filter((guess) => guess).length;
-    const playlistOwnerID = currentChallenge
-      ? currentChallenge.from
+    const playlistOwnerID = props.model.currentChallenge
+      ? props.model.currentChallenge.from
       : props.model.currentUser;
 
     saveUserStatsInFirebase(
@@ -172,7 +172,7 @@ function GamePresenter(props) {
 
   function clearGameSettings() {
     // Clear challenge specific data.
-    if (currentChallenge) {
+    if (props.model.currentChallenge) {
       props.model.acceptChallenge(currentChallenge.id, props.model.currentUser);
       props.model.setCurrentChallenge(null);
     }
