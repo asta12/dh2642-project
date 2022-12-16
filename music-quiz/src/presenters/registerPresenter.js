@@ -3,6 +3,7 @@ import RegisterView from "../views/registerView.js";
 import { Container } from "react-bootstrap";
 import { register } from "../firebaseAuthentication";
 import resolvePromise from "../resolvePromise";
+import { Navigate } from "react-router-dom";
 
 export default function Register(props) {
   const [validEmail, setValidEmail] = useState(true);
@@ -51,8 +52,11 @@ export default function Register(props) {
     <div>
       <Container
         className="d-flex justify-content-center align-items-center"
-        style={{ minHeight: "95vh" }}
-      >
+        style={{ minHeight: "75vh" }}
+      > 
+      {props.model.currentUser ? (
+          <Navigate replace to="/profile" />
+        ) : 
         <RegisterView
           created={registerPromiseState.data}
           error={registerPromiseState.error}
@@ -64,7 +68,7 @@ export default function Register(props) {
           setPassword={setPassword}
           setConfirmPassword={setConfirmPassword}
           handleSubmit={registerAttempt}
-        />
+        />}
       </Container>
     </div>
   );
