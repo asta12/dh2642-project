@@ -1,5 +1,5 @@
 import React from "react";
-import { Nav, Navbar, Container, Image } from "react-bootstrap";
+import { Nav, Navbar, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import head from "../images/robot_head.png";
 
@@ -18,58 +18,24 @@ export default function navbarView(props) {
             <Nav.Link as={Link} to="/" key="home" style={{ color: "white" }}>
               Home
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/profile"
-              key="profile"
-              style={{ color: "white" }}
-            >
-              Profile
-            </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/about"
-              key="about"
-              style={{ color: "white" }}
-            >
-              About
-            </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/play"
-              key="play"
-              style={{ color: "white" }}
-            >
-              Play
-            </Nav.Link>
-            {(!props.loggedInUser && [
-              <Nav.Link
-                as={Link}
-                to="/login"
-                key="login"
-                style={{ color: "white" }}
-              >
-                Log in
-              </Nav.Link>,
-              <Nav.Link
-                as={Link}
-                to="/register"
-                key="register"
-                style={{ color: "white" }}
-              >
-                Register
-              </Nav.Link>,
-            ]) || (
+
+            {props.loggedInUser && (
               <>
                 <Nav.Link
-                  onClick={(e) => {
-                    e.preventDefault();
-                    props.handleLogout();
-                  }}
-                  key="logout"
+                  as={Link}
+                  to="/play"
+                  key="play"
                   style={{ color: "white" }}
                 >
-                  Logout
+                  Play
+                </Nav.Link>
+                <Nav.Link
+                  as={Link}
+                  to="/profile"
+                  key="profile"
+                  style={{ color: "white" }}
+                >
+                  Profile
                 </Nav.Link>
                 <Nav.Link
                   as={Link}
@@ -77,17 +43,53 @@ export default function navbarView(props) {
                   key="add-friend"
                   style={{ color: "white" }}
                 >
-                  Add friend
+                  Add Friend
                 </Nav.Link>
               </>
             )}
           </Nav>
         </Navbar.Collapse>
-        <Navbar.Text>
-          {props.loggedInUser
-            ? `You are logged in as: ${props.loggedInUser}`
-            : "You are not logged in"}
-        </Navbar.Text>
+        <Nav>
+          {!props.loggedInUser ? (
+            <>
+              {" "}
+              <Nav.Link
+                className="d-flex"
+                as={Link}
+                to="/login"
+                key="login"
+                style={{ color: "white" }}
+              >
+                Log in
+              </Nav.Link>
+              <Nav.Link
+                className="d-flex"
+                as={Link}
+                to="/register"
+                key="register"
+                style={{ color: "white" }}
+              >
+                Register
+              </Nav.Link>
+            </>
+          ) : (
+            <>
+              <Navbar.Text>
+                {`You are logged in as: ${props.loggedInUser}`}
+              </Navbar.Text>
+              <Nav.Link
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.handleLogout();
+                }}
+                key="logout"
+                style={{ color: "white" }}
+              >
+                Logout
+              </Nav.Link>
+            </>
+          )}
+        </Nav>
       </Container>
     </Navbar>
   );

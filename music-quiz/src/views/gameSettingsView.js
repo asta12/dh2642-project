@@ -1,5 +1,6 @@
 import React from "react";
-import { Form, Row, Col, Button, Dropdown } from "react-bootstrap";
+import { Form, Row, Col, Button, Dropdown, Alert } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function GameSettingsView(props) {
   function onVolumeChange(e) {
@@ -37,7 +38,7 @@ function GameSettingsView(props) {
         </Col>
 
         <Col>
-          <Form.Label>Game Speed</Form.Label>
+          <Form.Label>Singing Speed</Form.Label>
           <Form.Range
             min="0.1"
             max="2"
@@ -48,14 +49,18 @@ function GameSettingsView(props) {
         </Col>
       </Row>
 
-      <Row>
+      {props.playlists.length > 0 ? (
         <Dropdown>
           <Dropdown.Toggle variant="primary" id="dropdown-playlists">
             {props.choosePlaylistText}
           </Dropdown.Toggle>
           <Dropdown.Menu>{props.playlists.map(getDropdownItem)}</Dropdown.Menu>
         </Dropdown>
-      </Row>
+      ) : (
+        <Button size="lg mb-3" as={Link} to="/profile">
+          Please create a quiz to start playing!
+        </Button>
+      )}
 
       <Row className="justify-content-md-center">
         <Button
@@ -67,6 +72,10 @@ function GameSettingsView(props) {
           Start Game{" "}
         </Button>
       </Row>
+
+      {props.errorMessage && (
+        <Alert variant="danger mt-3">{props.errorMessage}</Alert>
+      )}
     </>
   );
 }
