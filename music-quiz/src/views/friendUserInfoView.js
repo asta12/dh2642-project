@@ -1,9 +1,14 @@
-import { Form } from "react-bootstrap";
+import { Form, Image, Stack } from "react-bootstrap";
+import { getImgSrc } from "../settings/profileSettings";
 
 function FriendUserInfo(props) {
+  let img = getImgSrc(props.username);
   return (
     <div>
-      <h2>User's Profile</h2>
+      <Stack direction="horizontal">
+        <h2>User's Profile</h2>
+        <Image src={img} width="70" height="70" className="me-3" />{" "}
+      </Stack>
       <Form.Group className="mb-3">
         <Form.Label>Username</Form.Label>
         <Form.Control placeholder={props.username} disabled />
