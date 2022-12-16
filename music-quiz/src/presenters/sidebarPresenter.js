@@ -62,6 +62,7 @@ export default function SidebarPresenter(props) {
     } else {
       props.model.setCurrentChallenge(requestId);
       navigate("/play");
+      expand();
     }
   }
 
@@ -105,7 +106,7 @@ export default function SidebarPresenter(props) {
         show={expanded}
         onHide={expand}
         scroll={true}
-        backdrop={false}
+        backdrop={true}
         style={{ width: "600px" }}
       >
         <Offcanvas.Header closeButton>
@@ -121,6 +122,7 @@ export default function SidebarPresenter(props) {
                 color: "grey",
                 textDecoration: "none",
               }}
+              onClick={() => expand()}
             >
               <Badge pill>
                 <Image src={plus} height="9px" />
@@ -138,6 +140,7 @@ export default function SidebarPresenter(props) {
             playlist={playlist}
             choosePlaylist={choosePlaylist}
             challenge={challenge}
+            expand={expand}
           />
           <div style={{ position: "sticky", bottom: "0px", left: "0px" }}>
             <PendingView

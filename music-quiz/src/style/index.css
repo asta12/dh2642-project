@@ -18,3 +18,7 @@ html *
 a.navbar-hover:hover {
     color: lightgrey !important;
 }
+
+a {
+    text-decoration: none !important;
+}

@@ -50,7 +50,14 @@ export default function FriendsView(props) {
             >
               <div>
                 <Image src={img} width="50" />
-                <Link to={`/friend?id=${friend.id}`}>{friend.username}</Link>
+                <Link
+                  to={`/friend?id=${friend.id}`}
+                  onClick={() => {
+                    props.expand();
+                  }}
+                >
+                  {friend.username}
+                </Link>
               </div>
               <Button
                 onClick={(e) => props.togglePopup(friend)}
