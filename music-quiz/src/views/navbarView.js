@@ -9,13 +9,19 @@ export default function navbarView(props) {
       bg="primary"
       variant="dark"
       expand="lg"
-      style={{ borderRadius: "10px", height: "45px" }}
+      style={{ borderRadius: "10px" }}
     >
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav>
-            <Nav.Link as={Link} to="/" key="home" style={{ color: "white" }}>
+            <Nav.Link
+              as={Link}
+              to="/"
+              key="home"
+              className="navbar-hover"
+              style={{ color: "white" }}
+            >
               Home
             </Nav.Link>
 
@@ -25,6 +31,7 @@ export default function navbarView(props) {
                   as={Link}
                   to="/play"
                   key="play"
+                  className="navbar-hover"
                   style={{ color: "white" }}
                 >
                   Play
@@ -33,6 +40,7 @@ export default function navbarView(props) {
                   as={Link}
                   to="/profile"
                   key="profile"
+                  className="navbar-hover"
                   style={{ color: "white" }}
                 >
                   Profile
@@ -41,6 +49,7 @@ export default function navbarView(props) {
                   as={Link}
                   to="/profile/add-friend"
                   key="add-friend"
+                  className="navbar-hover"
                   style={{ color: "white" }}
                 >
                   Add Friend
@@ -54,7 +63,7 @@ export default function navbarView(props) {
             <>
               {" "}
               <Nav.Link
-                className="d-flex"
+                className="d-flex navbar-hover"
                 as={Link}
                 to="/login"
                 key="login"
@@ -63,7 +72,7 @@ export default function navbarView(props) {
                 Log in
               </Nav.Link>
               <Nav.Link
-                className="d-flex"
+                className="d-flex navbar-hover"
                 as={Link}
                 to="/register"
                 key="register"
@@ -83,6 +92,7 @@ export default function navbarView(props) {
                   props.handleLogout();
                 }}
                 key="logout"
+                className="navbar-hover"
                 style={{ color: "white" }}
               >
                 Logout

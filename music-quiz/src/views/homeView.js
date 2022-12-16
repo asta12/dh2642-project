@@ -26,7 +26,7 @@ export default function HomeView(props) {
           </Card.Title>
           <Card.Text style={{ paddingBottom: "20px" }}>
             <br />
-            If you are new here, start by registering. After creating an account
+            If you are new here start by registering. After creating an account
             you can create quizzes on your profile page. If you get a friend to
             register as well you can challenge each other to each other's
             quizzes!
