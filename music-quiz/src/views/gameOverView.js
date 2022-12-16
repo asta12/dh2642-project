@@ -2,7 +2,7 @@ import React from "react";
 import { Badge, Button, Row } from "react-bootstrap";
 import { numSongsToGuess } from "../settings/gameSettings";
 import ReactStars from "react-rating-stars-component";
-import ScoreboardView from "./scoreboardView.js"
+import ScoreboardView from "./scoreboardView.js";
 
 function GameOverView(props) {
   return (
@@ -16,10 +16,15 @@ function GameOverView(props) {
       </h3>
       <Row className="mt-5">
         <h3 className="d-flex justify-content-center">Leaderboard</h3>
-        <ScoreboardView  className="d-flex justify-content-center" scores={props.scores}></ScoreboardView>
+        <ScoreboardView
+          className="d-flex justify-content-center"
+          scores={props.scores}
+        ></ScoreboardView>
       </Row>
       <Row className="mt-5">
-        <h3 className="d-flex justify-content-center">Give this playlist a rating</h3>
+        <h3 className="d-flex justify-content-center">
+          Give this playlist a rating
+        </h3>
         <div className="d-flex justify-content-center">
           <ReactStars
             count={5}
@@ -29,9 +34,8 @@ function GameOverView(props) {
             activeColor="#ffd700"
           />
         </div>
-        <div className="d-flex justify-content-center mt-3">
-            <Button className="me-3" onClick={() => props.saveStats()}>Save Rating</Button>
-            <Button onClick={() => props.done()}>Done</Button>
+        <div className="d-flex justify-content-center">
+          <Button onClick={() => props.saveGame()}>Save Game</Button>
         </div>
       </Row>
     </div>

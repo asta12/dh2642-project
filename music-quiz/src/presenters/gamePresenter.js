@@ -10,6 +10,7 @@ import promiseNoData from "../views/promiseNoData";
 import {
   saveUserStatsInFirebase,
   searchForPlaylist,
+  searchForPlaylistPlayerHistory,
 } from "../models/firebaseModel";
 import GameChallengeView from "../views/gameChallengeView";
 
@@ -30,6 +31,10 @@ function GamePresenter(props) {
   );
   const [challengePlaylistPromiseState, setChallengePlaylistPromiseState] =
     useState({});
+  const [
+    playlistPlayerHistoryPromiseState,
+    setPlaylistPlayerHistoryPromiseState,
+  ] = useState({});
   const [, reRender] = useState();
 
   function componentCreated() {
@@ -135,7 +140,7 @@ function GamePresenter(props) {
     const answerOptions = shuffledSongs.map((song, index) =>
       getFourAnswerOptions(shuffledSongs, index)
     );
-    console.log(shuffledSongs);
+    // Uncomment this to print the correct answers for each question.
     console.log(answerOptions);
     setSelectedPlaylist(playlist);
     setSelectedSongs(shuffledSongs);
@@ -156,7 +161,13 @@ function GamePresenter(props) {
       props.model.username,
       score,
       rating
-    );
+    ).then(() => {
+      resolvePromise(
+        searchForPlaylistPlayerHistory(playlistOwnerID, selectedPlaylist.id),
+        playlistPlayerHistoryPromiseState,
+        reRender(new Object())
+      );
+    });
   }
 
   function clearGameSettings() {
@@ -169,6 +180,11 @@ function GamePresenter(props) {
     setSelectedPlaylist({});
     setGuesses([]);
     setRating(null);
+  }
+
+  function saveGame() {
+    saveStats();
+    clearGameSettings();
   }
 
   if (currentSongIndex === -1) {
@@ -225,13 +241,17 @@ function GamePresenter(props) {
   }
 
   return (
-    <GameOverView
-      guesses={guesses}
-      changeRating={setRating}
-      saveStats={saveStats}
-      done={clearGameSettings}
-      scores={selectedPlaylist.playerHistory}
-    />
+    promiseNoData(
+      playlistPlayerHistoryPromiseState,
+      playlistPlayerHistoryPromiseState.error
+    ) || (
+      <GameOverView
+        guesses={guesses}
+        changeRating={setRating}
+        saveGame={saveGame}
+        scores={playlistPlayerHistoryPromiseState.data}
+      />
+    )
   );
 }
 

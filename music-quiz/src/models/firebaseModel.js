@@ -252,6 +252,13 @@ function searchForPlaylist(userID, playlistID) {
     });
 }
 
+// Fetches the player history from a playlist.
+function searchForPlaylistPlayerHistory(playlistOwnerID, playlistID) {
+  return searchForPlaylist(playlistOwnerID, playlistID).then(
+    (playlist) => playlist.playerHistory
+  );
+}
+
 async function saveUserStatsInFirebase(
   playlistOwnerID,
   playlistID,
@@ -291,5 +298,6 @@ export {
   searchForUserByEmail,
   searchForUserByID,
   searchForPlaylist,
+  searchForPlaylistPlayerHistory,
   saveUserStatsInFirebase,
 };
