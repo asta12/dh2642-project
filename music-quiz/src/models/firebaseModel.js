@@ -2,6 +2,7 @@ import firebaseConfig from "../firebaseConfig.js";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/database";
+import { v4 as uuidv4 } from "uuid";
 import Model from "./Model.js";
 
 // Initialise firebase
@@ -271,14 +272,15 @@ async function saveUserStatsInFirebase(
       rating = oldPlayerHistory.rating;
     }
   }
-  let playerHistory = { playerID, username, score };
+  const playerHistoryID = uuidv4();
+  let playerHistory = { playerHistoryID, playerID, username, score };
   if (rating) {
     playerHistory = { ...playerHistory, rating };
   }
   return firebase
     .database()
     .ref(
-      `${REF}/users/${playlistOwnerID}/playlists/${playlistID}/playerHistory/${playerID}`
+      `${REF}/users/${playlistOwnerID}/playlists/${playlistID}/playerHistory/${playerHistoryID}`
     )
     .set(playerHistory);
 }

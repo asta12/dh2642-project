@@ -56,7 +56,9 @@ class Model {
 
   setCurrentChallenge(challengeID) {
     if (this.currentChallenge?.id === challengeID) return;
-    this.currentChallenge = this.pending.find(pending => pending.id === challengeID);
+    this.currentChallenge = this.pending.find(
+      (pending) => pending.id === challengeID
+    );
     this.notifyObservers({ challenge: this.currentChallenge });
   }
 
