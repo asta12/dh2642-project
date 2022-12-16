@@ -1,8 +1,15 @@
 import React from "react";
 import { Nav, Navbar, Container, Button } from "react-bootstrap";
+import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
 import { Link } from "react-router-dom";
+import { getImgSrc } from "../settings/profileSettings";
 
 export default function navbarView(props) {
+  let imgsrc = null;
+  if (props.loggedInUser) {
+    imgsrc = getImgSrc(props.loggedInUser);
+  }
+
   return (
     <Navbar bg="primary" variant="dark" expand="lg">
       <Container>
@@ -46,9 +53,22 @@ export default function navbarView(props) {
             </>
           ) : (
             <>
-              <Navbar.Text>
-                {`You are logged in as: ${props.loggedInUser}`}
-              </Navbar.Text>
+              <Navbar.Text>{props.loggedInUser}</Navbar.Text>
+              <Navbar.Brand as={Link} to="/profile">
+                <img
+                  style={{
+                    marginLeft: "5px",
+                    borderRadius: "15px",
+                    backgroundColor: "white",
+                  }}
+                  alt=""
+                  src={imgsrc}
+                  width="30"
+                  height="30"
+                  className="d-inline-block align-top"
+                />{" "}
+              </Navbar.Brand>
+
               <Nav.Link
                 onClick={(e) => {
                   e.preventDefault();
