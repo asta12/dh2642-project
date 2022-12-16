@@ -28,7 +28,7 @@ export default function HomeView(props) {
             <br />
             If you are new here, start by registering. After creating an account
             you can create quizzes on your profile page. If you get a friend to
-            registrer as well you can challenge each other to each other's
+            register as well you can challenge each other to each other's
             quizzes!
           </Card.Text>
 
