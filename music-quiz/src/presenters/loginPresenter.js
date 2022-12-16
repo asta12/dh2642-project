@@ -65,7 +65,7 @@ export default function Login(props) {
         style={{ minHeight: "75vh" }}
       >
         {currentUser ? (
-          <Navigate replace to="/home" />
+          <Navigate replace to="/play" />
         ) : (
           <LoginView
             error={loginPromiseState.error}
