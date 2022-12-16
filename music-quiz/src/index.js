@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import reportWebVitals from "./reportWebVitals";
 import "firebase/database";
-import ReactRoot from './ReactRoot.js'
-import 'bootstrap/dist/css/bootstrap.css';
-import './style/index.css'
+import ReactRoot from "./ReactRoot.js";
+import "bootstrap/dist/css/bootstrap.css";
+import "./style/index.css";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ReactRoot />

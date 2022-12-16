@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500&display=swap');
+
+html *
+{
+    font-family: 'M PLUS Rounded 1c', sans-serif !important;
+}
+
 .correct-guess>a {
     background-color: #198754 !important;
     color: #fff !important;
@@ -6,4 +13,8 @@
 .wrong-guess>a {
     background-color: #dc3545 !important;
     color: #fff !important;
+}
+
+a.navbar-hover:hover {
+    color: lightgrey !important;
 }

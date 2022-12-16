@@ -8,7 +8,7 @@ import UserProfilePresenter from "../presenters/userProfilePresenter.js";
 import GamePresenter from "../presenters/gamePresenter";
 import CreatePlaylistPresenter from "../presenters/createPlaylistPresenter.js";
 import EditPlaylistPresenter from "../presenters/editPlaylistPresenter";
-import FriendProfilePresenter from '../presenters/friendProfilePresenter'
+import FriendProfilePresenter from "../presenters/friendProfilePresenter";
 import HomePresenter from "../presenters/homePresenter";
 import AddFriend from "../presenters/addFriendPresenter";
 import Loading from "./loadingView.js";
@@ -50,7 +50,10 @@ function App(props) {
           <Route path="/play" element={<GamePresenter model={props.model} />} />
           <Route path="/login" element={<Login model={props.model} />} />
           <Route path="/register" element={<Register model={props.model} />} />
-          <Route path="/friend" element={<FriendProfilePresenter model={props.model} />} />
+          <Route
+            path="/friend"
+            element={<FriendProfilePresenter model={props.model} />}
+          />
           <Route
             path="/profile"
             element={<UserProfilePresenter model={props.model} />}
