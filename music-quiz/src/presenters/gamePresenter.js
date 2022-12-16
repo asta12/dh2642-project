@@ -17,6 +17,7 @@ import GameChallengeView from "../views/gameChallengeView";
 
 function GamePresenter(props) {
   const [playlists, setPlaylists] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const [songLyricsPromiseStates, setSongLyricsPromiseStates] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState({});
   const [selectedSongs, setSelectedSongs] = useState([]);
@@ -75,8 +76,13 @@ function GamePresenter(props) {
     );
   }
 
-  function gameStartChallenge() {
-    nextSong();
+  function startGame() {
+    if (selectedPlaylist.songs) {
+      nextSong();
+      setErrorMessage("");
+    } else {
+      setErrorMessage("Please select a quiz to start playing!");
+    }
   }
 
   function declineChallenge() {
@@ -174,7 +180,7 @@ function GamePresenter(props) {
         ) || (
           <GameChallengeView
             playlist={challengePlaylistPromiseState.data}
-            onStartClick={gameStartChallenge}
+            onStartClick={startGame}
             onDeclineClick={declineChallenge}
           />
         )
@@ -186,12 +192,13 @@ function GamePresenter(props) {
           onVolumeChange={setVolume}
           currentSpeed={speed}
           onSpeedChange={setSpeed}
-          onStartClick={nextSong}
+          onStartClick={startGame}
           playlists={props.model.playlists}
           onPlaylistSelected={onPlaylistSelected}
           choosePlaylistText={
             selectedPlaylist.songs ? selectedPlaylist.name : "Choose a playlist"
           }
+          errorMessage={errorMessage}
         />
       );
     }
@@ -211,6 +218,7 @@ function GamePresenter(props) {
           correctGuess={correctGuess}
           wrongGuess={wrongGuess}
           nextSong={nextSong}
+          exitGame={clearGameSettings}
         />
       )
     );
