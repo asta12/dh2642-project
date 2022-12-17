@@ -87,20 +87,20 @@ function GamePresenter(props) {
     }
   }
 
-  function declineChallenge() {
-    props.model.removeRequest(
-      props.model.currentChallenge.id,
-      "challenge",
-      props.model.currentUser
-    );
-    props.model.setCurrentChallenge(null);
-    clearGameSettings();
-  }
-
   function nextSong() {
     const nextSongIndex = currentSongIndex + 1;
     if (nextSongIndex === numSongsToGuess) {
-      saveStats();
+      // Save the score and load the leaderboard.
+      const playlistOwnerID = props.model.currentChallenge
+        ? props.model.currentChallenge.from
+        : props.model.currentUser;
+      saveStats().then(() => {
+        resolvePromise(
+          searchForPlaylistPlayerHistory(playlistOwnerID, selectedPlaylist.id),
+          playlistPlayerHistoryPromiseState,
+          () => reRender(new Object())
+        );
+      });
     } else {
       resolvePromise(
         getSongLyrics(selectedSongs[nextSongIndex].id),
@@ -154,37 +154,22 @@ function GamePresenter(props) {
       ? props.model.currentChallenge.from
       : props.model.currentUser;
 
-    saveUserStatsInFirebase(
+    return saveUserStatsInFirebase(
       playlistOwnerID,
       selectedPlaylist.id,
       props.model.currentUser,
       props.model.username,
       score,
       rating
-    ).then(() => {
-      resolvePromise(
-        searchForPlaylistPlayerHistory(playlistOwnerID, selectedPlaylist.id),
-        playlistPlayerHistoryPromiseState,
-        () => reRender(new Object())
-      );
-    });
+    );
   }
 
   function clearGameSettings() {
-    // Clear challenge specific data.
-    if (props.model.currentChallenge) {
-      props.model.acceptChallenge(currentChallenge.id, props.model.currentUser);
-      props.model.setCurrentChallenge(null);
-    }
+    props.model.setCurrentChallenge(null);
     setCurrentSongIndex(-1);
     setSelectedPlaylist({});
     setGuesses([]);
     setRating(null);
-  }
-
-  function saveGame() {
-    saveStats();
-    clearGameSettings();
   }
 
   if (currentSongIndex === -1) {
@@ -197,7 +182,7 @@ function GamePresenter(props) {
           <GameChallengeView
             playlist={challengePlaylistPromiseState.data}
             onStartClick={startGame}
-            onDeclineClick={declineChallenge}
+            onDeclineClick={clearGameSettings}
           />
         )
       );
@@ -248,7 +233,8 @@ function GamePresenter(props) {
       <GameOverView
         guesses={guesses}
         changeRating={setRating}
-        saveGame={saveGame}
+        saveRating={saveStats}
+        playAgain={clearGameSettings}
         scores={playlistPlayerHistoryPromiseState.data}
       />
     )

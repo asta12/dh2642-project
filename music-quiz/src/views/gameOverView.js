@@ -28,14 +28,16 @@ function GameOverView(props) {
         <div className="d-flex justify-content-center">
           <ReactStars
             count={5}
-            value={3}
             onChange={(newRating) => props.changeRating(newRating)}
             size={52}
             activeColor="#ffd700"
           />
         </div>
         <div className="d-flex justify-content-center">
-          <Button onClick={() => props.saveGame()}>Save Game</Button>
+          <Button onClick={() => props.saveRating()}>Save Rating</Button>
+        </div>
+        <div className="d-flex justify-content-center mt-3">
+          <Button onClick={() => props.playAgain()}>Play Again</Button>
         </div>
       </Row>
     </div>
