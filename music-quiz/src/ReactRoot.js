@@ -40,7 +40,7 @@ function ReactRoot() {
       style={{
         backgroundImage: `url(${backgroundImage})`,
         width: "100vw",
-        height: "100vh",
+        minHeight: "100vh",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
       }}
