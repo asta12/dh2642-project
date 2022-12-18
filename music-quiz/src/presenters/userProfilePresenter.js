@@ -4,6 +4,8 @@ import ShowPlaylistView from "../views/showPlaylistView";
 import UserInfoView from "../views/userInfoView";
 import CreatePlaylistButtonView from "../views/createPlaylistButtonView";
 import ReactStars from "react-rating-stars-component";
+import friendNotes from "../images/two_shades_friend_notes.png";
+import Image from "react-bootstrap/Image";
 
 export default function UserProfilePresenter(props) {
   const [playlists, updatePlaylists] = useState(props.model.playlists);
@@ -90,6 +92,13 @@ export default function UserProfilePresenter(props) {
   return (
     <div>
       <UserInfoView email={props.model.email} username={props.model.username} />
+      <div style={{ display: "flex", marginBottom: "10px" }}>
+        <Image src={friendNotes} width="40px" />
+        <p style={{ paddingTop: "5px", margin: "0px" }}>
+          Press the button in the left upper corner too see your friends and
+          challenge them.
+        </p>
+      </div>
       <ShowPlaylistView
         playlists={playlists}
         averageRating={averageRating}
