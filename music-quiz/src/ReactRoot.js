@@ -6,8 +6,10 @@ import {
 } from "./models/firebaseModel.js";
 import resolvePromise from "./resolvePromise.js";
 import promiseNoData from "./views/promiseNoData.js";
-import { BrowserRouter } from 'react-router-dom';
-import App from "./views/app.js"
+import { BrowserRouter } from "react-router-dom";
+import App from "./views/app.js";
+
+import backgroundImage from "./images/blueBackground.png";
 
 function ReactRoot() {
   const [promiseState] = useState({});
@@ -34,7 +36,15 @@ function ReactRoot() {
   useEffect(whenCreatedACB, []);
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        width: "100vw",
+        height: "100vh",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
+    >
       {promiseNoData(promiseState) || (
         <BrowserRouter>
           <App model={model} />

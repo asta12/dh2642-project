@@ -1,5 +1,5 @@
 import { ListGroup, Button, Badge, Image } from "react-bootstrap";
-import challengeImg from "../images/challenge_double.png";
+import challengeImg from "../images/challenge_big_fire.png";
 import friendImg from "../images/friend_2.png";
 
 export default function PendingView(props) {
@@ -9,10 +9,12 @@ export default function PendingView(props) {
         {props.pending.map((event, index) => {
           let type = "Friend Request";
           let color = "info";
+          let text = `You have sent a Friend Request to ${event.username}, waiting for response.`;
           let img = <Image src={friendImg} width="50px" />;
           if (event.type === "challenge") {
             type = "Challenge";
             color = "success";
+            text = `You have challenged ${event.username}`;
             img = <Image src={challengeImg} width="50px" />;
           }
           if (event.from) {
@@ -69,8 +71,7 @@ export default function PendingView(props) {
                   >
                     !
                   </Badge>
-                  You have sent a {type} to {event.username}, waiting for
-                  response
+                  {text}
                 </div>
               </ListGroup.Item>
             );

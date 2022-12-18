@@ -1,8 +1,8 @@
 import React from "react";
 import { Nav, Navbar, Container, Button } from "react-bootstrap";
-import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
 import { Link } from "react-router-dom";
 import { getImgSrc } from "../settings/profileSettings";
+import head from "../images/robot_head.png";
 
 export default function navbarView(props) {
   let imgsrc = null;
@@ -11,25 +11,54 @@ export default function navbarView(props) {
   }
 
   return (
-    <Navbar bg="primary" variant="dark" expand="lg">
+    <Navbar
+      bg="primary"
+      variant="dark"
+      expand="lg"
+      style={{ borderRadius: "10px" }}
+    >
       <Container>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link as={Link} to="/" key="home">
+          <Nav>
+            <Nav.Link
+              as={Link}
+              to="/"
+              key="home"
+              className="navbar-hover"
+              style={{ color: "white" }}
+            >
               Home
             </Nav.Link>
 
             {props.loggedInUser && (
               <>
-                <Nav.Link as={Link} to="/play" key="play">
+                <Nav.Link
+                  as={Link}
+                  to="/play"
+                  key="play"
+                  className="navbar-hover"
+                  style={{ color: "white" }}
+                >
                   Play
                 </Nav.Link>
-                <Nav.Link as={Link} to="/profile" key="profile">
+                <Nav.Link
+                  as={Link}
+                  to="/profile"
+                  key="profile"
+                  className="navbar-hover"
+                  style={{ color: "white" }}
+                >
                   Profile
                 </Nav.Link>
-                <Nav.Link as={Link} to="/profile/add-friend" key="add-friend">
-                  Add friend
+                <Nav.Link
+                  as={Link}
+                  to="/profile/add-friend"
+                  key="add-friend"
+                  className="navbar-hover"
+                  style={{ color: "white" }}
+                >
+                  Add Friend
                 </Nav.Link>
               </>
             )}
@@ -39,14 +68,21 @@ export default function navbarView(props) {
           {!props.loggedInUser ? (
             <>
               {" "}
-              <Nav.Link className="d-flex" as={Link} to="/login" key="login">
+              <Nav.Link
+                className="d-flex navbar-hover"
+                as={Link}
+                to="/login"
+                key="login"
+                style={{ color: "white" }}
+              >
                 Log in
               </Nav.Link>
               <Nav.Link
-                className="d-flex"
+                className="d-flex navbar-hover"
                 as={Link}
                 to="/register"
                 key="register"
+                style={{ color: "white" }}
               >
                 Register
               </Nav.Link>
@@ -75,6 +111,8 @@ export default function navbarView(props) {
                   props.handleLogout();
                 }}
                 key="logout"
+                className="navbar-hover"
+                style={{ color: "white" }}
               >
                 Logout
               </Nav.Link>
