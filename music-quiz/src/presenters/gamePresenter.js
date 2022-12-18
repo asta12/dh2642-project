@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import resolvePromise from "../resolvePromise";
 import { extractFirst20Lines, numSongsToGuess } from "../settings/gameSettings";
 import { getSongLyrics } from "../songSource";
@@ -18,6 +19,7 @@ function GamePresenter(props) {
   const [playlists, setPlaylists] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [songLyricsPromiseStates, setSongLyricsPromiseStates] = useState([]);
+  const [username, setUsername] = useState(props.model.username);
   const [playlistOwner, setPlaylistOwner] = useState(null);
   const [selectedPlaylist, setSelectedPlaylist] = useState({});
   const [selectedSongs, setSelectedSongs] = useState([]);
@@ -39,9 +41,12 @@ function GamePresenter(props) {
   const [, reRender] = useState();
 
   function componentCreated() {
-    function onObserverNotification() {
+    function onObserverNotification(payload) {
       setPlaylists(props.model.playlists);
       setCurrentChallenge(props.model.currentChallenge);
+      if (payload?.logOut) {
+        setUsername(null);
+      }
     }
 
     function onComponentTakeDown() {
@@ -177,73 +182,80 @@ function GamePresenter(props) {
     setRating(null);
   }
 
-  if (currentSongIndex === -1) {
-    if (props.model.currentChallenge) {
-      return (
-        promiseNoData(
-          challengePlaylistPromiseState,
-          challengePlaylistPromiseState.error
-        ) || (
-          <GameChallengeView
-            playlist={challengePlaylistPromiseState.data}
+  // If not logged in redirect to the login page.
+  if (!username) {
+    return <Navigate to="/login" />;
+  } else {
+    if (currentSongIndex === -1) {
+      if (props.model.currentChallenge) {
+        return (
+          promiseNoData(
+            challengePlaylistPromiseState,
+            challengePlaylistPromiseState.error
+          ) || (
+            <GameChallengeView
+              playlist={challengePlaylistPromiseState.data}
+              onStartClick={startGame}
+              onDeclineClick={clearGameSettings}
+            />
+          )
+        );
+      } else {
+        return (
+          <GameSettingsView
+            currentVolume={volume}
+            onVolumeChange={setVolume}
+            currentSpeed={speed}
+            onSpeedChange={setSpeed}
             onStartClick={startGame}
-            onDeclineClick={clearGameSettings}
+            playlists={props.model.playlists}
+            onPlaylistSelected={onPlaylistSelected}
+            choosePlaylistText={
+              selectedPlaylist.songs
+                ? selectedPlaylist.name
+                : "Choose a playlist"
+            }
+            errorMessage={errorMessage}
+          />
+        );
+      }
+    }
+
+    if (currentSongIndex < numSongsToGuess) {
+      return (
+        promiseNoData(songLyricsPromiseStates[currentSongIndex]) || (
+          <GameGuessSongView
+            songLyrics={extractFirst20Lines(
+              songLyricsPromiseStates[currentSongIndex].data
+            )}
+            speed={speed}
+            volume={volume}
+            answers={answerOptions[currentSongIndex]}
+            guesses={guesses}
+            correctGuess={correctGuess}
+            wrongGuess={wrongGuess}
+            nextSong={nextSong}
+            exitGame={clearGameSettings}
           />
         )
       );
-    } else {
-      return (
-        <GameSettingsView
-          currentVolume={volume}
-          onVolumeChange={setVolume}
-          currentSpeed={speed}
-          onSpeedChange={setSpeed}
-          onStartClick={startGame}
-          playlists={props.model.playlists}
-          onPlaylistSelected={onPlaylistSelected}
-          choosePlaylistText={
-            selectedPlaylist.songs ? selectedPlaylist.name : "Choose a playlist"
-          }
-          errorMessage={errorMessage}
-        />
-      );
     }
-  }
 
-  if (currentSongIndex < numSongsToGuess) {
     return (
-      promiseNoData(songLyricsPromiseStates[currentSongIndex]) || (
-        <GameGuessSongView
-          songLyrics={extractFirst20Lines(
-            songLyricsPromiseStates[currentSongIndex].data
-          )}
-          speed={speed}
-          volume={volume}
-          answers={answerOptions[currentSongIndex]}
+      promiseNoData(
+        playlistPlayerHistoryPromiseState,
+        playlistPlayerHistoryPromiseState.error
+      ) || (
+        <GameOverView
           guesses={guesses}
-          correctGuess={correctGuess}
-          wrongGuess={wrongGuess}
-          nextSong={nextSong}
-          exitGame={clearGameSettings}
+          changeRating={setRating}
+          saveRating={saveStats}
+          playAgain={clearGameSettings}
+          scores={playlistPlayerHistoryPromiseState.data}
         />
       )
     );
   }
-
-  return (
-    promiseNoData(
-      playlistPlayerHistoryPromiseState,
-      playlistPlayerHistoryPromiseState.error
-    ) || (
-      <GameOverView
-        guesses={guesses}
-        changeRating={setRating}
-        saveRating={saveStats}
-        playAgain={clearGameSettings}
-        scores={playlistPlayerHistoryPromiseState.data}
-      />
-    )
-  );
 }
 
 export default GamePresenter;

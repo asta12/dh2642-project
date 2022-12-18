@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import FriendUserInfo from "../views/friendUserInfoView";
 import resolvePromise from "../resolvePromise";
@@ -9,7 +10,8 @@ import ReactStars from "react-rating-stars-component";
 
 export default function FriendProfilePresenter(props) {
   const [email, setEmail] = useState(null);
-  const [username, setUsername] = useState(null);
+  const [friendUsername, setFriendUsername] = useState(null);
+  const [username, setUsername] = useState(props.model.username);
   const [playlists, setPlaylists] = useState([]);
   const [expanding, updateExpanding] = useState([]);
   const [friendPromiseState, setFriendPromiseState] = useState({});
@@ -30,6 +32,16 @@ export default function FriendProfilePresenter(props) {
 
   function whenCreated() {
     findFriend();
+
+    function observer(payload) {
+      if (payload?.logOut) setUsername(null);
+    }
+    props.model.addObserver(observer);
+
+    function whenTakenDown() {
+      props.model.removeObserver(observer);
+    }
+    return whenTakenDown;
   }
 
   function findFriend() {
@@ -39,7 +51,7 @@ export default function FriendProfilePresenter(props) {
         if (friendPromiseState.data) {
           const friend = friendPromiseState.data;
           setEmail(friend.email);
-          setUsername(friend.username);
+          setFriendUsername(friend.username);
           if (friend.playlists) {
             setPlaylists(Object.values(friend.playlists));
           }
@@ -92,6 +104,11 @@ export default function FriendProfilePresenter(props) {
 
   useEffect(findFriend, [searchParams]);
 
+  // If not logged in redirect to the login page.
+  if (!username) {
+    return <Navigate to="/login" />;
+  }
+
   if (!friendPromiseState.promise) {
     return "Please provide a valid ID";
   }
@@ -99,7 +116,7 @@ export default function FriendProfilePresenter(props) {
   return (
     promiseNoData(friendPromiseState, friendPromiseState.error) || (
       <div>
-        <FriendUserInfo username={username} email={email} />
+        <FriendUserInfo username={friendUsername} email={email} />
         <ShowPlaylistView
           averageRating={averageRating}
           playlists={playlists}
