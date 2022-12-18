@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import HeaderNavbar from "../presenters/headerNavbarPresenter";
 import { Route, Routes } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "../presenters/loginPresenter.js";
 import Register from "../presenters/registerPresenter.js";
 import UserProfilePresenter from "../presenters/userProfilePresenter.js";

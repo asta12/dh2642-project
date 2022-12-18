@@ -1,5 +1,4 @@
 import React from "react";
-import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import resolvePromise from "../resolvePromise";
 import { extractFirst20Lines, numSongsToGuess } from "../settings/gameSettings";
@@ -10,8 +9,8 @@ import GameSettingsView from "../views/gameSettingsView";
 import promiseNoData from "../views/promiseNoData";
 import {
   saveUserStatsInFirebase,
-  searchForChallenge,
   searchForPlaylist,
+  searchForPlaylistPlayerHistory,
 } from "../models/firebaseModel";
 import GameChallengeView from "../views/gameChallengeView";
 
@@ -26,12 +25,16 @@ function GamePresenter(props) {
   const [volume, setVolume] = useState(0.5);
   const [speed, setSpeed] = useState(0.6);
   const [guesses, setGuesses] = useState([]);
-  const [rating, setRating] = useState(3);
+  const [rating, setRating] = useState(null);
   const [currentChallenge, setCurrentChallenge] = useState(
     props.model.currentChallenge
   );
   const [challengePlaylistPromiseState, setChallengePlaylistPromiseState] =
     useState({});
+  const [
+    playlistPlayerHistoryPromiseState,
+    setPlaylistPlayerHistoryPromiseState,
+  ] = useState({});
   const [, reRender] = useState();
 
   function componentCreated() {
@@ -56,7 +59,6 @@ function GamePresenter(props) {
 
   function loadChallengeMode() {
     if (!props.model.currentChallenge) {
-      clearGameSettings();
       return;
     }
     // Load the user's playlist from the firebase database.
@@ -85,22 +87,27 @@ function GamePresenter(props) {
     }
   }
 
-  function declineChallenge() {
-    props.model.removeRequest(
-      currentChallenge.id,
-      "challenge",
-      props.model.currentUser
-    );
-    props.model.setCurrentChallenge(null);
-  }
-
   function nextSong() {
     const nextSongIndex = currentSongIndex + 1;
-    resolvePromise(
-      getSongLyrics(selectedSongs[nextSongIndex].id),
-      songLyricsPromiseStates[nextSongIndex],
-      () => reRender(new Object())
-    );
+    if (nextSongIndex === numSongsToGuess) {
+      // Save the score and load the leaderboard.
+      const playlistOwnerID = props.model.currentChallenge
+        ? props.model.currentChallenge.from
+        : props.model.currentUser;
+      saveStats().then(() => {
+        resolvePromise(
+          searchForPlaylistPlayerHistory(playlistOwnerID, selectedPlaylist.id),
+          playlistPlayerHistoryPromiseState,
+          () => reRender(new Object())
+        );
+      });
+    } else {
+      resolvePromise(
+        getSongLyrics(selectedSongs[nextSongIndex].id),
+        songLyricsPromiseStates[nextSongIndex],
+        () => reRender(new Object())
+      );
+    }
     setCurrentSongIndex(nextSongIndex);
   }
 
@@ -133,8 +140,8 @@ function GamePresenter(props) {
     const answerOptions = shuffledSongs.map((song, index) =>
       getFourAnswerOptions(shuffledSongs, index)
     );
-    console.log(shuffledSongs);
-    console.log(answerOptions);
+    // Uncomment this to print the correct answers for each question.
+    // console.log(answerOptions);
     setSelectedPlaylist(playlist);
     setSelectedSongs(shuffledSongs);
     setAnswerOptions(answerOptions);
@@ -143,11 +150,11 @@ function GamePresenter(props) {
 
   function saveStats() {
     const score = guesses.filter((guess) => guess).length;
-    const playlistOwnerID = currentChallenge
-      ? currentChallenge.from
+    const playlistOwnerID = props.model.currentChallenge
+      ? props.model.currentChallenge.from
       : props.model.currentUser;
 
-    saveUserStatsInFirebase(
+    return saveUserStatsInFirebase(
       playlistOwnerID,
       selectedPlaylist.id,
       props.model.currentUser,
@@ -155,20 +162,14 @@ function GamePresenter(props) {
       score,
       rating
     );
-
-    // Clear challenge specific data.
-    if (currentChallenge) {
-      props.model.acceptChallenge(currentChallenge.id, props.model.currentUser);
-      props.model.setCurrentChallenge(null);
-    }
-
-    clearGameSettings();
   }
 
   function clearGameSettings() {
+    props.model.setCurrentChallenge(null);
     setCurrentSongIndex(-1);
     setSelectedPlaylist({});
     setGuesses([]);
+    setRating(null);
   }
 
   if (currentSongIndex === -1) {
@@ -181,7 +182,7 @@ function GamePresenter(props) {
           <GameChallengeView
             playlist={challengePlaylistPromiseState.data}
             onStartClick={startGame}
-            onDeclineClick={declineChallenge}
+            onDeclineClick={clearGameSettings}
           />
         )
       );
@@ -225,12 +226,18 @@ function GamePresenter(props) {
   }
 
   return (
-    <GameOverView
-      guesses={guesses}
-      changeRating={setRating}
-      saveStats={saveStats}
-      scores={selectedPlaylist.playerHistory}
-    />
+    promiseNoData(
+      playlistPlayerHistoryPromiseState,
+      playlistPlayerHistoryPromiseState.error
+    ) || (
+      <GameOverView
+        guesses={guesses}
+        changeRating={setRating}
+        saveRating={saveStats}
+        playAgain={clearGameSettings}
+        scores={playlistPlayerHistoryPromiseState.data}
+      />
+    )
   );
 }
 

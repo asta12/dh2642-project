@@ -56,7 +56,9 @@ class Model {
 
   setCurrentChallenge(challengeID) {
     if (this.currentChallenge?.id === challengeID) return;
-    this.currentChallenge = this.pending.find(pending => pending.id === challengeID);
+    this.currentChallenge = this.pending.find(
+      (pending) => pending.id === challengeID
+    );
     this.notifyObservers({ challenge: this.currentChallenge });
   }
 
@@ -99,6 +101,30 @@ class Model {
       playlist,
     ];
     this.notifyObservers({ editPlaylist: playlist });
+  }
+
+  addPlayerHistory(playlistID, playerHistory) {
+    const playlist = this.playlists.find(
+      (playlist) => playlist.id === playlistID
+    );
+
+    if (!playlist.playerHistory) {
+      playlist.playerHistory = {};
+    }
+
+    playlist.playerHistory[playerHistory.historyID] = playerHistory;
+
+    this.notifyObservers({ addPlayerHistory: playerHistory });
+  }
+
+  removePlayerHistory(playlistID, historyID) {
+    const playlist = this.playlists.find(
+      (playlist) => playlist.id === playlistID
+    );
+
+    delete playlist.playerHistory[historyID];
+
+    this.notifyObservers({ removePlayerHistory: { playlistID, historyID } });
   }
 
   newPendingRequest(searchUserData, requestType, playlist = false) {

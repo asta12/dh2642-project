@@ -3,6 +3,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/database";
 import Model from "./Model.js";
+import { v4 as uuidv4 } from "uuid";
 
 // Initialise firebase
 firebase.initializeApp(firebaseConfig);
@@ -114,6 +115,28 @@ function updateModelFromFirebase(model) {
         .ref(`${REF}/users/${model.currentUser}/playlists/`)
         .on("child_added", (firebaseData) => {
           model.addPlaylist(firebaseData.val());
+
+          const playlistID = firebaseData.key;
+
+          // A player history has been added.
+          firebase
+            .database()
+            .ref(
+              `${REF}/users/${model.currentUser}/playlists/${playlistID}/playerHistory/`
+            )
+            .on("child_added", (firebaseData) => {
+              model.addPlayerHistory(playlistID, firebaseData.val());
+            });
+
+          // A player history has been deleted.
+          firebase
+            .database()
+            .ref(
+              `${REF}/users/${model.currentUser}/playlists/${playlistID}/playerHistory/`
+            )
+            .on("child_removed", (firebaseData) => {
+              model.removePlayerHistory(playlistID, firebaseData.key);
+            });
         });
 
       // A playlist has been removed.
@@ -121,7 +144,17 @@ function updateModelFromFirebase(model) {
         .database()
         .ref(`${REF}/users/${model.currentUser}/playlists/`)
         .on("child_removed", (firebaseData) => {
-          model.deletePlaylist(firebaseData.key);
+          const playlistID = firebaseData.key;
+
+          model.deletePlaylist(playlistID);
+
+          // Don't listen to player history events for that playlist anymore.
+          firebase
+            .database()
+            .ref(
+              `${REF}/users/${model.currentUser}/playlists/${playlistID}/playerHistory/`
+            )
+            .off();
         });
 
       // Get pending updates.
@@ -182,6 +215,15 @@ function updateModelFromFirebase(model) {
           .database()
           .ref(`${REF}/users/${model.currentUser}/playlists/`)
           .off();
+
+        model.playlists.forEach((playlist) => {
+          firebase
+            .database()
+            .ref(
+              `${REF}/users/${model.currentUser}/playlists/${playlist.id}/playerHistory`
+            )
+            .off();
+        });
 
         firebase
           .database()
@@ -252,7 +294,14 @@ function searchForPlaylist(userID, playlistID) {
     });
 }
 
-function saveUserStatsInFirebase(
+// Fetches the player history from a playlist.
+function searchForPlaylistPlayerHistory(playlistOwnerID, playlistID) {
+  return searchForPlaylist(playlistOwnerID, playlistID).then(
+    (playlist) => playlist.playerHistory
+  );
+}
+
+async function saveUserStatsInFirebase(
   playlistOwnerID,
   playlistID,
   playerID,
@@ -260,12 +309,43 @@ function saveUserStatsInFirebase(
   score,
   rating
 ) {
+  // Check if the player has already played the playlist.
+  const playlist = await searchForPlaylist(playlistOwnerID, playlistID);
+  if (
+    playlist.playerHistory &&
+    Object.values(playlist.playerHistory).find(
+      (history) => history.playerID === playerID
+    )
+  ) {
+    const oldPlayerHistory = Object.values(playlist.playerHistory).find(
+      (history) => history.playerID === playerID
+    );
+    // Keep the best score.
+    score = Math.max(score, oldPlayerHistory.score);
+    // Keep the old rating if no new rating is being provided.
+    if (!rating) {
+      rating = oldPlayerHistory.rating;
+    }
+    // Delete the old player history entry.
+    await firebase
+      .database()
+      .ref(
+        `${REF}/users/${playlistOwnerID}/playlists/${playlistID}/playerHistory/${oldPlayerHistory.historyID}/`
+      )
+      .set(null);
+  }
+  const historyID = uuidv4();
+  let playerHistory = { historyID, playerID, username, score };
+  if (rating) {
+    playerHistory = { ...playerHistory, rating };
+  }
+  // Insert the new player history entry.
   return firebase
     .database()
     .ref(
-      `${REF}/users/${playlistOwnerID}/playlists/${playlistID}/playerHistory/${playerID}`
+      `${REF}/users/${playlistOwnerID}/playlists/${playlistID}/playerHistory/${historyID}/`
     )
-    .set({ playerID, username, score, rating });
+    .set(playerHistory);
 }
 
 export default firebase;
@@ -276,5 +356,6 @@ export {
   searchForUserByEmail,
   searchForUserByID,
   searchForPlaylist,
+  searchForPlaylistPlayerHistory,
   saveUserStatsInFirebase,
 };

@@ -61,6 +61,7 @@ export default function SidebarPresenter(props) {
       props.model.addFriend(requestId, id, username);
     } else {
       props.model.setCurrentChallenge(requestId);
+      props.model.acceptChallenge(requestId, id);
       navigate("/play");
       expand();
     }
