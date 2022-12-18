@@ -18,6 +18,7 @@ function GamePresenter(props) {
   const [playlists, setPlaylists] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [songLyricsPromiseStates, setSongLyricsPromiseStates] = useState([]);
+  const [playlistOwner, setPlaylistOwner] = useState(null);
   const [selectedPlaylist, setSelectedPlaylist] = useState({});
   const [selectedSongs, setSelectedSongs] = useState([]);
   const [answerOptions, setAnswerOptions] = useState([]);
@@ -57,6 +58,14 @@ function GamePresenter(props) {
 
   useEffect(loadChallengeMode, [currentChallenge]);
 
+  useEffect(() => {
+    if (props.model.currentChallenge) {
+      setPlaylistOwner(props.model.currentChallenge.from);
+    } else {
+      setPlaylistOwner(props.model.currentUser);
+    }
+  }, [selectedPlaylist]);
+
   function loadChallengeMode() {
     if (!props.model.currentChallenge) {
       return;
@@ -91,15 +100,14 @@ function GamePresenter(props) {
     const nextSongIndex = currentSongIndex + 1;
     if (nextSongIndex === numSongsToGuess) {
       // Save the score and load the leaderboard.
-      const playlistOwnerID = props.model.currentChallenge
-        ? props.model.currentChallenge.from
-        : props.model.currentUser;
       saveStats().then(() => {
         resolvePromise(
-          searchForPlaylistPlayerHistory(playlistOwnerID, selectedPlaylist.id),
+          searchForPlaylistPlayerHistory(playlistOwner, selectedPlaylist.id),
           playlistPlayerHistoryPromiseState,
           () => reRender(new Object())
         );
+        // Remove the challenge when we enter GameOver view.
+        props.model.setCurrentChallenge(null);
       });
     } else {
       resolvePromise(
@@ -150,12 +158,8 @@ function GamePresenter(props) {
 
   function saveStats() {
     const score = guesses.filter((guess) => guess).length;
-    const playlistOwnerID = props.model.currentChallenge
-      ? props.model.currentChallenge.from
-      : props.model.currentUser;
-
     return saveUserStatsInFirebase(
-      playlistOwnerID,
+      playlistOwner,
       selectedPlaylist.id,
       props.model.currentUser,
       props.model.username,
@@ -168,12 +172,13 @@ function GamePresenter(props) {
     props.model.setCurrentChallenge(null);
     setCurrentSongIndex(-1);
     setSelectedPlaylist({});
+    setPlaylistOwner(null);
     setGuesses([]);
     setRating(null);
   }
 
   if (currentSongIndex === -1) {
-    if (currentChallenge) {
+    if (props.model.currentChallenge) {
       return (
         promiseNoData(
           challengePlaylistPromiseState,
