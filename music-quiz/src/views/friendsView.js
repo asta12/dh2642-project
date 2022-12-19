@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { getImgSrc } from "../settings/profileSettings";
 
 export default function FriendsView(props) {
-  console.log(props.playlistOptions
-    )
   return (
     <>
       <Modal show={props.showPopup} onHide={props.togglePopup}>
