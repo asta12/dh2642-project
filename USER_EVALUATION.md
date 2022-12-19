@@ -1,6 +1,6 @@
 # User Evaluation
 
-Everyone in our group choose one person and did a user evaluation in the form of a think aloud evaluation. We have added the label "User Evaluation" on every issue that addresses any of the feedback we recieved in this process. At the bottom of this document you can see images of our application before and after user evaluation.
+Everyone in our group choose one person and did a user evaluation in the form of a think aloud evaluation. We have added the label "User Evaluation" on every issue that addresses any of the feedback we recieved in this process. At the bottom of this document you can see a selection of images of our application before and after user evaluation.
 
 ## Feedback
 
@@ -91,31 +91,54 @@ This is all feedback from the think aloud evaluation. A checkmark means that we 
   - We have tried to improve this by imrpoving the description on the home page and for instance having a button in /play that can redirect a user to create a playlist if the user has no playlist.
 - [x] Fix so that you cannot enter the game without having a playlist.
   - When a user attempts to start a game without any quiz selected, an alert informs the user that a quiz needs to be selected.
-- [ ] Maybe increase the time between songs. Alternatively, choose it yourself.
+- [x] Maybe increase the time between songs. Alternatively, choose it yourself.
+  - You are now able to choose when you want to proceed with the next song.
 - [x] More colors in the design. Larger spinner in the middle.
   - More colors is implemented, but the spinner is the same.
 - [ ] Fix margin in mobile view. Fix so that it says "choose playlist" when you press start and have not made a list.
 - [ ] Margins look bad when we are in the game on a mobile device. The search bar looks bad in mobile view.
 
-## Before User Evaluation
+## Before/After User Evaluation
 
+### This is the before/after of the general design of the application as well as how we updated the homepage:
+<p> Before </p>
 <figure>
   <img src="music-quiz/src/images/before_user_evaluation/design.png" alt="my alt text"/>
-  <figcaption>The design of the application</figcaption>
 </figure>
 
+<p> After </p>
 <figure>
-  <img src="music-quiz/src/images/before_user_evaluation/sidebar.png" height="147px" alt="my alt text"/>
-  <img src="music-quiz/src/images/before_user_evaluation/sidebar_expanded.png" height="147" alt="my alt text"/>
-  <figcaption>To the left: The sidebar button. Right: The sidebar expanded </figcaption>
+  <img src="music-quiz/src/images/after_user_evaluation/design.png" alt="my alt text"/>
 </figure>
 
+### This is the before/after of the sidebar, both in expanded and non-expanded view.
+
+<p> Before </p>
+<table> 
+	<tr> 
+		<td><img src="music-quiz/src/images/before_user_evaluation/sidebar.png" width="250px"></td> 
+		<td><img src="music-quiz/src/images/before_user_evaluation/sidebar_expanded.png" width="700px"></td> 
+	</tr> 
+</table>
+
+<p> After </p>
+<table> 
+	<tr> 
+		<td><img src="music-quiz/src/images/after_user_evaluation/sidebar.png" width="100%"></td> 
+		<td><img src="music-quiz/src/images/after_user_evaluation/sidebar_expanded.png" width="100%"></td> 
+	</tr> 
+</table>
+
+### This is the before/after of the navbar.
+
+<p> Before </p>
 <figure>
   <img src="music-quiz/src/images/before_user_evaluation/navbar_not_logged_in.png" alt="my alt text"/>
   <img src="music-quiz/src/images/before_user_evaluation/navbar_logged_in.png" alt="my alt text"/>
-  <figcaption>Images of the sidebar when logged in/out. </figcaption>
 </figure>
 
-## After User Evaluation
-
-To be added.
+<p> After </p>
+<figure>
+  <img src="music-quiz/src/images/after_user_evaluation/navbar_logged_out.png" alt="my alt text"/>
+  <img src="music-quiz/src/images/after_user_evaluation/navbar_logged_in.png" alt="my alt text"/>
+</figure>
