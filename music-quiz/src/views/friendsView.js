@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { getImgSrc } from "../settings/profileSettings";
 
 export default function FriendsView(props) {
+  console.log(props.playlistOptions
+    )
   return (
     <>
       <Modal show={props.showPopup} onHide={props.togglePopup}>
@@ -16,6 +18,8 @@ export default function FriendsView(props) {
               {props.playlist?.name ? props.playlist?.name : "Choose playlist"}
             </Dropdown.Toggle>
             <Dropdown.Menu>
+              {props.playlistOptions.length < 1 ? <Dropdown.ItemText>Please create a playlist</Dropdown.ItemText> : "" }
+              
               {props.playlistOptions.map((playlist, index) => {
                 return (
                   <Dropdown.Item
