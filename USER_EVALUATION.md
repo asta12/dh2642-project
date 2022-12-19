@@ -37,7 +37,7 @@ This is all feedback from the think aloud evaluation. A checkmark means that we 
 - [x] If you register and then log out the register page is still present with a the page saying you have been registered. kind of confusing.
   - Now you get redirected elsewhere when you register/login.
 - [x] When you log in you redirect to an empty page.
-  - We chnged so that you redirect to the game.
+  - We changed so that the user is redirected to their profile.
 - [x] He asked how to add friends after having looked at the sidebar. It was empty and just said friends. Maybe add message “You have no friends. Do this to get friends”
   - Now a button "+ Add Friend" is there on the sidebar redirecting you to the add friend page.
 - [ ] 10 songs a bit too much when creating a playlist
