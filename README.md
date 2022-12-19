@@ -30,6 +30,13 @@ const firebaseConfig = {
 export default firebaseConfig;
 ```
 
+The last file that needs to be created is the *src/apiConfig.js* file
+which should contain the API key to the [Genius API](https://rapidapi.com/Glavier/api/genius-song-lyrics1).
+The file should have the following format (replace the empty string with your own value):
+```
+export const API_KEY = "";
+```
+
 Now you should be ready to host the website. Go 
 into the *music-quiz* folder and run the following commands:
 
