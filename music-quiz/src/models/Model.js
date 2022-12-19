@@ -122,6 +122,10 @@ class Model {
       (playlist) => playlist.id === playlistID
     );
 
+    if (!playlist) {
+      return;
+    }
+
     delete playlist.playerHistory[historyID];
 
     this.notifyObservers({ removePlayerHistory: { playlistID, historyID } });

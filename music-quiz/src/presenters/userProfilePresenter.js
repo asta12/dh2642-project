@@ -100,7 +100,7 @@ export default function UserProfilePresenter(props) {
         </p>
       </div>
       <ShowPlaylistView
-        playlists={playlists}
+        playlists={props.model.playlists}
         averageRating={averageRating}
         expanding={expanding}
         expand={expand}

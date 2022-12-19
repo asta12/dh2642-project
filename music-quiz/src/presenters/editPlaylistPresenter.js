@@ -10,6 +10,7 @@ export default function EditPlaylistPresenter(props) {
   const [playlistID, setPlaylistID] = useState(null);
   const [playlistName, setPlaylistName] = useState(null);
   const [playlistSongs, setPlaylistSongs] = useState([]);
+  const [playerHistory, setPlayerHistory] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentUser, updateCurrentUser] = useState(props.model.currentUser);
@@ -50,6 +51,7 @@ export default function EditPlaylistPresenter(props) {
       setPlaylistID(findPlaylist.id);
       setPlaylistName(findPlaylist.name);
       setPlaylistSongs([...findPlaylist.songs]);
+      setPlayerHistory(findPlaylist.playerHistory);
     }
   }
 
@@ -80,11 +82,20 @@ export default function EditPlaylistPresenter(props) {
     } else {
       // The playlist is valid save it in our model.
       setErrorMessage("");
-      props.model.editPlaylist({
-        id: playlistID,
-        name: playlistName,
-        songs: playlistSongs,
-      });
+      if (playerHistory) {
+        props.model.editPlaylist({
+          id: playlistID,
+          name: playlistName,
+          songs: playlistSongs,
+          playerHistory: playerHistory,
+        });
+      } else {
+        props.model.editPlaylist({
+          id: playlistID,
+          name: playlistName,
+          songs: playlistSongs,
+        });
+      }
       // Go back to the profile.
       navigate("/profile");
     }
