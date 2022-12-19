@@ -6,6 +6,8 @@ Music Quiz with a Twist is a music quiz where the lyrics of a song is read out l
 
 You can create an account on which you can create quiz playlists and save them for you and your friends to play later. You will be able to add friends and challenge them to play a game with one of your own crafted playlists.
 
+Link to the deployed app: https://dh2642-project-f1eca.web.app/
+
 ## Setup
 
 The website is a react application that uses firebase for persistent storage. 
